@@ -22,3 +22,5 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+.github/copilot-instructions.md
+.windsurf/rules/code-style-guide.md
