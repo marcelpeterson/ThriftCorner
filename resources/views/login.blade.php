@@ -12,11 +12,11 @@
             <a href="{{ route('register') }}" class="text-sm font-medium text-blue-500 hover:text-blue-800">Create Account</a>
         </div>
 
-        <form action="" class="mt-6" method="POST">
+        <form action="{{route('login.submit')}}" class="mt-6" method="POST">
             @csrf
             <div class="flex flex-col gap-3">
-                <input type="text" placeholder="Email" class="border border-gray-500 rounded-[12px] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                <input type="password" placeholder="Password" class="border border-gray-500 rounded-[12px] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input type="text" name="email" placeholder="Email" class="border border-gray-500 rounded-[12px] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input type="password" name="password" placeholder="Password" class="border border-gray-500 rounded-[12px] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-[12px] mt-2 w-full cursor-pointer">Login</button>
             </div>
         </form>

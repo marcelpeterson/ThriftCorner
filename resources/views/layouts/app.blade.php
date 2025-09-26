@@ -8,6 +8,7 @@
     <title>@yield('title', config('app.name', 'ThriftCorner'))</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     @stack('head')
 </head>
 <body class="min-h-screen flex flex-col bg-gray-50 text-gray-900 antialiased">

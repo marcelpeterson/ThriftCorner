@@ -40,12 +40,19 @@
                 @endauth
 
                 @auth
-                    <div class="relative group">
-                        <button type="button" class="inline-flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-emerald-700">
+            
+                    <div x-data="{ open: false }" class="relative">
+                        
+                        <button @click="open = !open" type="button" class="inline-flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-emerald-700">
                             <span>Hi, {{ \Illuminate\Support\Str::limit(auth()->user()->name, 20) }}</span>
                             <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.17l3.71-3.94a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd"/></svg>
                         </button>
-                        <div class="absolute right-0 mt-2 hidden w-44 rounded-md border border-gray-200 bg-white py-1 text-sm shadow-lg group-hover:block">
+
+                        <div x-show="open" 
+                            @click.away="open = false" 
+                            x-transition
+                            class="absolute right-0 mt-2 w-44 rounded-md border border-gray-200 bg-white py-1 text-sm shadow-lg z-50">
+                            
                             @if (Route::has('dashboard'))
                                 <a href="{{ route('dashboard') }}" class="block px-3 py-2 text-gray-700 hover:bg-gray-50">Dashboard</a>
                             @endif
@@ -75,8 +82,6 @@
                 @endauth
             </div>
         </div>
-
-        <!-- Mobile: links + search stacked -->
         <div class="md:hidden py-2 space-y-2">
             <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
                 @if (Route::has('listings.index'))
