@@ -3,7 +3,7 @@
         <div class="flex h-16 items-center justify-between gap-4">
             <div class="flex items-center gap-3 min-w-0">
                 <a href="{{ url('/') }}" class="flex items-center gap-2 shrink-0" aria-label="{{ config('app.name', 'ThriftCorner') }} Home">
-                    <img src="{{ asset('images/Logo.png') }}" alt="ThriftCorner Logo" width="192px">
+                    <img src="{{ asset('storage/images/Logo.png') }}" alt="ThriftCorner Logo" width="192px">
                 </a>
             </div>
 
@@ -38,48 +38,30 @@
                         </a>
                     @endif
                 @endauth
-
-                @auth
-            
-                    <div x-data="{ open: false }" class="relative">
-                        
-                        <button @click="open = !open" type="button" class="inline-flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-emerald-700">
-                            <span>Hi, {{ \Illuminate\Support\Str::limit(auth()->user()->name, 20) }}</span>
-                            <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.17l3.71-3.94a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd"/></svg>
-                        </button>
-
-                        <div x-show="open" 
-                            @click.away="open = false" 
-                            x-transition
-                            class="absolute right-0 mt-2 w-44 rounded-md border border-gray-200 bg-white py-1 text-sm shadow-lg z-50">
-                            
-                            @if (Route::has('dashboard'))
-                                <a href="{{ route('dashboard') }}" class="block px-3 py-2 text-gray-700 hover:bg-gray-50">Dashboard</a>
+                
+                <div class="flex items-center gap-4">
+                    @auth
+                        <span class="text-sm font-medium text-gray-700 hover:text-blue-700">Welcome, {{ Auth::user()->first_name }}</span>
+                        @if (Route::has('logout'))
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="inline-flex items-center rounded-md bg-red-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700 cursor-pointer">Log out</button>
+                            </form>
+                        @endif
+                    @else
+                        <div class="flex items-center gap-3">
+                            @if (Route::has('login'))
+                                <a href="{{ route('login') }}" class="text-sm font-medium text-gray-700 hover:text-blue-700">Log in</a>
                             @endif
-                            @if (Route::has('listings.index'))
-                                <a href="{{ route('listings.index', ['mine' => 1]) }}" class="block px-3 py-2 text-gray-700 hover:bg-gray-50">My Listings</a>
-                            @endif
-                            @if (Route::has('logout'))
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit" class="block w-full px-3 py-2 text-left text-red-600 hover:bg-red-50">Log out</button>
-                                </form>
+                            @if (Route::has('register'))
+                                <a href="{{ route('register') }}"
+                                   class="inline-flex items-center rounded-md border border-blue-700 bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-transparent hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                                    Register
+                                </a>
                             @endif
                         </div>
-                    </div>
-                @else
-                    <div class="flex items-center gap-3">
-                        @if (Route::has('login'))
-                            <a href="{{ route('login') }}" class="text-sm font-medium text-gray-700 hover:text-blue-700">Log in</a>
-                        @endif
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}"
-                               class="inline-flex items-center rounded-md border border-blue-700 bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-transparent hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
-                                Register
-                            </a>
-                        @endif
-                    </div>
-                @endauth
+                    @endauth
+                </div>
             </div>
         </div>
         <div class="md:hidden py-2 space-y-2">

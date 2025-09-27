@@ -2,11 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ItemController;
 
-Route::get('', function () {
-    return view('home');
-})->name('home');
+// Route::get('', function () {
+//     return view('home');
+// })->name('home');
 
+Route::get('/', [ItemController::class, 'getItemPage'])->name('home');
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login/submit', [AuthController::class, 'loginSubmit'])->name('login.submit');
 

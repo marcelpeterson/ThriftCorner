@@ -28,7 +28,7 @@
         </div>
     </div>
 
-    <div class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {{-- <div class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <div class="rounded-lg border border-gray-200 bg-white p-6">
             <h3 class="text-base font-semibold text-gray-900">Textbooks</h3>
             <p class="mt-1 text-sm text-gray-600">Buy and sell used textbooks for your courses.</p>
@@ -41,6 +41,34 @@
             <h3 class="text-base font-semibold text-gray-900">Dorm Essentials</h3>
             <p class="mt-1 text-sm text-gray-600">Furniture and essentials for boarding life.</p>
         </div>
+    </div> --}}
+
+    <div>
+        @if(count($items) > 0)
+            <h2 class="mt-12 text-2xl font-bold text-gray-900">Latest Listings</h2>
+            <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                @foreach ($items as $item)
+                    <div class="rounded-lg border border-gray-200 bg-white p-6">
+                        <h3 class="text-lg font-semibold text-gray-900">{{ $item->name }}</h3>
+                        <p class="mt-1 text-sm text-gray-600">{{ Str::limit($item->description, 100) }}</p>
+                        <p class="mt-2 text-sm font-medium text-gray-900">Price: ${{ number_format($item->price, 2) }}</p>
+                        <p class="mt-1 text-sm text-gray-600">Condition: {{ $item->item_condition }}</p>
+                        @if($item->photo_url)
+                            <img src="{{ $item->photo_url }}" alt="{{ $item->name }}" class="mt-4 w-full h-48 object-cover rounded-md">
+                        @else
+                            <div class="mt-4 w-full h-48 bg-gray-100 flex items-center justify-center rounded-md">
+                                <span class="text-gray-400">No Image</span>
+                            </div>
+                        @endif
+                        {{-- <a href="{{ route('listings.show', $item->id) }}" class="mt-4 inline-block text-sm font-medium text-emerald-700 hover:text-emerald-800">
+                            View Details
+                        </a> --}}
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <p class="mt-12 text-center text-gray-600">No listings available at the moment. Please check back later.</p>
+        @endif
     </div>
 </div>
 @endsection
