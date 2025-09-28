@@ -41,13 +41,46 @@
                 
                 <div class="flex items-center gap-4">
                     @auth
-                        <span class="text-sm font-medium text-gray-700 hover:text-blue-700">Welcome, {{ Auth::user()->first_name }}</span>
-                        @if (Route::has('logout'))
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="inline-flex items-center rounded-md bg-red-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700 cursor-pointer">Log out</button>
-                            </form>
-                        @endif
+                        <div class="relative">
+                            <button type="button"
+                                    id="navbar-user-menu-button"
+                                    class="flex items-center gap-2 rounded-full px-2 py-1 transition-colors hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600"
+                                    aria-expanded="false"
+                                    aria-haspopup="true"
+                                    aria-controls="navbar-user-menu"
+                                    data-navbar-user-toggle>
+                                <img src="{{ Auth::user()->photo_url }}" alt="User photo from API" class="w-8 h-8 rounded-full object-cover">
+                                <span class="text-sm font-medium text-gray-700">Welcome, {{ Auth::user()->first_name }}</span>
+                                <svg class="h-4 w-4 text-gray-500 transition-transform duration-200 ease-out transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-arrow>
+                                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 111.06 1.061l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+
+                            <div id="navbar-user-menu" class="absolute right-0 mt-2 hidden min-w-[12rem] overflow-hidden rounded-lg border border-gray-100 bg-white shadow-lg focus:outline-none" data-navbar-user-menu role="menu" aria-labelledby="navbar-user-menu-button">
+                                <ul class="py-2 text-sm text-gray-700" role="none">
+                                    <li>
+                                        <a href="#" class="block px-4 py-2 hover:bg-gray-100" role="menuitem">Profile</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="block px-4 py-2 hover:bg-gray-100" role="menuitem">Settings</a>
+                                    </li>
+                                    @if (Route::has('logout'))
+                                        <li class="border-t border-gray-100 mt-2 pt-2">
+                                            <form method="POST" action="{{ route('logout') }}" role="none">
+                                                @csrf
+                                                <button type="submit" class="flex w-full items-center justify-between px-4 py-2 text-left text-sm font-medium text-red-600 hover:bg-red-50" role="menuitem">
+                                                    Sign out
+                                                    <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                        <path fill-rule="evenodd" d="M3 4.75A1.75 1.75 0 014.75 3h4.5a.75.75 0 010 1.5h-4.5a.25.25 0 00-.25.25v11.5c0 .138.112.25.25.25h4.5a.75.75 0 010 1.5h-4.5A1.75 1.75 0 013 16.25V4.75z" clip-rule="evenodd" />
+                                                        <path fill-rule="evenodd" d="M8.47 5.47a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 11-1.06-1.06L11.69 11H7a.75.75 0 010-1.5h4.69L8.47 6.53a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </div>
+                        </div>
                     @else
                         <div class="flex items-center gap-3">
                             @if (Route::has('login'))
@@ -111,3 +144,56 @@
         </div>
     </div>
 </nav>
+
+@once
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const toggle = document.querySelector('[data-navbar-user-toggle]');
+                const menu = document.querySelector('[data-navbar-user-menu]');
+
+                if (!toggle || !menu) {
+                    return;
+                }
+
+                const arrow = toggle.querySelector('[data-arrow]');
+
+                const closeMenu = () => {
+                    toggle.setAttribute('aria-expanded', 'false');
+                    menu.classList.add('hidden');
+                    arrow?.classList.remove('rotate-180');
+                };
+
+                const openMenu = () => {
+                    toggle.setAttribute('aria-expanded', 'true');
+                    menu.classList.remove('hidden');
+                    arrow?.classList.add('rotate-180');
+                };
+
+                toggle.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+                    if (isExpanded) {
+                        closeMenu();
+                    } else {
+                        openMenu();
+                    }
+                });
+
+                document.addEventListener('click', (event) => {
+                    if (!menu.contains(event.target) && !toggle.contains(event.target)) {
+                        closeMenu();
+                    }
+                });
+
+                document.addEventListener('keydown', (event) => {
+                    if (event.key === 'Escape') {
+                        closeMenu();
+                    }
+                });
+            });
+        </script>
+    @endpush
+@endonce
