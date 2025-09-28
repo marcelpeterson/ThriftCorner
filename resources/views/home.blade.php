@@ -4,28 +4,28 @@
 
 @section('content')
 <div class="py-10">
-    <div class="mx-auto max-w-3xl text-center">
+    {{-- <div class="mx-auto max-w-3xl text-center">
         <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Welcome to {{ config('app.name', 'ThriftCorner') }}
         </h1>
         <p class="mt-4 text-gray-600">
             A simple marketplace for Binus students to buy and sell textbooks, electronics, and dorm essentials.
         </p>
-        <div class="mt-8 flex items-center justify-center gap-3">
-            @if (Route::has('listings.index'))
-                <a href="{{ route('listings.index') }}"
-                   class="inline-flex items-center rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600">
-                    Browse Listings
-                </a>
-            @endif
-            @auth
-                @if (Route::has('listings.create'))
-                    <a href="{{ route('listings.create') }}" class="text-sm font-medium text-emerald-700 hover:text-emerald-800">
-                        Sell an Item
-                    </a>
-                @endif
-            @endauth
+    </div> --}}
+
+    <div class="bg-gray-900 flex items-center rounded-[48px] overflow-hidden">
+        <div class="text-white ml-12 self-center pb-8">
+            <h1 class="text-[4rem] font-bold tracking-tight sm:text-[4rem]">
+                {{ config('app.name', 'ThriftCorner') }}
+            </h1>
+            <p class="mt-4 text-3xl font-bold text-gray-100">
+                Binusian favorite place for second-hand gems.
+            </p>
+            <p class="mt-2 text-gray-300">
+                A simple marketplace for Binus students to buy and sell textbooks, electronics, and dorm essentials.
+            </p>
         </div>
+        <img src="{{ asset('storage/images/bags.png') }}" alt="" class="w-full max-w-[400px] ml-auto">
     </div>
 
     {{-- <div class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">

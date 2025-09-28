@@ -68,7 +68,7 @@
                                         <li class="border-t border-gray-100 mt-2 pt-2">
                                             <form method="POST" action="{{ route('logout') }}" role="none">
                                                 @csrf
-                                                <button type="submit" class="flex w-full items-center justify-between px-4 py-2 text-left text-sm font-medium text-red-600 hover:bg-red-50" role="menuitem">
+                                                <button type="submit" class="flex w-full items-center justify-between px-4 py-2 text-left text-sm font-medium text-red-600 hover:bg-red-50 cursor-pointer" role="menuitem">
                                                     Sign out
                                                     <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                         <path fill-rule="evenodd" d="M3 4.75A1.75 1.75 0 014.75 3h4.5a.75.75 0 010 1.5h-4.5a.25.25 0 00-.25.25v11.5c0 .138.112.25.25.25h4.5a.75.75 0 010 1.5h-4.5A1.75 1.75 0 013 16.25V4.75z" clip-rule="evenodd" />
