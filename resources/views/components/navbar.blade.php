@@ -10,8 +10,8 @@
             <!-- Desktop: links + search + auth -->
             <div class="hidden md:flex flex-1 justify-center">
                 <form action="" class="flex items-center gap-2" method="GET">
-                    <input type="text" placeholder="Search..." class="w-128 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
-                    <button type="submit" class="ml-2 border border-blue-700 rounded-full px-5 h-[35px] bg-blue-700 text-white hover:bg-transparent hover:text-black cursor-pointer">Search</button>
+                    <input type="text" placeholder="Search..." class="w-128 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
+                    <button type="submit" class="ml-2 border border-blue-700 rounded-full px-5 h-[35px] bg-blue-700 text-white hover:bg-transparent hover:text-black cursor-pointer transition-all">Search</button>
                 </form>
             </div>
 
@@ -82,13 +82,13 @@
                             </div>
                         </div>
                     @else
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-4">
                             @if (Route::has('login'))
-                                <a href="{{ route('login') }}" class="text-sm font-medium text-gray-700 hover:text-blue-700">Log in</a>
+                                <a href="{{ route('login') }}" class="text-sm font-medium text-gray-700 hover:text-blue-700 transition-all">Log in</a>
                             @endif
                             @if (Route::has('register'))
                                 <a href="{{ route('register') }}"
-                                   class="inline-flex items-center rounded-md border border-blue-700 bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-transparent hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                                   class="inline-flex items-center rounded-md border border-blue-700 bg-blue-700 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-transparent hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 transition-all">
                                     Register
                                 </a>
                             @endif
