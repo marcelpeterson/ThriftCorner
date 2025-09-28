@@ -16,6 +16,8 @@ Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register/submit', [AuthController::class, 'registerSubmit'])->name('register.submit');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
+
 Route::get('/items', [ItemController::class, 'getItemPage'])->name('items');
 Route::get('/items/create', [ItemController::class, 'createItemPage'])->name('items.create');
 Route::post('/items/create/submit', [ItemController::class, 'createItemSubmit'])->name('items.create.submit');

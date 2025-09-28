@@ -59,7 +59,7 @@
                             <div id="navbar-user-menu" class="absolute right-0 mt-2 hidden min-w-[12rem] overflow-hidden rounded-lg border border-gray-100 bg-white shadow-lg focus:outline-none" data-navbar-user-menu role="menu" aria-labelledby="navbar-user-menu-button">
                                 <ul class="py-2 text-sm text-gray-700" role="none">
                                     <li>
-                                        <a href="#" class="block px-4 py-2 hover:bg-gray-100" role="menuitem">Profile</a>
+                                        <a href="{{ route('profile') }}" class="block px-4 py-2 hover:bg-gray-100" role="menuitem">Profile</a>
                                     </li>
                                     <li>
                                         <a href="#" class="block px-4 py-2 hover:bg-gray-100" role="menuitem">Settings</a>
