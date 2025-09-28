@@ -24,6 +24,7 @@ class ItemController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
+            'condition' => 'required|in:Brand new,Like new,Lightly used,Well used,Heavily used',
         ], [
             'category_id.exists' => 'The selected category is invalid.',
             'name.required' => 'The name field is required.',
@@ -31,6 +32,7 @@ class ItemController extends Controller
             'price.numeric' => 'The price must be a number.',
             'price.min' => 'The price must be at least 0.',
             'name.max' => 'The name may not be greater than 255 characters.',
+            'condition.in' => 'The selected condition is invalid.',
         ]);
 
         Item::create($request->all());
@@ -49,6 +51,7 @@ class ItemController extends Controller
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
+            'condition' => 'required|in:Brand new,Like new,Lightly used,Well used,Heavily used',
         ], [
             'category_id.exists' => 'The selected category is invalid.',
             'name.required' => 'The name field is required.',
@@ -56,6 +59,7 @@ class ItemController extends Controller
             'price.numeric' => 'The price must be a number.',
             'price.min' => 'The price must be at least 0.',
             'name.max' => 'The name may not be greater than 255 characters.',
+            'condition.in' => 'The selected condition is invalid.',
         ]);
 
         $item = Item::findOrFail($id);

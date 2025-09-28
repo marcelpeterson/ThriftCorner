@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
             'first_name' => 'John',
             'last_name' => 'Doe',
             'email' => 'john@example.com',
+            'photo_url' => 'https://avatar.iran.liara.run/username?username=John+Doe',
             'password' => Hash::make('password'),
         ]);
     }

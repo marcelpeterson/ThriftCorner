@@ -13,7 +13,7 @@ class Item extends Model
         'description',
         'price',
         'photo_url',
-        'item_condition',
+        'condition',
     ];
 
     public function category()
@@ -24,5 +24,13 @@ class Item extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Accessor: formatted Rupiah price (no decimals, thousand separators with dots)
+     */
+    public function getPriceRupiahAttribute(): string
+    {
+        return rupiah($this->price);
     }
 }

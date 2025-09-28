@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('price', 8, 2);
             $table->string('photo_url')->nullable();
-            $table->string('item_condition');
+            $table->enum('condition', ['Brand new', 'Like new', 'Lightly used', 'Well used', 'Heavily used'])->default('Like new');
             $table->timestamps();
         });
     }
