@@ -38,14 +38,6 @@
                 </button>
             </div>
         </div>
-        {{-- <div class="mb-6">
-            <label class="block text-gray-700 font-medium mb-2" for="name">Name</label>
-            <input class="w-full border border-gray-300 p-2 rounded-lg" type="text" id="name" value="{{ $user->first_name }} {{ $user->last_name }}" readonly>
-        </div>
-        <div class="mb-6">
-            <label class="block text-gray-700 font-medium mb-2" for="email">Email</label>
-            <input class="w-full border border-gray-300 p-2 rounded-lg" type="email" id="email" value="{{ $user->email }}" readonly> --}}
-        </div>
     </div>
 
     <div class="mt-10 max-w-5xl mx-auto">

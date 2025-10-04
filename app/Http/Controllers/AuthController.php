@@ -22,7 +22,22 @@ class AuthController extends Controller
             'first_name' => 'required|string|max:50',
             'last_name'  => 'required|string|max:50',
             'email'      => 'required|email|unique:users,email',
-            'password'   => 'required|min:6|confirmed', 
+            'password'   => 'required|min:6|confirmed',
+            'phone'      => 'required|string|min:10|max:12',
+        ], [
+            'first_name.required' => 'The first name field is required.',
+            'first_name.max' => 'The first name may not be greater than 50 characters.',
+            'last_name.required' => 'The last name field is required.',
+            'last_name.max' => 'The last name may not be greater than 50 characters.',
+            'email.required' => 'The email field is required.',
+            'email.email' => 'The email must be a valid email address.',
+            'email.unique' => 'The email has already been taken.',
+            'password.required' => 'The password field is required.',
+            'password.min' => 'The password must be at least 6 characters.',
+            'password.confirmed' => 'The password confirmation does not match.',
+            'phone.required' => 'The phone number field is required.',
+            'phone.min' => 'The phone number must be at least 10 characters.',
+            'phone.max' => 'The phone number may not be greater than 12 characters.',
         ]);
 
         $user = new User();
@@ -47,6 +62,10 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'email'    => 'required|email',
             'password' => 'required',
+        ], [
+            'email.required' => 'The email field is required.',
+            'email.email' => 'The email must be a valid email address.',
+            'password.required' => 'The password field is required.',
         ]);
 
     
