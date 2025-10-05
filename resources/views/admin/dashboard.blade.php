@@ -108,11 +108,15 @@
                 </div>
                 <div>
                     <p class="text-blue-100 text-sm">Device Types</p>
-                    <p class="text-sm mt-2">
-                        @foreach($analyticsData['deviceTypes'] as $device)
-                            <span class="inline-block bg-blue-500 px-2 py-1 rounded text-xs mr-1">{{ $device['deviceCategory'] }}: {{ $device['activeUsers'] }}</span>
-                        @endforeach
-                    </p>
+                    @if(count($analyticsData['deviceTypes']) === 0)
+                        <p class="text-sm font-bold mt-2">No data available</p>
+                    @else
+                        <p class="text-sm mt-2">
+                            @foreach($analyticsData['deviceTypes'] as $device)
+                                <span class="inline-block bg-blue-500 px-2 py-1 rounded text-xs mr-1">{{ $device['deviceCategory'] }}: {{ $device['activeUsers'] }}</span>
+                            @endforeach
+                        </p>
+                    @endif
                 </div>
             </div>
         </div>
