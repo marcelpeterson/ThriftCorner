@@ -14,18 +14,81 @@
         </a>
     </div>
 
-    {{-- Image Banner --}}
+    {{-- Image Carousel --}}
     <div class="mb-8">
-        @if($item->photo)
+        @if($item->images->count() > 0)
+            <div class="relative" x-data="{ currentSlide: 0, totalSlides: {{ $item->images->count() }} }">
+                {{-- Main Image Display --}}
+                <div class="relative w-full h-[400px] rounded-2xl shadow-lg overflow-hidden">
+                    @foreach($item->images as $index => $image)
+                        <div class="absolute inset-0 transition-opacity duration-300"
+                             :class="currentSlide === {{ $index }} ? 'opacity-100' : 'opacity-0'">
+                            {{-- Blurred Background --}}
+                            <div class="absolute inset-0">
+                                <img src="{{ $image->image_url }}" alt="" class="w-full h-full object-cover blur-2xl scale-110 opacity-60">
+                            </div>
+                            {{-- Actual Image --}}
+                            <img src="{{ $image->image_url }}" 
+                                 alt="{{ $item->name }} - Image {{ $index + 1 }}" 
+                                 class="relative w-full h-full object-contain z-10">
+                        </div>
+                    @endforeach
+
+                    {{-- Navigation Arrows (only show if more than 1 image) --}}
+                    @if($item->images->count() > 1)
+                        <button @click="currentSlide = currentSlide === 0 ? totalSlides - 1 : currentSlide - 1"
+                                class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-colors z-20 cursor-pointer">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                        </button>
+                        <button @click="currentSlide = currentSlide === totalSlides - 1 ? 0 : currentSlide + 1"
+                                class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-colors z-20 cursor-pointer">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+
+                        {{-- Slide Indicators --}}
+                        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+                            @foreach($item->images as $index => $image)
+                                <button @click="currentSlide = {{ $index }}"
+                                        class="w-2 h-2 rounded-full transition-all"
+                                        :class="currentSlide === {{ $index }} ? 'bg-white w-8' : 'bg-white/50'">
+                                </button>
+                            @endforeach
+                        </div>
+
+                        {{-- Image Counter --}}
+                        <div class="absolute top-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm font-medium z-20">
+                            <span x-text="currentSlide + 1"></span> / {{ $item->images->count() }}
+                        </div>
+                    @endif
+                </div>
+
+                {{-- Thumbnail Strip (only show if more than 1 image) --}}
+                @if($item->images->count() > 1)
+                    <div class="mt-4 flex gap-2 overflow-x-auto pb-2">
+                        @foreach($item->images as $index => $image)
+                            <button @click="currentSlide = {{ $index }}"
+                                    class="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all"
+                                    :class="currentSlide === {{ $index }} ? 'border-emerald-600 ring-2 ring-emerald-200' : 'border-gray-200 hover:border-gray-300'">
+                                <img src="{{ $image->image_url }}" alt="Thumbnail {{ $index + 1 }}" class="w-full h-full object-cover">
+                            </button>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+        @elseif($item->photo)
+            {{-- Fallback to old single photo --}}
             <div class="relative w-full h-[400px] rounded-2xl shadow-lg overflow-hidden">
-                {{-- Blurred Background --}}
                 <div class="absolute inset-0">
                     <img src="{{ $item->photo }}" alt="" class="w-full h-full object-cover blur-2xl scale-110 opacity-60">
                 </div>
-                {{-- Actual Image --}}
                 <img src="{{ $item->photo }}" alt="{{ $item->name }}" class="relative w-full h-full object-contain z-10">
             </div>
         @else
+            {{-- No images available --}}
             <div class="w-full h-[400px] bg-gray-200 flex items-center justify-center rounded-2xl shadow-lg">
                 <div class="text-center">
                     <svg class="w-24 h-24 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

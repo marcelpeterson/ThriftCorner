@@ -26,6 +26,11 @@ class Item extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function images()
+    {
+        return $this->hasMany(ItemImage::class)->orderBy('order');
+    }
+
     /**
      * Accessor: formatted Rupiah price (no decimals, thousand separators with dots)
      */

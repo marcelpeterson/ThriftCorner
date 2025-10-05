@@ -30,14 +30,16 @@
                     </a>
                 @endif
 
-                @auth
-                    @if (Route::has('listings.create'))
-                        <a href="{{ route('listings.create') }}"
-                           class="inline-flex items-center rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600">
-                            Post Listing
-                        </a>
-                    @endif
-                @endauth
+                {{-- Sell Button (visible for all users) --}}
+                @if (Route::has('items.create'))
+                    <a href="{{ auth()->check() ? route('items.create') : route('login') }}"
+                       class="inline-flex items-center rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 transition-colors">
+                        <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        Sell
+                    </a>
+                @endif
                 
                 <div class="flex items-center gap-4">
                     @auth
@@ -105,11 +107,10 @@
                 @if (Route::has('categories.index'))
                     <a href="{{ route('categories.index') }}" class="text-sm font-medium text-gray-700 hover:text-emerald-700 {{ request()->routeIs('categories.*') ? 'text-emerald-700' : '' }}">Categories</a>
                 @endif
-                @auth
-                    @if (Route::has('listings.create'))
-                        <a href="{{ route('listings.create') }}" class="text-sm font-semibold text-emerald-700">Post Listing</a>
-                    @endif
-                @endauth
+                {{-- Sell Button (mobile - visible for all users) --}}
+                @if (Route::has('items.create'))
+                    <a href="{{ auth()->check() ? route('items.create') : route('login') }}" class="text-sm font-semibold text-emerald-700">Sell</a>
+                @endif
             </div>
 
             @if (Route::has('listings.index'))
