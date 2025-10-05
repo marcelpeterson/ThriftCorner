@@ -67,4 +67,36 @@ class User extends Authenticatable
     {
         return $this->hasMany(Item::class);
     }
+
+    /**
+     * Get ratings given by this user.
+     */
+    public function ratingsGiven()
+    {
+        return $this->hasMany(Rating::class, 'rater_id');
+    }
+
+    /**
+     * Get ratings received by this user.
+     */
+    public function ratingsReceived()
+    {
+        return $this->hasMany(Rating::class, 'rated_user_id');
+    }
+
+    /**
+     * Get the user's average rating.
+     */
+    public function getAverageRatingAttribute(): float
+    {
+        return round($this->ratingsReceived()->avg('rating') ?? 0, 1);
+    }
+
+    /**
+     * Get the total number of ratings received.
+     */
+    public function getTotalRatingsAttribute(): int
+    {
+        return $this->ratingsReceived()->count();
+    }
 }

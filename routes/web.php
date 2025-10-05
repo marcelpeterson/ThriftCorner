@@ -35,6 +35,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/transactions/{id}/links', [TransactionController::class, 'showLinks'])->name('transaction.links');
     Route::post('/transactions/{id}/cancel', [TransactionController::class, 'cancel'])->name('transaction.cancel');
     Route::get('/transactions/{id}/report', [TransactionController::class, 'report'])->name('transaction.report');
+    
+    // Rating routes
+    Route::post('/transactions/{id}/rate', [\App\Http\Controllers\RatingController::class, 'store'])->name('rating.store');
 });
 
 // Public transaction confirmation (accessed via token)

@@ -178,20 +178,49 @@
                         </div>
                     </div>
 
-                    {{-- Reviews Placeholder --}}
+                    {{-- Seller Rating --}}
                     <div class="border-t border-gray-200 pt-4 mb-4">
-                        <div class="flex items-center mb-2">
-                            <div class="flex items-center">
-                                @for($i = 0; $i < 5; $i++)
-                                    <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                                    </svg>
-                                @endfor
+                        @if($item->user->total_ratings > 0)
+                            <div class="flex items-center mb-2">
+                                <div class="flex items-center">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($i <= floor($item->user->average_rating))
+                                            <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                            </svg>
+                                        @elseif($i - 0.5 <= $item->user->average_rating)
+                                            <svg class="w-5 h-5 text-yellow-400" viewBox="0 0 24 24">
+                                                <defs>
+                                                    <linearGradient id="half-{{ $i }}">
+                                                        <stop offset="50%" stop-color="currentColor" stop-opacity="1"/>
+                                                        <stop offset="50%" stop-color="#D1D5DB" stop-opacity="1"/>
+                                                    </linearGradient>
+                                                </defs>
+                                                <path fill="url(#half-{{ $i }})" d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                            </svg>
+                                        @else
+                                            <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                                            </svg>
+                                        @endif
+                                    @endfor
+                                </div>
+                                <span class="ml-2 text-sm font-semibold text-gray-700">{{ $item->user->average_rating }}</span>
                             </div>
-                            <span class="ml-2 text-sm font-semibold text-gray-700">5.0</span>
-                        </div>
-                        <p class="text-sm text-gray-500 italic">No reviews yet - be the first to review!</p>
-                        <p class="text-xs text-gray-400 mt-1">Reviews will be available after completed deals</p>
+                            <p class="text-sm text-gray-600">Based on {{ $item->user->total_ratings }} {{ Str::plural('review', $item->user->total_ratings) }}</p>
+                        @else
+                            <div class="flex items-center mb-2">
+                                <div class="flex items-center">
+                                    @for($i = 0; $i < 5; $i++)
+                                        <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                                        </svg>
+                                    @endfor
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500">No reviews yet</p>
+                            <p class="text-xs text-gray-400 mt-1">Be the first to complete a deal and leave a review!</p>
+                        @endif
                     </div>
 
                     {{-- WhatsApp Button --}}

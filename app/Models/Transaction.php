@@ -58,6 +58,11 @@ class Transaction extends Model
         return $this->belongsTo(User::class, 'buyer_id');
     }
 
+    public function rating()
+    {
+        return $this->hasOne(Rating::class);
+    }
+
     public function getSellerConfirmationUrlAttribute(): string
     {
         return route('transaction.confirm', ['token' => $this->seller_token]);

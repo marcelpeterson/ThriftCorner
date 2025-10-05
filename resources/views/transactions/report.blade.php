@@ -193,6 +193,171 @@
                 </div>
             </div>
 
+            {{-- Rating Section --}}
+            @if($isBuyer)
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                        <svg class="w-6 h-6 mr-2 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                        </svg>
+                        Rate Your Experience
+                    </h3>
+
+                    @if($hasRated)
+                        {{-- Show existing rating --}}
+                        <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6">
+                            <div class="flex items-start gap-4">
+                                @if(auth()->user()->photo_url)
+                                    <img src="{{ auth()->user()->photo_url }}" alt="{{ auth()->user()->first_name }}" class="w-12 h-12 rounded-full object-cover">
+                                @else
+                                    <div class="w-12 h-12 rounded-full bg-yellow-200 flex items-center justify-center">
+                                        <span class="text-yellow-700 font-bold">{{ substr(auth()->user()->first_name, 0, 1) }}</span>
+                                    </div>
+                                @endif
+                                
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <p class="font-bold text-gray-900">{{ auth()->user()->full_name }}</p>
+                                        <p class="text-sm text-gray-500">{{ $transaction->rating->created_at->format('M d, Y') }}</p>
+                                    </div>
+                                    
+                                    <div class="flex items-center mb-2">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            @if($i <= $transaction->rating->rating)
+                                                <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                                </svg>
+                                            @else
+                                                <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                                                </svg>
+                                            @endif
+                                        @endfor
+                                        <span class="ml-2 text-sm font-semibold text-gray-700">{{ $transaction->rating->rating }} out of 5</span>
+                                    </div>
+                                    
+                                    @if($transaction->rating->review)
+                                        <p class="text-gray-700 mt-2">{{ $transaction->rating->review }}</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @else
+                        {{-- Rating form --}}
+                        <div class="bg-gradient-to-br from-yellow-50 to-amber-50 border-2 border-yellow-200 rounded-lg p-6">
+                            <p class="text-gray-700 mb-4">Share your experience with this seller to help other buyers make informed decisions.</p>
+                            
+                            <form action="{{ route('rating.store', $transaction->id) }}" method="POST" x-data="{ selectedRating: 0, hoveredRating: 0 }">
+                                @csrf
+                                
+                                {{-- Star Rating --}}
+                                <div class="mb-6">
+                                    <label class="block text-sm font-semibold text-gray-900 mb-3">Rating*</label>
+                                    <div class="flex items-center gap-2">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <button type="button"
+                                                    @click="selectedRating = {{ $i }}"
+                                                    @mouseenter="hoveredRating = {{ $i }}"
+                                                    @mouseleave="hoveredRating = 0"
+                                                    class="focus:outline-none transition-transform hover:scale-110">
+                                                <svg class="w-10 h-10 transition-colors cursor-pointer"
+                                                     :class="(hoveredRating >= {{ $i }} || (hoveredRating === 0 && selectedRating >= {{ $i }})) ? 'text-yellow-400 fill-current' : 'text-gray-300'"
+                                                     viewBox="0 0 24 24"
+                                                     stroke="currentColor"
+                                                     stroke-width="1">
+                                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                                </svg>
+                                            </button>
+                                        @endfor
+                                        <span class="ml-3 text-lg font-semibold text-gray-700" x-show="selectedRating > 0" x-text="selectedRating + ' out of 5 stars'"></span>
+                                    </div>
+                                    <input type="hidden" name="rating" :value="selectedRating" required>
+                                    @error('rating')
+                                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                {{-- Review Text --}}
+                                <div class="mb-6">
+                                    <label for="review" class="block text-sm font-semibold text-gray-900 mb-2">
+                                        Review (Optional)
+                                        <span class="text-gray-500 font-normal">- Share your detailed experience</span>
+                                    </label>
+                                    <textarea name="review" 
+                                              id="review" 
+                                              rows="4" 
+                                              maxlength="1000"
+                                              placeholder="How was your experience with this seller? Quality of the item, communication, meeting arrangement, etc."
+                                              class="w-full rounded-lg border border-gray-300 px-4 py-3 text-sm focus:border-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-500">{{ old('review') }}</textarea>
+                                    <p class="mt-1 text-xs text-gray-500">Maximum 1000 characters</p>
+                                    @error('review')
+                                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <button type="submit" 
+                                        class="w-full bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-600 hover:to-amber-600 text-white font-bold py-3 rounded-lg transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                    Submit Rating & Review
+                                </button>
+                            </form>
+                        </div>
+                    @endif
+                </div>
+            @else
+                {{-- Show rating to seller if buyer has rated --}}
+                @if($hasRated)
+                    <div class="mb-8">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+                            <svg class="w-6 h-6 mr-2 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                            </svg>
+                            Buyer's Rating
+                        </h3>
+                        
+                        <div class="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6">
+                            <div class="flex items-start gap-4">
+                                @if($transaction->buyer->photo_url)
+                                    <img src="{{ $transaction->buyer->photo_url }}" alt="{{ $transaction->buyer->first_name }}" class="w-12 h-12 rounded-full object-cover">
+                                @else
+                                    <div class="w-12 h-12 rounded-full bg-yellow-200 flex items-center justify-center">
+                                        <span class="text-yellow-700 font-bold">{{ substr($transaction->buyer->first_name, 0, 1) }}</span>
+                                    </div>
+                                @endif
+                                
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <p class="font-bold text-gray-900">{{ $transaction->buyer->full_name }}</p>
+                                        <p class="text-sm text-gray-500">{{ $transaction->rating->created_at->format('M d, Y') }}</p>
+                                    </div>
+                                    
+                                    <div class="flex items-center mb-2">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            @if($i <= $transaction->rating->rating)
+                                                <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+                                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                                </svg>
+                                            @else
+                                                <svg class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                                                </svg>
+                                            @endif
+                                        @endfor
+                                        <span class="ml-2 text-sm font-semibold text-gray-700">{{ $transaction->rating->rating }} out of 5</span>
+                                    </div>
+                                    
+                                    @if($transaction->rating->review)
+                                        <p class="text-gray-700 mt-2">{{ $transaction->rating->review }}</p>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            @endif
+
             {{-- Actions --}}
             <div class="border-t pt-6">
                 <div class="flex gap-4">
@@ -200,13 +365,13 @@
                        class="flex-1 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg text-center transition-colors">
                         Back to Home
                     </a>
-                    <button onclick="window.print()" 
+                    {{-- <button onclick="window.print()" 
                             class="flex-1 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
                         </svg>
                         Print Report
-                    </button>
+                    </button> --}}
                 </div>
             </div>
         </div>

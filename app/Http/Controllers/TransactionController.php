@@ -135,7 +135,8 @@ class TransactionController extends Controller
      */
     public function report($transactionId)
     {
-        $transaction = Transaction::with(['item.images', 'seller', 'buyer'])->findOrFail($transactionId);
+        $transaction = Transaction::with(['item.images', 'item.category', 'seller', 'buyer', 'rating.rater'])
+            ->findOrFail($transactionId);
 
         // Check if user is involved in the transaction
         if ($transaction->seller_id !== auth()->id() && $transaction->buyer_id !== auth()->id()) {
@@ -147,7 +148,10 @@ class TransactionController extends Controller
             abort(403, 'Transaction is not yet completed.');
         }
 
-        return view('transactions.report', compact('transaction'));
+        $isBuyer = $transaction->buyer_id === auth()->id();
+        $hasRated = $transaction->rating !== null;
+
+        return view('transactions.report', compact('transaction', 'isBuyer', 'hasRated'));
     }
 
     /**
