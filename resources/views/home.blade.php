@@ -138,15 +138,118 @@
     </div> --}}
 
     <div>
+        {{-- Search and Filter Section --}}
+        <div class="mt-12 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-2xl font-bold text-gray-900">
+                    @if(request('q'))
+                        Search Results for "{{ request('q') }}"
+                    @else
+                        Explore ThriftCorner
+                    @endif
+                </h2>
+                <span class="text-sm text-gray-600">{{ $items->total() }} item(s) found</span>
+            </div>
+
+            {{-- Filters --}}
+            <form method="GET" action="{{ route('home') }}" class="space-y-4">
+                @if(request('q'))
+                    <input type="hidden" name="q" value="{{ request('q') }}">
+                @endif
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    {{-- Category Filter --}}
+                    <div>
+                        <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                        <select name="category" id="category" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                            <option value="">All Categories</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- Condition Filter --}}
+                    <div>
+                        <label for="condition" class="block text-sm font-medium text-gray-700 mb-1">Condition</label>
+                        <select name="condition" id="condition" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                            <option value="">All Conditions</option>
+                            <option value="Brand new" {{ request('condition') == 'Brand new' ? 'selected' : '' }}>Brand new</option>
+                            <option value="Like new" {{ request('condition') == 'Like new' ? 'selected' : '' }}>Like new</option>
+                            <option value="Lightly used" {{ request('condition') == 'Lightly used' ? 'selected' : '' }}>Lightly used</option>
+                            <option value="Well used" {{ request('condition') == 'Well used' ? 'selected' : '' }}>Well used</option>
+                            <option value="Heavily used" {{ request('condition') == 'Heavily used' ? 'selected' : '' }}>Heavily used</option>
+                        </select>
+                    </div>
+
+                    {{-- Price Range --}}
+                    <div>
+                        <label for="min_price" class="block text-sm font-medium text-gray-700 mb-1">Min Price</label>
+                        <input type="number" name="min_price" id="min_price" value="{{ request('min_price') }}" placeholder="Rp 0" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    </div>
+
+                    <div>
+                        <label for="max_price" class="block text-sm font-medium text-gray-700 mb-1">Max Price</label>
+                        <input type="number" name="max_price" id="max_price" value="{{ request('max_price') }}" placeholder="Rp 999,999,999" class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    {{-- Sort Options --}}
+                    <div class="flex items-center gap-2">
+                        <label for="sort" class="text-sm font-medium text-gray-700">Sort by:</label>
+                        <select name="sort" id="sort" class="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                            <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Newest First</option>
+                            <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Oldest First</option>
+                            <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
+                            <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Price: High to Low</option>
+                        </select>
+                    </div>
+
+                    {{-- Filter Actions --}}
+                    <div class="flex items-center gap-2">
+                        <a href="{{ route('home') }}" class="text-sm text-gray-600 hover:text-gray-900 underline mr-2">Clear Filters</a>
+                        <button type="submit" class="bg-blue-700 text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-blue-800 transition-colors cursor-pointer">
+                            Apply Filters
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        {{-- Listings Grid --}}
         @if(count($items) > 0)
-            <h2 class="mt-12 text-2xl font-bold text-gray-900">Explore ThriftCorner</h2>
             <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($items as $item)
                     <x-listing-card :item="$item" />
                 @endforeach
             </div>
+
+            {{-- Pagination --}}
+            <div class="mt-8">
+                {{ $items->links() }}
+            </div>
         @else
-            <p class="mt-12 text-center text-gray-600">No listings available at the moment. Please check back later.</p>
+            <div class="mt-8 text-center py-12">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <h3 class="mt-4 text-lg font-medium text-gray-900">No listings found</h3>
+                <p class="mt-2 text-sm text-gray-600">
+                    @if(request('q') || request()->hasAny(['category', 'condition', 'min_price', 'max_price']))
+                        Try adjusting your search or filters to find what you're looking for.
+                    @else
+                        No listings available at the moment. Please check back later.
+                    @endif
+                </p>
+                @if(request('q') || request()->hasAny(['category', 'condition', 'min_price', 'max_price']))
+                    <a href="{{ route('home') }}" class="mt-4 inline-block text-blue-700 hover:text-blue-800 font-medium">
+                        Clear all filters
+                    </a>
+                @endif
+            </div>
         @endif
     </div>
 </div>

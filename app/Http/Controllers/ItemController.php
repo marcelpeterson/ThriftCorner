@@ -7,14 +7,42 @@ use App\Models\Category;
 use App\Models\ItemImage;
 use App\Services\WhatsAppLinkBuilder;
 use App\Http\Requests\StoreItemRequest;
+use App\Http\Requests\SearchItemsRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
 {
-    function getItemPage() {
-        $items = Item::all();
-        return view('home', compact('items'));
+    function getItemPage(SearchItemsRequest $request) {
+        $query = Item::with(['user', 'category', 'images'])
+            ->available()
+            ->search($request->input('q'))
+            ->category($request->input('category'))
+            ->condition($request->input('condition'))
+            ->priceRange($request->input('min_price'), $request->input('max_price'));
+
+        // Sorting
+        $sort = $request->input('sort', 'newest');
+        switch ($sort) {
+            case 'price_asc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'oldest':
+                $query->orderBy('created_at', 'asc');
+                break;
+            case 'newest':
+            default:
+                $query->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $items = $query->paginate(12)->withQueryString();
+        $categories = Category::all();
+
+        return view('home', compact('items', 'categories'));
     }
 
     function viewItem($id) {

@@ -10,28 +10,14 @@
             <!-- Desktop: links + search + auth -->
             @if(!auth()->check() || !auth()->user()->is_admin)
                 <div class="hidden md:flex flex-1 justify-center">
-                    <form action="" class="flex items-center gap-2" method="GET">
-                        <input type="text" placeholder="Search..." class="w-128 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
+                    <form action="{{ route('home') }}" class="flex items-center gap-2" method="GET">
+                        <input type="text" name="q" value="{{ request('q') }}" placeholder="Search..." class="w-128 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
                         <button type="submit" class="ml-2 border border-blue-700 rounded-full px-5 h-[35px] bg-blue-700 text-white hover:bg-transparent hover:text-black cursor-pointer transition-all">Search</button>
                     </form>
                 </div>
             @endif
 
             <div class="hidden md:flex items-center gap-6 shrink-0">
-                @if (Route::has('listings.index'))
-                    <a href="{{ route('listings.index') }}"
-                       class="text-sm font-medium transition-colors {{ request()->routeIs('listings.*') ? 'text-emerald-700' : 'text-gray-700 hover:text-emerald-700' }}">
-                        Listings
-                    </a>
-                @endif
-
-                @if (Route::has('categories.index'))
-                    <a href="{{ route('categories.index') }}"
-                       class="text-sm font-medium transition-colors {{ request()->routeIs('categories.*') ? 'text-emerald-700' : 'text-gray-700 hover:text-emerald-700' }}">
-                        Categories
-                    </a>
-                @endif
-
                 {{-- Sell Button (visible for non-admin users) --}}
                 @if (Route::has('items.create') && (!auth()->check() || !auth()->user()->is_admin))
                     <a href="{{ auth()->check() ? route('items.create') : route('login') }}"
@@ -121,12 +107,7 @@
         </div>
         <div class="md:hidden py-2 space-y-2">
             <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
-                @if (Route::has('listings.index'))
-                    <a href="{{ route('listings.index') }}" class="text-sm font-medium text-gray-700 hover:text-emerald-700 {{ request()->routeIs('listings.*') ? 'text-emerald-700' : '' }}">Listings</a>
-                @endif
-                @if (Route::has('categories.index'))
-                    <a href="{{ route('categories.index') }}" class="text-sm font-medium text-gray-700 hover:text-emerald-700 {{ request()->routeIs('categories.*') ? 'text-emerald-700' : '' }}">Categories</a>
-                @endif
+                <a href="{{ route('home') }}" class="text-sm font-medium text-gray-700 hover:text-emerald-700 {{ request()->routeIs('home') || request()->routeIs('items') ? 'text-emerald-700' : '' }}">Browse Items</a>
                 @auth
                     @if (Route::has('transactions.index') && !auth()->user()->is_admin)
                         <a href="{{ route('transactions.index') }}" class="text-sm font-medium text-gray-700 hover:text-emerald-700 {{ request()->routeIs('transactions.*') ? 'text-emerald-700' : '' }}">Transactions</a>
@@ -138,8 +119,8 @@
                 @endif
             </div>
 
-            @if (Route::has('listings.index') && (!auth()->check() || !auth()->user()->is_admin))
-                <form method="GET" action="{{ route('listings.index') }}">
+            @if (!auth()->check() || !auth()->user()->is_admin)
+                <form method="GET" action="{{ route('home') }}">
                     <label for="nav-search-mobile" class="sr-only">Search listings</label>
                     <input id="nav-search-mobile" name="q" value="{{ request('q') }}" type="search"
                            placeholder="Search listings..."

@@ -69,4 +69,57 @@ class Item extends Model
 
         return asset('storage/' . $this->photo_url);
     }
+
+    /**
+     * Scope: search items by name and description
+     */
+    public function scopeSearch($query, $search)
+    {
+        return $query->when($search, function ($q) use ($search) {
+            $q->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        });
+    }
+
+    /**
+     * Scope: filter by category
+     */
+    public function scopeCategory($query, $categoryId)
+    {
+        return $query->when($categoryId, function ($q) use ($categoryId) {
+            $q->where('category_id', $categoryId);
+        });
+    }
+
+    /**
+     * Scope: filter by condition
+     */
+    public function scopeCondition($query, $condition)
+    {
+        return $query->when($condition, function ($q) use ($condition) {
+            $q->where('condition', $condition);
+        });
+    }
+
+    /**
+     * Scope: filter by price range
+     */
+    public function scopePriceRange($query, $minPrice, $maxPrice)
+    {
+        return $query->when($minPrice !== null && $minPrice !== '', function ($q) use ($minPrice) {
+            $q->where('price', '>=', $minPrice);
+        })->when($maxPrice !== null && $maxPrice !== '', function ($q) use ($maxPrice) {
+            $q->where('price', '<=', $maxPrice);
+        });
+    }
+
+    /**
+     * Scope: filter available items (not sold)
+     */
+    public function scopeAvailable($query)
+    {
+        return $query->where('is_sold', false);
+    }
 }
