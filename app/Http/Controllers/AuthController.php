@@ -21,7 +21,7 @@ class AuthController extends Controller
         $request->validate([
             'first_name' => 'required|string|max:50',
             'last_name'  => 'required|string|max:50',
-            'email'      => 'required|email|unique:users,email',
+            'email'      => 'required|email|unique:users,email|regex:/^[a-zA-Z0-9._%+-]+@(binus.ac.id)|(binus.edu)$/',
             'password'   => 'required|min:6|confirmed',
             'phone'      => 'required|string|min:10|max:12',
         ], [
@@ -32,6 +32,7 @@ class AuthController extends Controller
             'email.required' => 'The email field is required.',
             'email.email' => 'The email must be a valid email address.',
             'email.unique' => 'The email has already been taken.',
+            'email.regex' => 'The email must be a valid binus.ac.id or binus.edu address.',
             'password.required' => 'The password field is required.',
             'password.min' => 'The password must be at least 6 characters.',
             'password.confirmed' => 'The password confirmation does not match.',
