@@ -72,6 +72,12 @@ class AuthController extends Controller
     
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+            
+            // Redirect admin users to dashboard
+            if (Auth::user()->is_admin) {
+                return redirect()->route('admin.dashboard')->with('success', 'Welcome back, Admin!');
+            }
+            
             return redirect()->route('home')->with('success', 'Welcome back!');
         }
 

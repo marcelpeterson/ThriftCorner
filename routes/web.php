@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\AdminController;
 
 // Route::get('', function () {
 //     return view('home');
@@ -39,3 +40,14 @@ Route::middleware('auth')->group(function () {
 // Public transaction confirmation (accessed via token)
 Route::get('/transaction/confirm/{token}', [TransactionController::class, 'showConfirmation'])->name('transaction.confirm');
 Route::post('/transaction/confirm/{token}', [TransactionController::class, 'confirm'])->name('transaction.confirm.submit');
+
+// Admin routes
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/analytics', [AdminController::class, 'analytics'])->name('analytics');
+    Route::get('/users', [AdminController::class, 'users'])->name('users');
+    Route::post('/users/{user}/toggle-admin', [AdminController::class, 'toggleAdmin'])->name('users.toggleAdmin');
+    Route::get('/listings', [AdminController::class, 'listings'])->name('listings');
+    Route::delete('/listings/{item}', [AdminController::class, 'deleteListing'])->name('listings.delete');
+    Route::get('/transactions', [AdminController::class, 'transactions'])->name('transactions');
+});

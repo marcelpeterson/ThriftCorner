@@ -22,5 +22,14 @@ class UserSeeder extends Seeder
             'photo_url' => 'https://avatar.iran.liara.run/username?username=John+Doe',
             'password' => Hash::make('password'),
         ]);
+        User::create([
+            'first_name' => 'Admin',
+            'last_name' => 'User',
+            'email' => 'admin@example.com',
+            'phone' => '081298765432',
+            'photo_url' => 'https://avatar.iran.liara.run/username?username=Admin+User',
+            'password' => Hash::make('password'),
+            'is_admin' => true,
+        ]);
     }
 }

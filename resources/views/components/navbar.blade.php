@@ -8,12 +8,14 @@
             </div>
 
             <!-- Desktop: links + search + auth -->
-            <div class="hidden md:flex flex-1 justify-center">
-                <form action="" class="flex items-center gap-2" method="GET">
-                    <input type="text" placeholder="Search..." class="w-128 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
-                    <button type="submit" class="ml-2 border border-blue-700 rounded-full px-5 h-[35px] bg-blue-700 text-white hover:bg-transparent hover:text-black cursor-pointer transition-all">Search</button>
-                </form>
-            </div>
+            @if(!auth()->check() || !auth()->user()->is_admin)
+                <div class="hidden md:flex flex-1 justify-center">
+                    <form action="" class="flex items-center gap-2" method="GET">
+                        <input type="text" placeholder="Search..." class="w-128 px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
+                        <button type="submit" class="ml-2 border border-blue-700 rounded-full px-5 h-[35px] bg-blue-700 text-white hover:bg-transparent hover:text-black cursor-pointer transition-all">Search</button>
+                    </form>
+                </div>
+            @endif
 
             <div class="hidden md:flex items-center gap-6 shrink-0">
                 @if (Route::has('listings.index'))
@@ -30,8 +32,8 @@
                     </a>
                 @endif
 
-                {{-- Sell Button (visible for all users) --}}
-                @if (Route::has('items.create'))
+                {{-- Sell Button (visible for non-admin users) --}}
+                @if (Route::has('items.create') && (!auth()->check() || !auth()->user()->is_admin))
                     <a href="{{ auth()->check() ? route('items.create') : route('login') }}"
                        class="inline-flex items-center rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 transition-colors">
                         <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,17 +62,30 @@
 
                             <div id="navbar-user-menu" class="absolute right-0 mt-2 hidden min-w-[12rem] overflow-hidden rounded-lg border border-gray-100 bg-white shadow-lg focus:outline-none" data-navbar-user-menu role="menu" aria-labelledby="navbar-user-menu-button">
                                 <ul class="py-2 text-sm text-gray-700" role="none">
-                                    <li>
-                                        <a href="{{ route('profile') }}" class="block px-4 py-2 hover:bg-gray-100" role="menuitem">Profile</a>
-                                    </li>
-                                    @if (Route::has('transactions.index'))
+                                    @if(!auth()->user()->is_admin)
                                         <li>
-                                            <a href="{{ route('transactions.index') }}" class="block px-4 py-2 hover:bg-gray-100" role="menuitem">My Transactions</a>
+                                            <a href="{{ route('profile') }}" class="block px-4 py-2 hover:bg-gray-100" role="menuitem">Profile</a>
+                                        </li>
+                                        @if (Route::has('transactions.index'))
+                                            <li>
+                                                <a href="{{ route('transactions.index') }}" class="block px-4 py-2 hover:bg-gray-100" role="menuitem">My Transactions</a>
+                                            </li>
+                                        @endif
+                                    @endif
+                                    @if(auth()->user()->is_admin)
+                                        <li class="{{ !auth()->user()->is_admin ? 'border-t border-gray-100 mt-2 pt-2' : '' }}">
+                                            <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 hover:bg-purple-50 text-purple-600 font-semibold" role="menuitem">
+                                                <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                                </svg>
+                                                Admin Dashboard
+                                            </a>
+                                        </li>
+                                    @else
+                                        <li>
+                                            <a href="#" class="block px-4 py-2 hover:bg-gray-100" role="menuitem">Settings</a>
                                         </li>
                                     @endif
-                                    <li>
-                                        <a href="#" class="block px-4 py-2 hover:bg-gray-100" role="menuitem">Settings</a>
-                                    </li>
                                     @if (Route::has('logout'))
                                         <li class="border-t border-gray-100 mt-2 pt-2">
                                             <form method="POST" action="{{ route('logout') }}" role="none">
@@ -113,17 +128,17 @@
                     <a href="{{ route('categories.index') }}" class="text-sm font-medium text-gray-700 hover:text-emerald-700 {{ request()->routeIs('categories.*') ? 'text-emerald-700' : '' }}">Categories</a>
                 @endif
                 @auth
-                    @if (Route::has('transactions.index'))
+                    @if (Route::has('transactions.index') && !auth()->user()->is_admin)
                         <a href="{{ route('transactions.index') }}" class="text-sm font-medium text-gray-700 hover:text-emerald-700 {{ request()->routeIs('transactions.*') ? 'text-emerald-700' : '' }}">Transactions</a>
                     @endif
                 @endauth
-                {{-- Sell Button (mobile - visible for all users) --}}
-                @if (Route::has('items.create'))
+                {{-- Sell Button (mobile - visible for non-admin users) --}}
+                @if (Route::has('items.create') && (!auth()->check() || !auth()->user()->is_admin))
                     <a href="{{ auth()->check() ? route('items.create') : route('login') }}" class="text-sm font-semibold text-emerald-700">Sell</a>
                 @endif
             </div>
 
-            @if (Route::has('listings.index'))
+            @if (Route::has('listings.index') && (!auth()->check() || !auth()->user()->is_admin))
                 <form method="GET" action="{{ route('listings.index') }}">
                     <label for="nav-search-mobile" class="sr-only">Search listings</label>
                     <input id="nav-search-mobile" name="q" value="{{ request('q') }}" type="search"
