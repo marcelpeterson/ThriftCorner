@@ -29,6 +29,7 @@ Route::get('/items/{id}', [ItemController::class, 'viewItem'])->name('items.view
 
 // Transaction routes
 Route::middleware('auth')->group(function () {
+    Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
     Route::post('/items/{id}/mark-sold', [TransactionController::class, 'markAsSold'])->name('transaction.markSold');
     Route::get('/transactions/{id}/links', [TransactionController::class, 'showLinks'])->name('transaction.links');
     Route::post('/transactions/{id}/cancel', [TransactionController::class, 'cancel'])->name('transaction.cancel');

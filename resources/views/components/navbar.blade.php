@@ -63,6 +63,11 @@
                                     <li>
                                         <a href="{{ route('profile') }}" class="block px-4 py-2 hover:bg-gray-100" role="menuitem">Profile</a>
                                     </li>
+                                    @if (Route::has('transactions.index'))
+                                        <li>
+                                            <a href="{{ route('transactions.index') }}" class="block px-4 py-2 hover:bg-gray-100" role="menuitem">My Transactions</a>
+                                        </li>
+                                    @endif
                                     <li>
                                         <a href="#" class="block px-4 py-2 hover:bg-gray-100" role="menuitem">Settings</a>
                                     </li>
@@ -107,6 +112,11 @@
                 @if (Route::has('categories.index'))
                     <a href="{{ route('categories.index') }}" class="text-sm font-medium text-gray-700 hover:text-emerald-700 {{ request()->routeIs('categories.*') ? 'text-emerald-700' : '' }}">Categories</a>
                 @endif
+                @auth
+                    @if (Route::has('transactions.index'))
+                        <a href="{{ route('transactions.index') }}" class="text-sm font-medium text-gray-700 hover:text-emerald-700 {{ request()->routeIs('transactions.*') ? 'text-emerald-700' : '' }}">Transactions</a>
+                    @endif
+                @endauth
                 {{-- Sell Button (mobile - visible for all users) --}}
                 @if (Route::has('items.create'))
                     <a href="{{ auth()->check() ? route('items.create') : route('login') }}" class="text-sm font-semibold text-emerald-700">Sell</a>

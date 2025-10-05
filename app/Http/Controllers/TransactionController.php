@@ -9,6 +9,25 @@ use Illuminate\Http\Request;
 class TransactionController extends Controller
 {
     /**
+     * Display a listing of the user's transactions
+     */
+    public function index()
+    {
+        $user = auth()->user();
+        
+        // Get transactions where user is seller or buyer
+        $transactions = Transaction::with(['item.images', 'seller', 'buyer'])
+            ->where(function ($query) use ($user) {
+                $query->where('seller_id', $user->id)
+                      ->orWhere('buyer_id', $user->id);
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('transactions.index', compact('transactions'));
+    }
+
+    /**
      * Initiate a transaction (seller marks item as sold)
      */
     public function markAsSold(Request $request, $itemId)
