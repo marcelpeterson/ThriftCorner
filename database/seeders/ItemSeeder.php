@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Item;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\ItemImage;
 use Illuminate\Database\Seeder;
 
 class ItemSeeder extends Seeder
@@ -19,8 +19,12 @@ class ItemSeeder extends Seeder
             'name' => 'Vintage Lamp',
             'description' => 'A beautiful vintage lamp in excellent condition.',
             'price' => 45000.00,
-            'photo_url' => 'images/vintage_lamp.png',
             'condition' => 'Like new',
+        ]);
+
+        ItemImage::create([
+            'item_id' => 1,
+            'image_path' => 'images/vintage_lamp.png',
         ]);
     }
 }
