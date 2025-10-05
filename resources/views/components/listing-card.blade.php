@@ -8,8 +8,8 @@
             <p class="text-xs text-gray-500 ml-2">{{ $item->created_at->diffForHumans() }}</p>
         </div>
     </div>
-    @if($item->photo_url)
-        <img src="{{ $item->photo_url }}" alt="{{ $item->name }}" class="mt-3 w-96 h-96 object-cover rounded-md">
+    @if($item->photo)
+        <img src="{{ $item->photo }}" alt="{{ $item->name }}" class="mt-3 w-96 h-96 object-cover rounded-md">
     @else
         <div class="mt-4 w-full h-48 bg-gray-100 flex items-center justify-center rounded-md">
             <span class="text-gray-400">No Image</span>

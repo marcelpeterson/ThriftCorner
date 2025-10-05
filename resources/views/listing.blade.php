@@ -16,8 +16,15 @@
 
     {{-- Image Banner --}}
     <div class="mb-8">
-        @if($item->photo_url)
-            <img src="{{ $item->photo_url }}" alt="{{ $item->name }}" class="w-full h-[400px] object-cover rounded-2xl shadow-lg">
+        @if($item->photo)
+            <div class="relative w-full h-[400px] rounded-2xl shadow-lg overflow-hidden">
+                {{-- Blurred Background --}}
+                <div class="absolute inset-0">
+                    <img src="{{ $item->photo }}" alt="" class="w-full h-full object-cover blur-2xl scale-110 opacity-60">
+                </div>
+                {{-- Actual Image --}}
+                <img src="{{ $item->photo }}" alt="{{ $item->name }}" class="relative w-full h-full object-contain z-10">
+            </div>
         @else
             <div class="w-full h-[400px] bg-gray-200 flex items-center justify-center rounded-2xl shadow-lg">
                 <div class="text-center">

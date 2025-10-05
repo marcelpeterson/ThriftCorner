@@ -19,7 +19,7 @@ class ItemSeeder extends Seeder
             'name' => 'Vintage Lamp',
             'description' => 'A beautiful vintage lamp in excellent condition.',
             'price' => 45000.00,
-            'photo_url' => 'storage/images/vintage_lamp.png',
+            'photo_url' => 'images/vintage_lamp.png',
             'condition' => 'Like new',
         ]);
     }

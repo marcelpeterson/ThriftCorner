@@ -33,4 +33,24 @@ class Item extends Model
     {
         return rupiah($this->price);
     }
+
+    /**
+     * Accessor: get the full URL for the photo
+     */
+    public function getPhotoAttribute(): ?string
+    {
+        if (!$this->photo_url) {
+            return null;
+        }
+
+        if (filter_var($this->photo_url, FILTER_VALIDATE_URL)) {
+            return $this->photo_url;
+        }
+
+        if (str_starts_with($this->photo_url, 'storage/')) {
+            return asset($this->photo_url);
+        }
+
+        return asset('storage/' . $this->photo_url);
+    }
 }
