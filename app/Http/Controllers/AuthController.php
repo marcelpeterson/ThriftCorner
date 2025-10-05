@@ -43,8 +43,9 @@ class AuthController extends Controller
         $user = new User();
         $user->first_name = $request->first_name;
         $user->last_name  = $request->last_name;
-        $user->name       = $request->first_name . ' ' . $request->last_name; 
         $user->email      = $request->email;
+        $user->phone      = $request->phone;
+        $user->photo_url  = 'https://avatar.iran.liara.run/username?username=' . urlencode($request->first_name . ' ' . $request->last_name);
         $user->password   = Hash::make($request->password);
         $user->save();
 

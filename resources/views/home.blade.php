@@ -11,7 +11,7 @@
             <div class="absolute inset-0 transition-opacity duration-750" 
                  :class="currentSlide === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0'">
                 <div class="bg-gray-900 relative h-[400px]">
-                    <div class="text-white ml-24 pt-22 max-w-2xl">
+                    <div class="text-white ml-24 pt-16 max-w-2xl">
                         <h1 class="text-[4rem] font-bold tracking-tight sm:text-[4rem]">
                             {{ config('app.name', 'ThriftCorner') }}
                         </h1>
@@ -21,6 +21,11 @@
                         <p class="mt-2 text-gray-300">
                             A simple marketplace for Binus students to buy and sell textbooks, electronics, and dorm essentials.
                         </p>
+                        <button class="bg-white text-gray-900 font-bold mt-5 px-8 py-3 rounded-full hover:bg-blue-50 transition-colors shadow-lg cursor-pointer">
+                            @if (Route::has('items.create'))
+                                <a href="{{ auth()->check() ? route('items.create') : route('login') }}">Sell Now →</a>
+                            @endif
+                        </button>
                     </div>
                     <img src="{{ asset('storage/images/bags.png') }}" alt="" class="absolute bottom-0 right-0 w-full max-w-[450px]">
                 </div>

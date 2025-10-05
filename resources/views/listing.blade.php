@@ -210,6 +210,38 @@
                     <p class="text-xs text-gray-500 text-center mt-3">
                         Click to start a chat with pre-filled message
                     </p>
+
+                    {{-- Mark as Sold Button (Only for seller) --}}
+                    @auth
+                        @if(auth()->id() === $item->user_id && !$item->is_sold)
+                            <div class="mt-4 pt-4 border-t border-gray-200">
+                                <form action="{{ route('transaction.markSold', $item->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to mark this item as sold? This will generate confirmation links for you and the buyer.');">
+                                    @csrf
+                                    <button type="submit" class="block w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-150 ease-in-out shadow-md hover:shadow-lg text-center">
+                                        <div class="flex items-center justify-center cursor-pointer">
+                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                            Mark as Sold
+                                        </div>
+                                    </button>
+                                </form>
+                                <p class="text-xs text-gray-500 text-center mt-2">Generate transaction confirmation links</p>
+                            </div>
+                        @endif
+
+                        @if($item->is_sold)
+                            <div class="mt-4 pt-4 border-t border-gray-200">
+                                <div class="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+                                    <svg class="w-8 h-8 text-green-600 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <p class="font-bold text-green-800">SOLD</p>
+                                    <p class="text-xs text-green-600 mt-1">This item has been sold</p>
+                                </div>
+                            </div>
+                        @endif
+                    @endauth
                 </div>
 
                 {{-- Safety Tips --}}
@@ -224,7 +256,6 @@
                                 <li>• Meet in public places</li>
                                 <li>• Inspect items before buying</li>
                                 <li>• Never share sensitive info</li>
-                                <li>• Trust your instincts</li>
                             </ul>
                         </div>
                     </div>

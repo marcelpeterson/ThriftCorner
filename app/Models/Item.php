@@ -14,6 +14,12 @@ class Item extends Model
         'price',
         'photo_url',
         'condition',
+        'is_sold',
+        'transaction_id',
+    ];
+
+    protected $casts = [
+        'is_sold' => 'boolean',
     ];
 
     public function category()
@@ -29,6 +35,11 @@ class Item extends Model
     public function images()
     {
         return $this->hasMany(ItemImage::class)->orderBy('order');
+    }
+
+    public function transaction()
+    {
+        return $this->belongsTo(Transaction::class);
     }
 
     /**
