@@ -16,7 +16,13 @@
             @csrf
             <div class="flex flex-col gap-3">
                 <input type="text" name="email" placeholder="Email" class="border border-gray-500 rounded-[12px] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                @error('email')
+                    <p class="text-sm text-red-500">{{ $message }}</p>
+                @enderror
                 <input type="password" name="password" placeholder="Password" class="border border-gray-500 rounded-[12px] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                @error('password')
+                    <p class="text-sm text-red-500">{{ $message }}</p>
+                @enderror
                 <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-[12px] mt-2 w-full cursor-pointer">Login</button>
             </div>
         </form>
