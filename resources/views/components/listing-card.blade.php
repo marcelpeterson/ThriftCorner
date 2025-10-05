@@ -1,6 +1,6 @@
 @props(['item'])
 
-<div class="rounded-lg border border-gray-200 bg-white p-6">
+<a href="{{ route('items.view', $item->id) }}" class="block rounded-lg border border-gray-200 bg-white p-6 hover:shadow-lg transition-shadow duration-200 ease-in-out">
     <div class="flex items-center gap-0.5">
         <img src="{{ $item->user->photo_url }}" alt="User photo from API" class="w-10 h-10 rounded-full object-cover inline-block">
         <div>
@@ -21,4 +21,4 @@
         <p class="mt-2 text-md font-semibold text-gray-900">{{ $item->price_rupiah }}</p>
         <p class="mt-1 text-sm text-gray-600">{{ $item->condition }}</p>
     </div>
-</div>
+</a>

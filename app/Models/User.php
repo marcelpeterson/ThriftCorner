@@ -49,4 +49,20 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the user's full name.
+     */
+    public function getFullNameAttribute(): string
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
+    /**
+     * Get items listed by this user.
+     */
+    public function items()
+    {
+        return $this->hasMany(Item::class);
+    }
 }

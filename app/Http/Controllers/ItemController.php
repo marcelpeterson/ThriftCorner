@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use App\Models\Category;
+use App\Services\WhatsAppLinkBuilder;
 use Illuminate\Http\Request;
 
 class ItemController extends Controller
@@ -11,6 +12,15 @@ class ItemController extends Controller
     function getItemPage() {
         $items = Item::all();
         return view('home', compact('items'));
+    }
+
+    function viewItem($id) {
+        $item = Item::with(['user', 'category'])->findOrFail($id);
+        
+        $whatsappLinkBuilder = app(WhatsAppLinkBuilder::class);
+        $whatsappLink = $whatsappLinkBuilder->generateLink($item, auth()->user());
+        
+        return view('listing', compact('item', 'whatsappLink'));
     }
 
     function getCreateItemPage() {
