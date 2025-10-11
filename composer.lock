@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f3bddfb3cffa912dbfa34c9f864524d7",
+    "content-hash": "33026851fbd5dd681eac4c108484246a",
     "packages": [
         {
             "name": "brick/math",
@@ -2476,6 +2476,67 @@
                 }
             ],
             "time": "2024-12-08T08:18:47+00:00"
+        },
+        {
+            "name": "midtrans/midtrans-php",
+            "version": "2.6.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Midtrans/midtrans-php.git",
+                "reference": "8ed7fc58ff1ababe675da17acf8233f4028eb3be"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Midtrans/midtrans-php/zipball/8ed7fc58ff1ababe675da17acf8233f4028eb3be",
+                "reference": "8ed7fc58ff1ababe675da17acf8233f4028eb3be",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-openssl": "*",
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "5.7.*",
+                "psy/psysh": "0.4.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SnapBi\\": "SnapBi/",
+                    "Midtrans\\": "Midtrans/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andri Setiawan",
+                    "email": "andri.setiawan@veritrans.co.id"
+                },
+                {
+                    "name": "Alvin Litani",
+                    "email": "alvin.litani@veritrans.co.id"
+                },
+                {
+                    "name": "Ismail Faruqi",
+                    "email": "ismail.faruqi@veritrans.co.id"
+                },
+                {
+                    "name": "Muhammad Fauzi Masykur",
+                    "email": "muhammad.masykur@gojek.com"
+                }
+            ],
+            "description": "PHP Wrapper for Midtrans Payment API.",
+            "homepage": "https://midtrans.com",
+            "support": {
+                "issues": "https://github.com/Midtrans/midtrans-php/issues",
+                "source": "https://github.com/Midtrans/midtrans-php/tree/v2.6.2"
+            },
+            "time": "2025-03-18T06:30:17+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -7197,6 +7258,72 @@
                 "source": "https://github.com/hamcrest/hamcrest-php/tree/v2.1.1"
             },
             "time": "2025-04-30T06:54:44+00:00"
+        },
+        {
+            "name": "jn-jairo/laravel-ngrok",
+            "version": "v3.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jn-jairo/laravel-ngrok.git",
+                "reference": "ee4538bda6e4bf1c1b66ba1acacca2d0764855c8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jn-jairo/laravel-ngrok/zipball/ee4538bda6e4bf1c1b66ba1acacca2d0764855c8",
+                "reference": "ee4538bda6e4bf1c1b66ba1acacca2d0764855c8",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.5.8|^7.4.5",
+                "illuminate/console": "^8.83|^9.0|^10.0|^11.0|^12.0",
+                "illuminate/http": "^8.83|^9.0|^10.0|^11.0|^12.0",
+                "illuminate/pagination": "^8.83|^9.0|^10.0|^11.0|^12.0",
+                "illuminate/routing": "^8.83|^9.0|^10.0|^11.0|^12.0",
+                "illuminate/support": "^8.83|^9.0|^10.0|^11.0|^12.0",
+                "php": "^8.1",
+                "symfony/process": "^5.4|^6.0|^7.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.24|^7.0|^8.0|^9.0|^10.0",
+                "pestphp/pest": "^1.22|^2.34|^3.7.4",
+                "phpspec/prophecy": "^1.17",
+                "phpspec/prophecy-phpunit": "^2.0",
+                "webmozart/assert": "^1.11"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "JnJairo\\Laravel\\Ngrok\\NgrokServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "JnJairo\\Laravel\\Ngrok\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jairo Correa",
+                    "email": "jn.j41r0@gmail.com"
+                }
+            ],
+            "description": "Share Laravel application with ngrok.",
+            "homepage": "https://github.com/jn-jairo/laravel-ngrok",
+            "keywords": [
+                "jn-jairo",
+                "laravel-ngrok"
+            ],
+            "support": {
+                "issues": "https://github.com/jn-jairo/laravel-ngrok/issues",
+                "source": "https://github.com/jn-jairo/laravel-ngrok/tree/v3.0.3"
+            },
+            "time": "2025-02-27T00:47:12+00:00"
         },
         {
             "name": "laravel/pail",

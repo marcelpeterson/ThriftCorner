@@ -103,8 +103,20 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {{-- Left Column: Item Details --}}
         <div class="lg:col-span-2">
-            {{-- Item Name --}}
-            <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ $item->name }}</h1>
+            {{-- Item Name with Premium Badge --}}
+            <div class="flex items-start gap-3 mb-4">
+                <h1 class="text-4xl font-bold text-gray-900 flex-1">{{ $item->name }}</h1>
+                @if($item->isPremium())
+                    <div class="flex-shrink-0">
+                        <div class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full shadow-md">
+                            <svg class="w-4 h-4 mr-1.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                            </svg>
+                            <span class="text-white font-bold text-sm">PREMIUM</span>
+                        </div>
+                    </div>
+                @endif
+            </div>
 
             {{-- Price --}}
             <div class="mb-6">
@@ -240,10 +252,36 @@
                         Click to start a chat with pre-filled message
                     </p>
 
-                    {{-- Mark as Sold Button (Only for seller) --}}
+                    {{-- Seller Actions --}}
                     @auth
                         @if(auth()->id() === $item->user_id && !$item->is_sold)
-                            <div class="mt-4 pt-4 border-t border-gray-200">
+                            <div class="mt-4 pt-4 border-t border-gray-200 space-y-3">
+                                {{-- Premium Button --}}
+                                @if(!$item->isPremium())
+                                    <a href="{{ route('premium.packages', $item->id) }}" class="block w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-150 ease-in-out shadow-md hover:shadow-lg text-center">
+                                        <div class="flex items-center justify-center">
+                                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                                            </svg>
+                                            Boost with Premium
+                                        </div>
+                                    </a>
+                                @else
+                                    <div class="bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-300 rounded-lg p-4 text-center">
+                                        <div class="flex items-center justify-center text-purple-700 mb-1">
+                                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                            </svg>
+                                            <span class="font-bold">PREMIUM LISTING</span>
+                                        </div>
+                                        <p class="text-xs text-purple-600">Active until {{ $item->premium_until->format('M d, Y') }}</p>
+                                        <a href="{{ route('premium.packages', $item->id) }}" class="text-xs text-purple-700 hover:text-purple-900 font-semibold mt-2 inline-block">
+                                            Extend or Upgrade →
+                                        </a>
+                                    </div>
+                                @endif
+
+                                {{-- Mark as Sold Button --}}
                                 <form action="{{ route('transaction.markSold', $item->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to mark this item as sold? This will generate confirmation links for you and the buyer.');">
                                     @csrf
                                     <button type="submit" class="block w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-150 ease-in-out shadow-md hover:shadow-lg text-center">
@@ -255,7 +293,7 @@
                                         </div>
                                     </button>
                                 </form>
-                                <p class="text-xs text-gray-500 text-center mt-2">Generate transaction confirmation links</p>
+                                <p class="text-xs text-gray-500 text-center">Generate transaction confirmation links</p>
                             </div>
                         @endif
 

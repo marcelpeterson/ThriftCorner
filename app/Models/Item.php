@@ -16,10 +16,14 @@ class Item extends Model
         'condition',
         'is_sold',
         'transaction_id',
+        'is_premium',
+        'premium_until',
     ];
 
     protected $casts = [
         'is_sold' => 'boolean',
+        'is_premium' => 'boolean',
+        'premium_until' => 'datetime',
     ];
 
     public function category()
@@ -40,6 +44,23 @@ class Item extends Model
     public function transaction()
     {
         return $this->belongsTo(Transaction::class);
+    }
+
+    public function premiumListing()
+    {
+        return $this->hasOne(PremiumListing::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function isPremium()
+    {
+        return $this->is_premium && 
+               $this->premium_until && 
+               $this->premium_until->isFuture();
     }
 
     /**
@@ -121,5 +142,13 @@ class Item extends Model
     public function scopeAvailable($query)
     {
         return $query->where('is_sold', false);
+    }
+
+    /**
+     * Scope: premium items first
+     */
+    public function scopePremiumFirst($query)
+    {
+        return $query->orderByRaw('is_premium DESC, premium_until DESC');
     }
 }

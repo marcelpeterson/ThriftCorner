@@ -21,6 +21,9 @@ class ItemController extends Controller
             ->condition($request->input('condition'))
             ->priceRange($request->input('min_price'), $request->input('max_price'));
 
+        // Always show premium items first, then apply sorting
+        $query->premiumFirst();
+        
         // Sorting
         $sort = $request->input('sort', 'newest');
         switch ($sort) {
@@ -41,8 +44,17 @@ class ItemController extends Controller
 
         $items = $query->paginate(12)->withQueryString();
         $categories = Category::all();
+        
+        // Get featured items for homepage section
+        $featuredItems = Item::with(['user', 'category', 'images'])
+            ->where('is_premium', true)
+            ->where('premium_until', '>', now())
+            ->available()
+            ->latest()
+            ->take(6)
+            ->get();
 
-        return view('home', compact('items', 'categories'));
+        return view('home', compact('items', 'categories', 'featuredItems'));
     }
 
     function viewItem($id) {

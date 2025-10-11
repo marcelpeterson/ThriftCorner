@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PaymentController;
 
 // Route::get('', function () {
 //     return view('home');
@@ -43,6 +44,18 @@ Route::middleware('auth')->group(function () {
 // Public transaction confirmation (accessed via token)
 Route::get('/transaction/confirm/{token}', [TransactionController::class, 'showConfirmation'])->name('transaction.confirm');
 Route::post('/transaction/confirm/{token}', [TransactionController::class, 'confirm'])->name('transaction.confirm.submit');
+
+// Premium listing & payment routes
+Route::middleware('auth')->group(function () {
+    Route::get('/items/{id}/premium/packages', [PaymentController::class, 'showPackages'])->name('premium.packages');
+    Route::post('/items/{id}/premium/payment', [PaymentController::class, 'createPayment'])->name('premium.createPayment');
+    Route::get('/payment/{id}/checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
+    Route::get('/payment/{id}/finish', [PaymentController::class, 'finish'])->name('payment.finish');
+    Route::get('/payment/{id}/status', [PaymentController::class, 'checkStatus'])->name('payment.status');
+});
+
+// Midtrans notification callback (no auth required)
+Route::post('/payment/notification', [PaymentController::class, 'notification'])->name('payment.notification');
 
 // Admin routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {

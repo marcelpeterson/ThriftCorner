@@ -31,6 +31,22 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
         User::create([
+            'first_name' => 'Alice',
+            'last_name' => 'Johnson',
+            'email' => 'alice@example.com',
+            'phone' => '081212345680',
+            'photo_url' => 'https://avatar.iran.liara.run/username?username=Alice+Johnson',
+            'password' => Hash::make('password'),
+        ]);
+        User::create([
+            'first_name' => 'Bob',
+            'last_name' => 'Brown',
+            'email' => 'bob@example.com',
+            'phone' => '081212345681',
+            'photo_url' => 'https://avatar.iran.liara.run/username?username=Bob+Brown',
+            'password' => Hash::make('password'),
+        ]);
+        User::create([
             'first_name' => 'Admin',
             'last_name' => 'User',
             'email' => 'admin@example.com',
