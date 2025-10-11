@@ -33,15 +33,15 @@ class PaymentController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        // Check if item is already premium
-        $activePremium = PremiumListing::where('item_id', $item->id)
+        // Get all active premium packages for this item
+        $activePremiumPackages = PremiumListing::where('item_id', $item->id)
             ->where('is_active', true)
             ->where('expires_at', '>', now())
-            ->first();
+            ->get();
 
         $packages = PremiumListing::getPackages();
 
-        return view('premium.packages', compact('item', 'packages', 'activePremium'));
+        return view('premium.packages', compact('item', 'packages', 'activePremiumPackages'));
     }
 
     /**
@@ -50,7 +50,7 @@ class PaymentController extends Controller
     public function createPayment(Request $request, $itemId)
     {
         $request->validate([
-            'package_type' => 'required|in:featured',
+            'package_type' => 'required|in:hero,featured',
         ]);
 
         $item = Item::findOrFail($itemId);

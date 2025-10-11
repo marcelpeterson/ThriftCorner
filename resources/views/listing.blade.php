@@ -256,8 +256,42 @@
                     @auth
                         @if(auth()->id() === $item->user_id && !$item->is_sold)
                             <div class="mt-4 pt-4 border-t border-gray-200 space-y-3">
-                                {{-- Premium Button --}}
-                                @if(!$item->isPremium())
+                                {{-- Premium Packages Status --}}
+                                @if($activePremiumPackages->count() > 0)
+                                    <div class="space-y-3">
+                                        @foreach($activePremiumPackages as $package)
+                                            @if($package->package_type === 'hero')
+                                                {{-- Hero Banner Status --}}
+                                                <div class="bg-gradient-to-r from-blue-50 to-cyan-50 border-2 border-blue-300 rounded-lg p-4 text-center">
+                                                    <div class="flex items-center justify-center text-blue-700 mb-1">
+                                                        {{-- <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/>
+                                                        </svg> --}}
+                                                        <span class="font-bold">🎯 HERO BANNER</span>
+                                                    </div>
+                                                    <p class="text-xs text-blue-600">Active until {{ $package->expires_at->format('M d, Y') }}</p>
+                                                </div>
+                                            @elseif($package->package_type === 'featured')
+                                                {{-- Featured Listing Status --}}
+                                                <div class="bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-300 rounded-lg p-4 text-center">
+                                                    <div class="flex items-center justify-center text-purple-700 mb-1">
+                                                        {{-- <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                                                        </svg> --}}
+                                                        <span class="font-bold">⭐ FEATURED</span>
+                                                    </div>
+                                                    <p class="text-xs text-purple-600">Active until {{ $package->expires_at->format('M d, Y') }}</p>
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                        
+                                        {{-- Extend/Upgrade Link --}}
+                                        <a href="{{ route('premium.packages', $item->id) }}" class="block text-center text-sm text-gray-700 hover:text-gray-900 font-semibold mt-2">
+                                            Extend or Add More Packages →
+                                        </a>
+                                    </div>
+                                @else
+                                    {{-- No Premium - Show Boost Button --}}
                                     <a href="{{ route('premium.packages', $item->id) }}" class="block w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-150 ease-in-out shadow-md hover:shadow-lg text-center">
                                         <div class="flex items-center justify-center">
                                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -266,19 +300,6 @@
                                             Boost with Premium
                                         </div>
                                     </a>
-                                @else
-                                    <div class="bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-300 rounded-lg p-4 text-center">
-                                        <div class="flex items-center justify-center text-purple-700 mb-1">
-                                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                                            </svg>
-                                            <span class="font-bold">PREMIUM LISTING</span>
-                                        </div>
-                                        <p class="text-xs text-purple-600">Active until {{ $item->premium_until->format('M d, Y') }}</p>
-                                        <a href="{{ route('premium.packages', $item->id) }}" class="text-xs text-purple-700 hover:text-purple-900 font-semibold mt-2 inline-block">
-                                            Extend or Upgrade →
-                                        </a>
-                                    </div>
                                 @endif
 
                                 {{-- Mark as Sold Button --}}

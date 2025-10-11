@@ -54,16 +54,33 @@ class ItemController extends Controller
             ->take(6)
             ->get();
 
-        return view('home', compact('items', 'categories', 'featuredItems'));
+        // Get ALL hero banner items (all active hero premium listings)
+        $heroItems = Item::with(['user', 'category', 'images'])
+            ->whereHas('premiumListing', function($q) {
+                $q->where('package_type', 'hero')
+                  ->where('is_active', true)
+                  ->where('expires_at', '>', now());
+            })
+            ->available()
+            ->latest()
+            ->get();
+
+        return view('home', compact('items', 'categories', 'featuredItems', 'heroItems'));
     }
 
     function viewItem($id) {
-        $item = Item::with(['user', 'category', 'images'])->findOrFail($id);
+        $item = Item::with(['user', 'category', 'images', 'premiumListing'])->findOrFail($id);
+        
+        // Get all active premium packages for this item
+        $activePremiumPackages = $item->premiumListing()
+            ->where('is_active', true)
+            ->where('expires_at', '>', now())
+            ->get();
         
         $whatsappLinkBuilder = app(WhatsAppLinkBuilder::class);
         $whatsappLink = $whatsappLinkBuilder->generateLink($item, auth()->user());
         
-        return view('listing', compact('item', 'whatsappLink'));
+        return view('listing', compact('item', 'whatsappLink', 'activePremiumPackages'));
     }
 
     function createItemPage() {

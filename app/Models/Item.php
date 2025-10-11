@@ -48,7 +48,7 @@ class Item extends Model
 
     public function premiumListing()
     {
-        return $this->hasOne(PremiumListing::class);
+        return $this->hasMany(PremiumListing::class);
     }
 
     public function payments()

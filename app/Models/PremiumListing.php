@@ -49,11 +49,14 @@ class PremiumListing extends Model
         $this->is_active = true;
         $this->save();
 
-        // Update item premium status
-        $this->item->update([
-            'is_premium' => true,
-            'premium_until' => $this->expires_at,
-        ]);
+        // Only set is_premium for 'featured' package type
+        // Hero banner doesn't need premium priority in search results
+        if ($this->package_type === 'featured') {
+            $this->item->update([
+                'is_premium' => true,
+                'premium_until' => $this->expires_at,
+            ]);
+        }
     }
 
     public function deactivate()
@@ -83,14 +86,25 @@ class PremiumListing extends Model
     public static function getPackages()
     {
         return [
+            'hero' => [
+                'name' => 'Hero Banner',
+                'price' => 15000, // IDR 15,000
+                'duration_days' => 7,
+                'features' => [
+                    'Displayed as main banner on homepage',
+                    'Full-width hero display',
+                    'Immediate visibility for all visitors',
+                    '7 days of prime placement',
+                ],
+                'color' => 'blue',
+                'description' => 'Get maximum exposure with hero banner placement on homepage',
+            ],
             'featured' => [
                 'name' => 'Featured Listing',
                 'price' => 25000, // IDR 25,000
                 'duration_days' => 14,
                 'features' => [
-                    // 'Premium badge on your listing',
                     'Highlighted in search results',
-                    // 'Featured section on homepage',
                     'Priority in all listings',
                     '14 days of maximum visibility',
                 ],
