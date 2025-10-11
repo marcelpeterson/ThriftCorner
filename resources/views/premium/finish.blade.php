@@ -171,7 +171,13 @@
     // Check payment status with exponential backoff
     function checkPaymentStatus() {
         checkAttempts++;
-        updateStatusMessage('Checking payment status... (Attempt ' + checkAttempts + ')');
+        
+        // Show appropriate message based on attempt number
+        if (checkAttempts === 1) {
+            updateStatusMessage('Verifying payment status...');
+        } else {
+            updateStatusMessage('Still checking... (Attempt ' + checkAttempts + ')');
+        }
         
         fetch('{{ route('payment.status', $payment->id) }}')
             .then(response => response.json())
