@@ -5,8 +5,10 @@
 @section('content')
 <div class="pb-10 pt-5">
     {{-- Hero Banner Carousel --}}
-    <div class="relative mb-12" x-data="{ currentSlide: 0, totalSlides: {{ $heroItems->count() + 3 }} }">
-        <div class="relative rounded-[48px] overflow-hidden shadow-xl h-[400px]">
+    <div class="relative mb-12" x-data="{ currentSlide: 0, totalSlides: {{ $heroItems->count() + 3 }}, isPaused: false }">
+        <div class="relative rounded-[48px] overflow-hidden shadow-xl h-[400px]"
+             @mouseenter="isPaused = true"
+             @mouseleave="isPaused = false">
             @foreach($heroItems as $index => $heroItem)
                 {{-- Slide {{ $index }}: Hero Banner from Premium Listing --}}
                 <a href="{{ route('items.view', $heroItem->id) }}" class="absolute inset-0 transition-opacity duration-750 cursor-pointer group"
@@ -160,10 +162,12 @@
                 </button>
             </div>
 
-            {{-- Auto-play functionality --}}
+            {{-- Auto-play functionality with pause on hover --}}
             <div x-init="
                 setInterval(() => {
-                    currentSlide = currentSlide === totalSlides - 1 ? 0 : currentSlide + 1;
+                    if (!isPaused) {
+                        currentSlide = currentSlide === totalSlides - 1 ? 0 : currentSlide + 1;
+                    }
                 }, 5000);
             "></div>
         </div>
