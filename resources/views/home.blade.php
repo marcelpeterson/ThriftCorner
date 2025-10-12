@@ -3,13 +3,61 @@
 @section('title', 'Welcome')
 
 @section('content')
-<div class="py-10">
-    {{-- Hero Banner Carousel (Ad Space) --}}
-    <div class="relative mb-12" x-data="{ currentSlide: 0, totalSlides: 3 }">
-        <div class="relative rounded-[48px] overflow-hidden shadow-xl h-[400px]">
-            {{-- Slide 1: ThriftCorner Welcome --}}
+<div class="pb-10 pt-5">
+    {{-- Hero Banner Carousel --}}
+    <div class="relative mb-12" x-data="{ currentSlide: 0, totalSlides: {{ $heroItems->count() + 3 }}, isPaused: false }">
+        <div class="relative rounded-[48px] overflow-hidden shadow-xl h-[400px]"
+             @mouseenter="isPaused = true"
+             @mouseleave="isPaused = false">
+            @foreach($heroItems as $index => $heroItem)
+                {{-- Slide {{ $index }}: Hero Banner from Premium Listing --}}
+                <a href="{{ route('items.view', $heroItem->id) }}" class="absolute inset-0 transition-opacity duration-750 cursor-pointer group"
+                   :class="currentSlide === {{ $index }} ? 'opacity-100 z-10' : 'opacity-0 z-0'">
+                    <div class="relative h-[400px] transform transition-transform duration-300 group-hover:scale-[1.02]">
+                        {{-- Background Image --}}
+                        @if($heroItem->images->count() > 0)
+                            <div class="absolute inset-0">
+                                {{-- Blurred Background --}}
+                                <div class="absolute inset-0">
+                                    <img src="{{ $heroItem->images->first()->image_url }}" alt="" class="w-full h-full object-cover blur-2xl scale-110 opacity-60">
+                                </div>
+                                {{-- Actual Image --}}
+                                <img src="{{ $heroItem->images->first()->image_url }}" alt="{{ $heroItem->name }}" class="relative w-full h-full object-contain z-10">
+                                {{-- Overlay Gradient --}}
+                                <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
+                            </div>
+                        @else
+                            <div class="absolute inset-0 bg-gradient-to-r from-gray-800 to-gray-600"></div>
+                        @endif
+
+                        {{-- Content --}}
+                        <div class="relative h-full flex flex-col justify-center px-24 z-10">
+                            <div class="inline-block bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-sm font-bold px-4 py-2 rounded-full mb-4 w-fit shadow-lg">
+                                🎯 HERO FEATURED
+                            </div>
+                            <h1 class="text-5xl font-bold text-white mb-4 drop-shadow-lg">
+                                {{ $heroItem->name }}
+                            </h1>
+                            <p class="text-4xl font-bold text-cyan-400 mb-6 drop-shadow-lg">
+                                {{ $heroItem->price_rupiah }}
+                            </p>
+                            <div class="flex items-center gap-4">
+                                <div class="bg-white/90 backdrop-blur-sm px-6 py-3 rounded-full font-bold text-gray-900 shadow-xl group-hover:bg-white transition-colors">
+                                    View Listing →
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            @endforeach
+
+            @php
+                $heroCount = $heroItems->count();
+            @endphp
+
+            {{-- Slide {{ $heroCount }}: ThriftCorner Welcome --}}
             <div class="absolute inset-0 transition-opacity duration-750" 
-                 :class="currentSlide === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0'">
+                 :class="currentSlide === {{ $heroCount }} ? 'opacity-100 z-10' : 'opacity-0 z-0'">
                 <div class="bg-gray-900 relative h-[400px]">
                     <div class="text-white ml-24 pt-16 max-w-2xl">
                         <h1 class="text-[4rem] font-bold tracking-tight sm:text-[4rem]">
@@ -31,9 +79,9 @@
                 </div>
             </div>
 
-            {{-- Slide 2: Dummy Ad - Electronics Sale --}}
+            {{-- Slide {{ $heroCount + 1 }}: Dummy Ad - Electronics Sale --}}
             <div class="absolute inset-0 transition-opacity duration-750" 
-                 :class="currentSlide === 1 ? 'opacity-100 z-10' : 'opacity-0 z-0'">
+                 :class="currentSlide === {{ $heroCount + 1 }} ? 'opacity-100 z-10' : 'opacity-0 z-0'">
                 <div class="bg-gradient-to-r from-blue-600 to-blue-800 flex items-center justify-between h-[400px] px-24">
                     <div class="text-white max-w-2xl">
                         <div class="inline-block bg-yellow-400 text-blue-900 text-xs font-bold px-3 py-1 rounded-full mb-4">
@@ -53,9 +101,9 @@
                 </div>
             </div>
 
-            {{-- Slide 3: Dummy Ad - Textbook Exchange --}}
+            {{-- Slide {{ $heroCount + 2 }}: Dummy Ad - Textbook Exchange --}}
             <div class="absolute inset-0 transition-opacity duration-750" 
-                 :class="currentSlide === 2 ? 'opacity-100 z-10' : 'opacity-0 z-0'">
+                 :class="currentSlide === {{ $heroCount + 2 }} ? 'opacity-100 z-10' : 'opacity-0 z-0'">
                 <div class="bg-gradient-to-r from-emerald-600 to-teal-700 flex items-center justify-between h-[400px] px-24">
                     <div class="text-white max-w-2xl">
                         <div class="inline-block bg-orange-400 text-emerald-900 text-xs font-bold px-3 py-1 rounded-full mb-4">
@@ -91,24 +139,35 @@
 
             {{-- Slide Indicators --}}
             <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
-                <button @click="currentSlide = 0"
+                {{-- Hero item indicators --}}
+                @foreach($heroItems as $index => $heroItem)
+                    <button @click="currentSlide = {{ $index }}"
+                            class="w-2 h-2 rounded-full transition-all"
+                            :class="currentSlide === {{ $index }} ? 'bg-white w-8' : 'bg-white/50'">
+                    </button>
+                @endforeach
+                
+                {{-- Default slide indicators --}}
+                <button @click="currentSlide = {{ $heroCount }}"
                         class="w-2 h-2 rounded-full transition-all"
-                        :class="currentSlide === 0 ? 'bg-white w-8' : 'bg-white/50'">
+                        :class="currentSlide === {{ $heroCount }} ? 'bg-white w-8' : 'bg-white/50'">
                 </button>
-                <button @click="currentSlide = 1"
+                <button @click="currentSlide = {{ $heroCount + 1 }}"
                         class="w-2 h-2 rounded-full transition-all"
-                        :class="currentSlide === 1 ? 'bg-white w-8' : 'bg-white/50'">
+                        :class="currentSlide === {{ $heroCount + 1 }} ? 'bg-white w-8' : 'bg-white/50'">
                 </button>
-                <button @click="currentSlide = 2"
+                <button @click="currentSlide = {{ $heroCount + 2 }}"
                         class="w-2 h-2 rounded-full transition-all"
-                        :class="currentSlide === 2 ? 'bg-white w-8' : 'bg-white/50'">
+                        :class="currentSlide === {{ $heroCount + 2 }} ? 'bg-white w-8' : 'bg-white/50'">
                 </button>
             </div>
 
-            {{-- Auto-play functionality --}}
+            {{-- Auto-play functionality with pause on hover --}}
             <div x-init="
                 setInterval(() => {
-                    currentSlide = currentSlide === totalSlides - 1 ? 0 : currentSlide + 1;
+                    if (!isPaused) {
+                        currentSlide = currentSlide === totalSlides - 1 ? 0 : currentSlide + 1;
+                    }
                 }, 5000);
             "></div>
         </div>
@@ -122,20 +181,30 @@
         </div>
     </div>
 
-    {{-- <div class="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        <div class="rounded-lg border border-gray-200 bg-white p-6">
-            <h3 class="text-base font-semibold text-gray-900">Textbooks</h3>
-            <p class="mt-1 text-sm text-gray-600">Buy and sell used textbooks for your courses.</p>
+    {{-- Featured Listings Section --}}
+    {{-- @if($featuredItems->count() > 0)
+        <div class="mt-12 bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-8 border-2 border-purple-200">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Featured Listings</h2>
+                        <p class="text-sm text-gray-600">Premium listings from verified sellers</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                @foreach ($featuredItems as $item)
+                    <x-listing-card :item="$item" :featured="true" />
+                @endforeach
+            </div>
         </div>
-        <div class="rounded-lg border border-gray-200 bg-white p-6">
-            <h3 class="text-base font-semibold text-gray-900">Electronics</h3>
-            <p class="mt-1 text-sm text-gray-600">Laptops, phones, and accessories, secondhand and affordable.</p>
-        </div>
-        <div class="rounded-lg border border-gray-200 bg-white p-6">
-            <h3 class="text-base font-semibold text-gray-900">Dorm Essentials</h3>
-            <p class="mt-1 text-sm text-gray-600">Furniture and essentials for boarding life.</p>
-        </div>
-    </div> --}}
+    @endif --}}
 
     <div>
         {{-- Search and Filter Section --}}
