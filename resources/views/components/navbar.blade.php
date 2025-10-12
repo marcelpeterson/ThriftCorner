@@ -5,7 +5,6 @@
                 <a href="{{ url('/') }}" class="flex items-center gap-2 shrink-0" aria-label="{{ config('app.name', 'ThriftCorner') }} Home">
                     <img src="{{ asset('storage/images/Logo.png') }}" alt="ThriftCorner Logo" width="192px">
                 </a>
-                <a href="{{ route('news.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">News</a>
             </div>
 
             <!-- Desktop: links + search + auth -->
@@ -19,6 +18,14 @@
             @endif
 
             <div class="hidden md:flex items-center gap-6 shrink-0">
+                {{-- News Button --}}
+                <a href="{{ route('news.index') }}" class="inline-flex items-center rounded-md px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100 transition-colors {{ request()->routeIs('news.*') ? 'bg-gray-100 text-gray-900' : '' }}">
+                    <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                    </svg>
+                    News
+                </a>
+                
                 {{-- Sell Button (visible for non-admin users) --}}
                 @if (Route::has('items.create') && (!auth()->check() || !auth()->user()->is_admin))
                     <a href="{{ auth()->check() ? route('items.create') : route('login') }}"
@@ -109,6 +116,7 @@
         <div class="md:hidden py-2 space-y-2">
             <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
                 <a href="{{ route('home') }}" class="text-sm font-medium text-gray-700 hover:text-emerald-700 {{ request()->routeIs('home') || request()->routeIs('items') ? 'text-emerald-700' : '' }}">Browse Items</a>
+                <a href="{{ route('news.index') }}" class="text-sm font-medium text-gray-700 hover:text-emerald-700 {{ request()->routeIs('news.*') ? 'text-emerald-700' : '' }}">News</a>
                 @auth
                     @if (Route::has('transactions.index') && !auth()->user()->is_admin)
                         <a href="{{ route('transactions.index') }}" class="text-sm font-medium text-gray-700 hover:text-emerald-700 {{ request()->routeIs('transactions.*') ? 'text-emerald-700' : '' }}">Transactions</a>
