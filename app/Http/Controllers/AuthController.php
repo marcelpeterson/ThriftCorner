@@ -21,7 +21,12 @@ class AuthController extends Controller
         $request->validate([
             'first_name' => 'required|string|max:50',
             'last_name'  => 'required|string|max:50',
-            'email'      => 'required|email|unique:users,email|regex:/^[a-zA-Z0-9._%+-]+@(binus.ac.id)|(binus.edu)$/',
+            'email'      => [
+                'required',
+                'email',
+                'unique:users,email',
+                'regex:/^[a-zA-Z0-9._%+-]+@(binus\.ac\.id|binus\.edu)$/'
+            ],
             'password'   => 'required|min:6|confirmed',
             'phone'      => 'required|string|min:10|max:12',
         ], [

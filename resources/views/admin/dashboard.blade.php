@@ -17,6 +17,7 @@
                 </svg>
                 Analytics
             </a>
+            <a href="{{ route('admin.news.index') }}" class="text-blue-500 hover:underline">Manage News</a>
         </div>
     </div>
 
