@@ -22,7 +22,7 @@ class NewsArticleSeeder extends Seeder
             'title' => 'Welcome to the ThriftCorner News Portal!',
             'slug' => 'welcome-to-the-thriftcorner-news-portal',
             'content' => 'This is the first news article on our new portal. We are excited to share updates and news with you.',
-            'user_id' => $user->id,
+            'user_id' => 5,
         ]);
     }
 }

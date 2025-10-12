@@ -10,14 +10,23 @@
             <h1 class="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
             <p class="text-gray-600 mt-1">Monitor and manage ThriftCorner platform</p>
         </div>
-        <div class="flex gap-3">
+        <div class="flex gap-3 items-center">
             <a href="{{ route('admin.analytics') }}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
-                <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-5 h-5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                 </svg>
-                Analytics
+                <span class="align-middle">
+                    Analytics
+                </span>
             </a>
-            <a href="{{ route('admin.news.index') }}" class="text-blue-500 hover:underline">Manage News</a>
+            <a href="{{ route('admin.news.index') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors">
+                <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h4l2 3h6l2-3h4a2 2 0 012 2v12a2 2 0 01-2 2zM7 10h10M7 14h6m-6 4h4"/>
+                </svg>
+                <span class="align-middle">
+                    Manage News
+                </span>
+            </a>
         </div>
     </div>
 

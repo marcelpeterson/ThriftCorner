@@ -44,7 +44,7 @@
                         <form action="{{ route('admin.news.destroy', $article) }}" method="POST" class="inline-block ml-4" onsubmit="return confirm('Are you sure you want to delete this article?');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                            <button type="submit" class="text-red-600 hover:text-red-900 cursor-pointer">Delete</button>
                         </form>
                     </td>
                 </tr>
