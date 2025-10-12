@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\Admin\NewsController as AdminNewsController; 
 use App\Http\Controllers\PaymentController;
 
 // Route::get('', function () {
@@ -66,4 +68,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/listings', [AdminController::class, 'listings'])->name('listings');
     Route::delete('/listings/{item}', [AdminController::class, 'deleteListing'])->name('listings.delete');
     Route::get('/transactions', [AdminController::class, 'transactions'])->name('transactions');
+    Route::resource('/news', AdminNewsController::class);
 });
+
+Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+Route::get('/news/{article:slug}', [NewsController::class, 'show'])->name('news.show');

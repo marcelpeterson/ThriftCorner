@@ -5,6 +5,7 @@
                 <a href="{{ url('/') }}" class="flex items-center gap-2 shrink-0" aria-label="{{ config('app.name', 'ThriftCorner') }} Home">
                     <img src="{{ asset('storage/images/Logo.png') }}" alt="ThriftCorner Logo" width="192px">
                 </a>
+                <a href="{{ route('news.index') }}" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">News</a>
             </div>
 
             <!-- Desktop: links + search + auth -->
