@@ -2,10 +2,36 @@
 
 @section('title', 'Welcome')
 
+@push('head')
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('carousel', (totalSlides) => ({
+        currentSlide: 0,
+        totalSlides: totalSlides,
+        isPaused: false,
+        timer: null,
+        
+        init() {
+            this.startAutoplay();
+        },
+        
+        startAutoplay() {
+            const self = this;
+            this.timer = setInterval(function() {
+                if (!self.isPaused) {
+                    self.currentSlide = (self.currentSlide + 1) % self.totalSlides;
+                }
+            }, 5000);
+        }
+    }));
+});
+</script>
+@endpush
+
 @section('content')
 <div class="pb-10 pt-5">
     {{-- Hero Banner Carousel --}}
-    <div class="relative mb-12" x-data="{ currentSlide: 0, totalSlides: {{ $heroItems->count() + 3 }}, isPaused: false }">
+    <div class="relative mb-12" x-data="carousel({{ $heroItems->count() + 3 }})">
         <div class="relative rounded-[48px] overflow-hidden shadow-xl h-[400px]"
              @mouseenter="isPaused = true"
              @mouseleave="isPaused = false">
@@ -162,14 +188,6 @@
                 </button>
             </div>
 
-            {{-- Auto-play functionality with pause on hover --}}
-            <div x-init="
-                setInterval(() => {
-                    if (!isPaused) {
-                        currentSlide = currentSlide === totalSlides - 1 ? 0 : currentSlide + 1;
-                    }
-                }, 5000);
-            "></div>
         </div>
 
         {{-- Ad Space Info Badge --}}
