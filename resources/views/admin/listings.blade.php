@@ -67,7 +67,7 @@
                     <p class="text-xs text-gray-500 mb-3">Posted {{ $listing->created_at->diffForHumans() }}</p>
 
                     <div class="flex gap-2">
-                        <a href="{{ route('items.view', $listing->id) }}" target="_blank"
+                        <a href="{{ route('items.view', $listing->slug) }}" target="_blank"
                            class="flex-1 px-3 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg text-sm font-medium text-center transition-colors">
                             View
                         </a>

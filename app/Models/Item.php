@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Item extends Model
 {
@@ -10,6 +11,7 @@ class Item extends Model
         'category_id',
         'user_id',
         'name',
+        'slug',
         'description',
         'price',
         'photo_url',
@@ -25,6 +27,30 @@ class Item extends Model
         'is_premium' => 'boolean',
         'premium_until' => 'datetime',
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($item) {
+            if (empty($item->slug)) {
+                $base = Str::slug($item->name ?? 'item');
+                if ($base === '') {
+                    $base = 'item';
+                }
+                $slug = $base;
+                $attempt = 0;
+                while (static::where('slug', $slug)->exists()) {
+                    $attempt++;
+                    $suffix = '-' . Str::lower(Str::random(6));
+                    $slug = substr($base, 0, 255 - strlen($suffix)) . $suffix;
+                    if ($attempt > 20) {
+                        $slug = substr($base, 0, 200) . '-' . time() . '-' . Str::lower(Str::random(4));
+                        break;
+                    }
+                }
+                $item->slug = $slug;
+            }
+        });
+    }
 
     public function category()
     {

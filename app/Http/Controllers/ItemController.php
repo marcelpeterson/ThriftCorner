@@ -68,8 +68,8 @@ class ItemController extends Controller
         return view('home', compact('items', 'categories', 'featuredItems', 'heroItems'));
     }
 
-    function viewItem($id) {
-        $item = Item::with(['user', 'category', 'images', 'premiumListing'])->findOrFail($id);
+    function viewItem(Item $item) {
+        $item->load(['user', 'category', 'images', 'premiumListing']);
         
         // Get all active premium packages for this item
         $activePremiumPackages = $item->premiumListing()
@@ -121,7 +121,7 @@ class ItemController extends Controller
             }
         }
 
-        return redirect()->route('items.view', $item->id)->with('success', 'Item listed successfully!');
+        return redirect()->route('items.view', $item->slug)->with('success', 'Item listed successfully!');
     }
 
     function getEditItemPage($id) {

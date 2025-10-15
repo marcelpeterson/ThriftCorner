@@ -93,11 +93,11 @@
             </div>
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <p class="text-sm font-medium text-gray-600">Avg Session Duration</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">{{ number_format($analyticsData['avgSessionDuration']->avg('averageSessionDuration'), 0) }}s</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">{{ number_format($analyticsData['avgSessionDuration']->avg('averageSessionDuration') ?? 0, 0) }}s</p>
             </div>
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <p class="text-sm font-medium text-gray-600">Bounce Rate</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">{{ number_format($analyticsData['bounceRate']->avg('bounceRate'), 1) }}%</p>
+                <p class="text-sm font-medium text-gray-600">Engagement Rate</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">{{ number_format(($analyticsData['bounceRate']->avg('engagementRate') ?? 0) * 100, 1) }}%</p>
             </div>
         </div>
 

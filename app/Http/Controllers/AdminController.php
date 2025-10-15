@@ -117,14 +117,15 @@ class AdminController extends Controller
             $period = Period::days(30);
 
             return [
-                'visitors' => Analytics::get($period, ['activeUsers']),
-                'pageViews' => Analytics::get($period, ['screenPageViews']),
-                'topPages' => Analytics::get($period, ['screenPageViews'], ['pageTitle', 'fullPageUrl'], 10),
-                'topSources' => Analytics::get($period, ['activeUsers'], ['sessionSource'], 10),
+                'visitors' => Analytics::fetchTotalVisitorsAndPageViews($period),
+                'pageViews' => Analytics::fetchTotalVisitorsAndPageViews($period),
+                'topPages' => Analytics::fetchMostVisitedPages($period, 10),
+                'topSources' => Analytics::fetchTopReferrers($period, 10),
                 'deviceTypes' => Analytics::get($period, ['activeUsers'], ['deviceCategory']),
             ];
         } catch (\Exception $e) {
             // Analytics not configured or error occurred
+            \Log::error('Analytics Error: ' . $e->getMessage());
             return null;
         }
     }
@@ -141,15 +142,19 @@ class AdminController extends Controller
             if (config('analytics.property_id')) {
                 $analyticsPeriod = Period::days($period);
 
+                // Fetch analytics data using corrected API calls
+                $visitorsAndPageViews = Analytics::fetchTotalVisitorsAndPageViews($analyticsPeriod);
+                
                 $analyticsData = [
                     'totalVisitors' => Analytics::get($analyticsPeriod, ['activeUsers']),
                     'totalPageViews' => Analytics::get($analyticsPeriod, ['screenPageViews']),
                     'totalSessions' => Analytics::get($analyticsPeriod, ['sessions']),
                     'avgSessionDuration' => Analytics::get($analyticsPeriod, ['averageSessionDuration']),
-                    'bounceRate' => Analytics::get($analyticsPeriod, ['bounceRate']),
+                    // Note: bounceRate is deprecated in GA4, using engagementRate instead
+                    'bounceRate' => Analytics::get($analyticsPeriod, ['engagementRate']),
                     
                     // Top pages
-                    'topPages' => Analytics::get($analyticsPeriod, ['screenPageViews'], ['pageTitle', 'fullPageUrl'], 20),
+                    'topPages' => Analytics::fetchMostVisitedPages($analyticsPeriod, 20),
                     
                     // Traffic sources
                     'trafficSources' => Analytics::get($analyticsPeriod, ['activeUsers'], ['sessionSource', 'sessionMedium'], 15),
@@ -165,6 +170,7 @@ class AdminController extends Controller
                 ];
             }
         } catch (\Exception $e) {
+            \Log::error('Analytics Error: ' . $e->getMessage());
             session()->flash('analytics_error', 'Unable to fetch Google Analytics data: ' . $e->getMessage());
         }
 

@@ -1,6 +1,6 @@
 @props(['item', 'featured' => false])
 
-<a href="{{ route('items.view', $item->id) }}" 
+<a href="{{ route('items.view', $item->slug) }}"
    class="block rounded-lg border {{ $item->isPremium() ? 'border-purple-300 bg-gradient-to-br from-purple-50 to-blue-50 ring-2 ring-purple-200' : 'border-gray-200 bg-white' }} p-6 hover:shadow-xl transition-all duration-200 ease-in-out {{ $item->isPremium() ? 'transform hover:scale-105' : '' }}">
     
     {{-- Premium Badge --}}

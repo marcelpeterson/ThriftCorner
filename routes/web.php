@@ -6,8 +6,9 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\NewsController;
-use App\Http\Controllers\Admin\NewsController as AdminNewsController; 
+use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\PaymentController;
+use App\Models\Item;
 
 // Route::get('', function () {
 //     return view('home');
@@ -29,7 +30,12 @@ Route::post('/items/create/submit', [ItemController::class, 'createItemSubmit'])
 Route::get('/items/{id}/edit', [ItemController::class, 'editItemPage'])->name('items.edit');
 Route::post('/items/{id}/edit/submit', [ItemController::class, 'editItemSubmit'])->name('items.edit.submit');
 Route::post('/items/{id}/delete', [ItemController::class, 'deleteItem'])->name('items.delete');
-Route::get('/items/{id}', [ItemController::class, 'viewItem'])->name('items.view');
+Route::get('/items/{id}', function ($id) {
+    $item = Item::findOrFail($id);
+    return redirect()->route('items.view', $item->slug);
+})->whereNumber('id');
+
+Route::get('/items/{item:slug}', [ItemController::class, 'viewItem'])->name('items.view');
 
 // Transaction routes
 Route::middleware('auth')->group(function () {

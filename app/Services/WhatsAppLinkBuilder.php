@@ -12,6 +12,11 @@ class WhatsAppLinkBuilder
      */
     public function generateLink(Item $item, ?User $buyer = null, array $customFields = []): string
     {
+        // Hide seller phone for unauthenticated users by redirecting to login
+        if ($buyer === null) {
+            return route('login');
+        }
+
         $seller = $item->user;
         $sellerPhone = $this->normalizePhone($seller->phone);
 
@@ -31,7 +36,7 @@ class WhatsAppLinkBuilder
     protected function buildMessage(Item $item, User $seller, ?User $buyer, array $customFields): string
     {
         $buyerName = $buyer ? "{$buyer->first_name} {$buyer->last_name}" : '[Your Name]';
-        $listingUrl = route('items.view', $item->id);
+        $listingUrl = route('items.view', $item->slug);
 
         $template = "Hai {seller_name}, aku tertarik dengan listingmu:\n\n"
             . "Item: {listing_title}\n"
