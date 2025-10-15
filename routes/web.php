@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\Admin\NewsController as AdminNewsController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\SupportContactController;
 use App\Models\Item;
 
 // Route::get('', function () {
@@ -68,14 +69,25 @@ Route::post('/payment/notification', [PaymentController::class, 'notification'])
 // Admin routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-    Route::get('/analytics', [AdminController::class, 'analytics'])->name('analytics');
+    // Route::get('/analytics', [AdminController::class, 'analytics'])->name('analytics'); // Disabled Google Analytics in favor of SimpleAnalytics
     Route::get('/users', [AdminController::class, 'users'])->name('users');
     Route::post('/users/{user}/toggle-admin', [AdminController::class, 'toggleAdmin'])->name('users.toggleAdmin');
     Route::get('/listings', [AdminController::class, 'listings'])->name('listings');
     Route::delete('/listings/{item}', [AdminController::class, 'deleteListing'])->name('listings.delete');
     Route::get('/transactions', [AdminController::class, 'transactions'])->name('transactions');
     Route::resource('/news', AdminNewsController::class);
+
+    // Support contact management routes
+    Route::get('/support', [AdminController::class, 'supportIndex'])->name('support.index');
+    Route::get('/support/{supportContact}', [AdminController::class, 'supportShow'])->name('support.show');
+    Route::patch('/support/{supportContact}/status', [AdminController::class, 'supportUpdateStatus'])->name('support.update-status');
+    Route::patch('/support/{supportContact}/notes', [AdminController::class, 'supportUpdateNotes'])->name('support.update-notes');
+    Route::delete('/support/{supportContact}', [AdminController::class, 'supportDestroy'])->name('support.destroy');
 });
+
+// Support contact routes (public)
+Route::get('/support', [SupportContactController::class, 'create'])->name('support.create');
+Route::post('/support', [SupportContactController::class, 'store'])->name('support.store');
 
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 Route::get('/news/{article:slug}', [NewsController::class, 'show'])->name('news.show');

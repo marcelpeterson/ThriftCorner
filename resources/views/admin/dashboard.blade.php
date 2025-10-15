@@ -11,12 +11,23 @@
             <p class="text-gray-600 mt-1">Monitor and manage ThriftCorner platform</p>
         </div>
         <div class="flex gap-3 items-center">
+            {{-- Disabled Google Analytics button in favor of SimpleAnalytics --}}
+            {{--
             <a href="{{ route('admin.analytics') }}" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
                 <svg class="w-5 h-5 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                 </svg>
                 <span class="align-middle">
                     Analytics
+                </span>
+            </a>
+            --}}
+            <a href="{{ route('admin.support.index') }}" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-medium transition-colors">
+                <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+                <span class="align-middle">
+                    Support
                 </span>
             </a>
             <a href="{{ route('admin.news.index') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors">
@@ -98,7 +109,8 @@
         </div>
     </div>
 
-    {{-- Google Analytics Overview (if configured) --}}
+    {{-- Google Analytics Overview (disabled in favor of SimpleAnalytics) --}}
+    {{--
     @if($analyticsData)
         <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl shadow-lg p-6 text-white">
             <h2 class="text-xl font-bold mb-4 flex items-center">
@@ -131,6 +143,7 @@
             </div>
         </div>
     @endif
+    --}}
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {{-- Category Distribution --}}

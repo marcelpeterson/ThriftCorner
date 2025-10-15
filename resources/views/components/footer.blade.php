@@ -13,7 +13,7 @@
             <div class="flex flex-col justify-center">
                 <ul class="mt-3 space-y-2 text-md flex gap-16">
                     <li><a href="{{ url('/about') }}" class="text-white hover:text-blue-700">About Us</a></li>
-                    <li><a href="{{ url('/contact') }}" class="text-white hover:text-blue-700">Contact</a></li>
+                    <li><a href="{{ route('support.create') }}" class="text-white hover:text-blue-700">Support</a></li>
                     <li><a href="{{ url('/terms') }}" class="text-white hover:text-blue-700">Terms</a></li>
                     <li><a href="{{ url('/privacy') }}" class="text-white hover:text-blue-700">Privacy</a></li>
                 </ul>
