@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Laravolt\Avatar\Facade as Avatar;
 
 class UserSeeder extends Seeder
 {
@@ -19,7 +20,7 @@ class UserSeeder extends Seeder
             'last_name' => 'Doe',
             'email' => 'john@example.com',
             'phone' => '081212345678',
-            'photo_url' => 'https://avatar.iran.liara.run/username?username=John+Doe',
+            'photo_url' => Avatar::create('John Doe')->toBase64(),
             'password' => Hash::make('password'),
         ]);
         User::create([
@@ -27,7 +28,7 @@ class UserSeeder extends Seeder
             'last_name' => 'Smith',
             'email' => 'jane@example.com',
             'phone' => '081212345679',
-            'photo_url' => 'https://avatar.iran.liara.run/username?username=Jane+Smith',
+            'photo_url' => Avatar::create('Jane Smith')->toBase64(),
             'password' => Hash::make('password'),
         ]);
         User::create([
@@ -35,7 +36,7 @@ class UserSeeder extends Seeder
             'last_name' => 'Johnson',
             'email' => 'alice@example.com',
             'phone' => '081212345680',
-            'photo_url' => 'https://avatar.iran.liara.run/username?username=Alice+Johnson',
+            'photo_url' => Avatar::create('Alice Johnson')->toBase64(),
             'password' => Hash::make('password'),
         ]);
         User::create([
@@ -43,7 +44,7 @@ class UserSeeder extends Seeder
             'last_name' => 'Brown',
             'email' => 'bob@example.com',
             'phone' => '081212345681',
-            'photo_url' => 'https://avatar.iran.liara.run/username?username=Bob+Brown',
+            'photo_url' => Avatar::create('Bob Brown')->toBase64(),
             'password' => Hash::make('password'),
         ]);
         User::create([
@@ -51,7 +52,7 @@ class UserSeeder extends Seeder
             'last_name' => 'User',
             'email' => 'admin@example.com',
             'phone' => '081298765432',
-            'photo_url' => 'https://avatar.iran.liara.run/username?username=Admin+User',
+            'photo_url' => Avatar::create('Admin User')->toBase64(),
             'password' => Hash::make('password'),
             'is_admin' => true,
         ]);
