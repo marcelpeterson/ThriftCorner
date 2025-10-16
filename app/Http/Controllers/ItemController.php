@@ -105,8 +105,8 @@ class ItemController extends Controller
         // Handle image uploads
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $index => $image) {
-                $path = $image->store('images/items', 'public');
-                
+                $path = $image->store('images/items', config('filesystems.default'));
+
                 ItemImage::create([
                     'item_id' => $item->id,
                     'image_path' => $path,

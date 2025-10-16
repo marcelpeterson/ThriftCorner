@@ -7,7 +7,7 @@
 <section aria-labelledby="register-title" class="min-h-[50vh] flex items-center justify-center">
     <div class="flex gap-8 items-center">
         <div>
-            <img src="{{ asset('storage/images/binus-register.png') }}" alt="Binus Register" class="w-[400px]">
+            <img src="https://storage.thriftcorner.store/assets/binus-register.png" alt="Binus Register" class="w-[400px]">
         </div>
         <div>
             <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl text-center">Create an account</h1>

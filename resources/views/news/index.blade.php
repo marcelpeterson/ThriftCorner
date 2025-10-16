@@ -10,7 +10,7 @@
                 {{-- Thumbnail section --}}
                 @if($article->thumbnail)
                     <a href="{{ route('news.show', $article->slug) }}">
-                        <img class="w-full h-48 object-cover" src="{{ asset('storage/' . $article->thumbnail) }}" alt="{{ $article->title }}">
+                        <img class="w-full h-48 object-cover" src="{{ Storage::url($article->thumbnail) }}" alt="{{ $article->title }}">
                     </a>
                 @endif
 

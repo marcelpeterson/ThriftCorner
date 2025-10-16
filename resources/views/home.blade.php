@@ -101,7 +101,7 @@ document.addEventListener('alpine:init', () => {
                             @endif
                         </button>
                     </div>
-                    <img src="{{ asset('storage/images/bags.png') }}" alt="" class="absolute bottom-0 right-0 w-full max-w-[450px]">
+                    <img src="https://storage.thriftcorner.store/assets/bags.png" alt="" class="absolute bottom-0 right-0 w-full max-w-[450px]">
                 </div>
             </div>
 

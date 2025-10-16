@@ -316,7 +316,7 @@ class AdminController extends Controller
     {
         // Delete attachment if exists
         if ($supportContact->attachment_path) {
-            \Storage::disk('public')->delete($supportContact->attachment_path);
+            \Storage::disk(config('filesystems.default'))->delete($supportContact->attachment_path);
         }
 
         $supportContact->delete();

@@ -31,7 +31,7 @@
                 <tr class="border-b">
                     <td class="px-6 py-4">
                         @if($article->thumbnail)
-                            <img src="{{ asset('storage/' . $article->thumbnail) }}" alt="Thumbnail" class="w-24 h-auto rounded">
+                            <img src="{{ Storage::url($article->thumbnail) }}" alt="Thumbnail" class="w-24 h-auto rounded">
                         @else
                             <span class="text-gray-400">No Image</span>
                         @endif

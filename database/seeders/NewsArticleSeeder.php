@@ -21,7 +21,7 @@ class NewsArticleSeeder extends Seeder
         NewsArticle::create([
             'title' => 'Welcome to the ThriftCorner News Portal!',
             'slug' => 'welcome-to-the-thriftcorner-news-portal',
-            'thumbnail' => 'images/anggrek.jpeg',
+            'thumbnail' => 'assets/anggrek.jpeg',
             'content' => 'This is the first news article on our new portal. We are excited to share updates and news with you.',
             'user_id' => 5,
         ]);

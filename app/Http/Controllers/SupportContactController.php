@@ -49,7 +49,7 @@ class SupportContactController extends Controller
 
         // Handle file upload
         if ($request->hasFile('attachment')) {
-            $path = $request->file('attachment')->store('support-attachments', 'public');
+            $path = $request->file('attachment')->store('support-attachments', config('filesystems.default'));
             $data['attachment_path'] = $path;
         }
 

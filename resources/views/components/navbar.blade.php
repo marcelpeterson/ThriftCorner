@@ -3,7 +3,7 @@
         <div class="flex h-16 items-center justify-between gap-4">
             <div class="flex items-center gap-3 min-w-0">
                 <a href="{{ url('/') }}" class="flex items-center gap-2 shrink-0" aria-label="{{ config('app.name', 'ThriftCorner') }} Home">
-                    <img src="{{ asset('storage/images/Logo.png') }}" alt="ThriftCorner Logo" width="192px">
+                    <img src="https://storage.thriftcorner.store/assets/Logo.png" alt="ThriftCorner Logo" width="192px">
                 </a>
             </div>
 

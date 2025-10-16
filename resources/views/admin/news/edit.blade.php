@@ -46,7 +46,7 @@
                         <div id="current-thumbnail">
                             <p class="text-sm font-semibold text-gray-700 mb-2">Current Thumbnail:</p>
                             <div class="relative group">
-                                <img src="{{ asset('storage/' . $news->thumbnail) }}" alt="Current thumbnail" class="w-full h-64 object-cover rounded-lg border-2 border-gray-300">
+                                <img src="{{ Storage::url($news->thumbnail) }}" alt="Current thumbnail" class="w-full h-64 object-cover rounded-lg border-2 border-gray-300">
                                 <div class="absolute top-2 left-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">
                                     Current Thumbnail
                                 </div>

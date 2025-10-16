@@ -31,7 +31,7 @@ class NewsController extends Controller
 
         $path = null;
         if ($request->hasFile('thumbnail')) {
-            $path = $request->file('thumbnail')->store('thumbnails', 'public');
+            $path = $request->file('thumbnail')->store('thumbnails', config('filesystems.default'));
         }
 
         NewsArticle::create([
@@ -61,9 +61,9 @@ class NewsController extends Controller
         $path = $news->thumbnail;
         if ($request->hasFile('thumbnail')) {
             if ($news->thumbnail) {
-                Storage::disk('public')->delete($news->thumbnail);
+                Storage::disk(config('filesystems.default'))->delete($news->thumbnail);
             }
-            $path = $request->file('thumbnail')->store('thumbnails', 'public');
+            $path = $request->file('thumbnail')->store('thumbnails', config('filesystems.default'));
         }
 
         $news->update([
@@ -79,7 +79,7 @@ class NewsController extends Controller
     public function destroy(NewsArticle $news)
     {
         if ($news->thumbnail) {
-            Storage::disk('public')->delete($news->thumbnail);
+            Storage::disk(config('filesystems.default'))->delete($news->thumbnail);
         }
 
         $news->delete();
