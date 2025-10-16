@@ -32,7 +32,7 @@
             
             <div class="flex gap-4 mb-6">
                 @if($transaction->item->images->count() > 0)
-                    <img src="{{ $transaction->item->images->first()->image_url }}" 
+                    <img src="{{ Storage::url($transaction->item->images->first()->image_path) }}" 
                          alt="{{ $transaction->item->name }}" 
                          class="w-24 h-24 object-cover rounded-lg">
                 @else

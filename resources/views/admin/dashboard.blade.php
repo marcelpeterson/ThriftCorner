@@ -168,17 +168,21 @@
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 class="text-lg font-bold text-gray-900 mb-4">Monthly Revenue (Last 6 Months)</h3>
             <div class="space-y-3">
-                @foreach($monthlyRevenue as $month)
-                    <div>
-                        <div class="flex items-center justify-between mb-1">
-                            <span class="text-sm font-medium text-gray-700">{{ \Carbon\Carbon::parse($month->month . '-01')->format('M Y') }}</span>
-                            <span class="text-sm font-bold text-emerald-600">{{ rupiah($month->revenue) }}</span>
+                @if($monthlyRevenue->isEmpty())
+                    <p class="text-sm font-bold text-gray-500">No revenue data available</p>
+                @else
+                    @foreach($monthlyRevenue as $month)
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-medium text-gray-700">{{ \Carbon\Carbon::parse($month->month . '-01')->format('M Y') }}</span>
+                                <span class="text-sm font-bold text-emerald-600">{{ rupiah($month->revenue) }}</span>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-2">
                             <div class="bg-purple-600 h-2 rounded-full" style="width: {{ ($month->revenue / $monthlyRevenue->max('revenue')) * 100 }}%"></div>
+                            </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                @endif
             </div>
         </div>
     </div>
@@ -220,7 +224,7 @@
                 @foreach($recentListings as $listing)
                     <div class="flex items-start gap-3">
                         @if($listing->images->count() > 0)
-                            <img src="{{ $listing->images->first()->image_url }}" alt="{{ $listing->name }}" class="w-12 h-12 rounded object-cover">
+                            <img src="{{ Storage::url($listing->images->first()->image_path) }}" alt="{{ $listing->name }}" class="w-12 h-12 rounded object-cover">
                         @else
                             <div class="w-12 h-12 bg-gray-200 rounded flex items-center justify-center flex-shrink-0">
                                 <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

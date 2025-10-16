@@ -45,10 +45,10 @@ document.addEventListener('alpine:init', () => {
                             <div class="absolute inset-0">
                                 {{-- Blurred Background --}}
                                 <div class="absolute inset-0">
-                                    <img src="{{ $heroItem->images->first()->image_url }}" alt="" class="w-full h-full object-cover blur-2xl scale-110 opacity-60">
+                                    <img src="{{ Storage::url($heroItem->images->first()->image_path) }}" alt="" class="w-full h-full object-cover blur-2xl scale-110 opacity-60">
                                 </div>
                                 {{-- Actual Image --}}
-                                <img src="{{ $heroItem->images->first()->image_url }}" alt="{{ $heroItem->name }}" class="relative w-full h-full object-contain z-10">
+                                <img src="{{ Storage::url($heroItem->images->first()->image_path) }}" alt="{{ $heroItem->name }}" class="relative w-full h-full object-contain z-10">
                                 {{-- Overlay Gradient --}}
                                 <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
                             </div>

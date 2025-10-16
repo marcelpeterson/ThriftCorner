@@ -24,10 +24,10 @@
                     @if($listing->images->count() > 0)
                         {{-- Blurred Background --}}
                         <div class="absolute inset-0">
-                            <img src="{{ $listing->images->first()->image_url }}" alt="" class="w-full h-full object-cover blur-2xl scale-110 opacity-60">
+                            <img src="{{ Storage::url($listing->images->first()->image_path) }}" alt="" class="w-full h-full object-cover blur-2xl scale-110 opacity-60">
                         </div>
                         {{-- Actual Image --}}
-                        <img src="{{ $listing->images->first()->image_url }}" alt="{{ $listing->name }}" class="relative w-full h-full object-contain z-10">
+                        <img src="{{ Storage::url($listing->images->first()->image_path) }}" alt="{{ $listing->name }}" class="relative w-full h-full object-contain z-10">
                     @else
                         <div class="w-full h-full bg-gray-200 flex items-center justify-center">
                             <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

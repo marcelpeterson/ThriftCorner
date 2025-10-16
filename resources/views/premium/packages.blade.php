@@ -15,7 +15,7 @@
         <h3 class="text-lg font-bold text-gray-900 mb-4">Your Listing:</h3>
         <div class="flex items-center gap-4">
             @if($item->images->count() > 0)
-                <img src="{{ $item->images->first()->image_url }}" alt="{{ $item->name }}" class="w-24 h-24 object-cover rounded-lg">
+                <img src="{{ Storage::url($item->images->first()->image_path) }}" alt="{{ $item->name }}" class="w-24 h-24 object-cover rounded-lg">
             @else
                 <div class="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center">
                     <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

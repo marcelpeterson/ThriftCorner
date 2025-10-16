@@ -40,7 +40,7 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     @if($transaction->item->images->count() > 0)
-                                        <img src="{{ $transaction->item->images->first()->image_url }}" alt="{{ $transaction->item->name }}" class="w-10 h-10 rounded object-cover">
+                                        <img src="{{ Storage::url($transaction->item->images->first()->image_path) }}" alt="{{ $transaction->item->name }}" class="w-10 h-10 rounded object-cover">
                                     @else
                                         <div class="w-10 h-10 bg-gray-200 rounded flex items-center justify-center">
                                             <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

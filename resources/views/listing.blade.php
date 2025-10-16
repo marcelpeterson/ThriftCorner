@@ -25,10 +25,10 @@
                              :class="currentSlide === {{ $index }} ? 'opacity-100' : 'opacity-0'">
                             {{-- Blurred Background --}}
                             <div class="absolute inset-0">
-                                <img src="{{ $image->image_url }}" alt="" class="w-full h-full object-cover blur-2xl scale-110 opacity-60">
+                                <img src="{{ Storage::url($image->image_path) }}" alt="" class="w-full h-full object-cover blur-2xl scale-110 opacity-60">
                             </div>
                             {{-- Actual Image --}}
-                            <img src="{{ $image->image_url }}" 
+                            <img src="{{ Storage::url($image->image_path) }}" 
                                  alt="{{ $item->name }} - Image {{ $index + 1 }}" 
                                  class="relative w-full h-full object-contain z-10">
                         </div>
@@ -73,7 +73,7 @@
                             <button @click="currentSlide = {{ $index }}"
                                     class="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all"
                                     :class="currentSlide === {{ $index }} ? 'border-emerald-600 ring-2 ring-emerald-200' : 'border-gray-200 hover:border-gray-300'">
-                                <img src="{{ $image->image_url }}" alt="Thumbnail {{ $index + 1 }}" class="w-full h-full object-cover">
+                                <img src="{{ Storage::url($image->image_path) }}" alt="Thumbnail {{ $index + 1 }}" class="w-full h-full object-cover">
                             </button>
                         @endforeach
                     </div>

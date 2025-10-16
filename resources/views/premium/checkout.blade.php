@@ -18,7 +18,7 @@
             {{-- Item --}}
             <div class="flex items-center gap-4 mb-6 pb-6 border-b border-gray-200">
                 @if($payment->item->images->count() > 0)
-                    <img src="{{ $payment->item->images->first()->image_url }}" alt="{{ $payment->item->name }}" class="w-20 h-20 object-cover rounded-lg">
+                    <img src="{{ Storage::url($payment->item->images->first()->image_path) }}" alt="{{ $payment->item->name }}" class="w-20 h-20 object-cover rounded-lg">
                 @else
                     <div class="w-20 h-20 bg-gray-200 rounded-lg flex items-center justify-center">
                         <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
