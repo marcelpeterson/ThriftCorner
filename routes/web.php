@@ -39,7 +39,11 @@ Route::post('/email/verification-notification', function (\Illuminate\Http\Reque
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/profile', [AuthController::class, 'profile'])->middleware('verified')->name('profile');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
+    Route::get('/profile/edit', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+});
 
 Route::get('/items', [ItemController::class, 'getItemPage'])->name('items');
 Route::get('/items/create', [ItemController::class, 'createItemPage'])->name('items.create');

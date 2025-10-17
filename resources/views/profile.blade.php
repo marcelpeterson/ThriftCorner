@@ -62,9 +62,9 @@
             </div>
     
             <div>
-                <button class="inline-flex items-center rounded-md border border-gray-300 bg-white px-8 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:text-blue-700 hover:border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer transition-all">
-                    <a href="#">Edit</a>
-                </button>
+                <a href="{{ route('profile.edit') }}" class="inline-flex items-center rounded-md border border-gray-300 bg-white px-8 py-2 text-sm font-semibold text-gray-700 shadow-sm hover:text-blue-700 hover:border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer transition-all">
+                    Edit
+                </a>
             </div>
         </div>
     </div>

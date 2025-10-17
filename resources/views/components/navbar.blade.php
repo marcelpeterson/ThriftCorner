@@ -77,7 +77,7 @@
                                         </li>
                                     @else
                                         <li>
-                                            <a href="#" class="block px-4 py-2 hover:bg-gray-100" role="menuitem">Settings</a>
+                                            <a href="{{ route('profile.edit') }}" class="block px-4 py-2 hover:bg-gray-100" role="menuitem">Settings</a>
                                         </li>
                                     @endif
                                     @if (Route::has('logout'))
