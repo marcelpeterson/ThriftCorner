@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
+use Laravolt\Avatar\Facade as Avatar;
 
 class AuthController extends Controller
 {
@@ -15,9 +17,9 @@ class AuthController extends Controller
         return view('register');
     }
 
-    public function registerSubmit(Request $request) 
+    public function registerSubmit(Request $request)
     {
- 
+
         $request->validate([
             'first_name' => 'required|string|max:50',
             'last_name'  => 'required|string|max:50',
@@ -55,7 +57,10 @@ class AuthController extends Controller
         $user->password   = Hash::make($request->password);
         $user->save();
 
-        return redirect()->route('login')->with('success', 'Registration successful. Please login.');
+        // Fire the Registered event to trigger email verification
+        event(new Registered($user));
+
+        return redirect()->route('verification.notice')->with('status', 'A verification link has been sent to your email address. Please check your email to verify your account.');
     }
 
     public function login() 
