@@ -24,7 +24,7 @@ Route::post('/register/submit', [AuthController::class, 'registerSubmit'])->name
 
 // Email verification routes
 Route::get('/email/verify', function () {
-    return view('auth.verify-email');
+    return view('auth.verify-email', ['user' => auth()->user()]);
 })->middleware('auth')->name('verification.notice');
 
 Route::get('/email/verify/{id}/{hash}', function (\Illuminate\Foundation\Auth\EmailVerificationRequest $request) {
@@ -43,6 +43,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
     Route::get('/profile/edit', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::put('/email', [\App\Http\Controllers\ProfileController::class, 'updateEmail'])->name('email.update');
 });
 
 Route::get('/items', [ItemController::class, 'getItemPage'])->name('items');

@@ -14,17 +14,23 @@ class UpdateProfileRequest extends FormRequest
 
     public function rules(): array
     {
-        return [
+        $rules = [
             'first_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:50',
             'phone' => 'required|string|min:10|max:12',
-            'email' => [
+        ];
+
+        // Only allow email updates for unverified users
+        if ($this->user()->email_verified_at === null) {
+            $rules['email'] = [
                 'required',
                 'email',
                 Rule::unique('users', 'email')->ignore($this->user()->id),
                 'regex:/^[a-zA-Z0-9._%+-]+@(binus\.ac\.id|binus\.edu)$/'
-            ],
-        ];
+            ];
+        }
+
+        return $rules;
     }
 
     public function messages(): array

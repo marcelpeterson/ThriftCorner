@@ -55,24 +55,6 @@
                     @enderror
                 </div>
 
-                <!-- Email -->
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-900">
-                        Email
-                    </label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value="{{ old('email', $user->email) }}"
-                        required
-                        class="mt-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 @error('email') border-red-500 @enderror"
-                    />
-                    @error('email')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
                 <!-- Phone -->
                 <div>
                     <label for="phone" class="block text-sm font-medium text-gray-900">
