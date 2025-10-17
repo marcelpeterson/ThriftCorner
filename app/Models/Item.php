@@ -36,17 +36,11 @@ class Item extends Model
                 if ($base === '') {
                     $base = 'item';
                 }
-                $slug = $base;
-                $attempt = 0;
-                while (static::where('slug', $slug)->exists()) {
-                    $attempt++;
-                    $suffix = '-' . Str::lower(Str::random(6));
-                    $slug = substr($base, 0, 255 - strlen($suffix)) . $suffix;
-                    if ($attempt > 20) {
-                        $slug = substr($base, 0, 200) . '-' . time() . '-' . Str::lower(Str::random(4));
-                        break;
-                    }
-                }
+
+                // Always append random suffix for uniqueness
+                $suffix = '-' . Str::lower(Str::random(6));
+                $slug = substr($base, 0, 255 - strlen($suffix)) . $suffix;
+
                 $item->slug = $slug;
             }
         });

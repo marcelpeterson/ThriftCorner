@@ -10,9 +10,13 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     {{-- Alpine.js for interactive components --}}
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/csp@3.x.x/dist/cdn.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     @stack('head')
+
+    {{-- 100% privacy-first analytics --}}
+    <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
 </head>
 <body class="min-h-screen flex flex-col bg-gray-50 text-gray-900 antialiased">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 rounded bg-emerald-600 px-3 py-2 text-white">Skip to content</a>
