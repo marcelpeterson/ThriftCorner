@@ -356,7 +356,7 @@
                     </div>
 
                     {{-- WhatsApp Button --}}
-                    <button onclick="showDisclaimerModal()"
+                    <button onclick="handleWhatsAppClick()"
                        type="button"
                        class="block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-6 rounded-lg transition duration-150 ease-in-out shadow-md hover:shadow-lg text-center cursor-pointer">
                         <div class="flex items-center justify-center">
@@ -476,6 +476,19 @@
 <script>
     // Store WhatsApp link for later use
     const whatsappLink = '{{ $whatsappLink }}';
+    const isUserLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
+    const loginUrl = '{{ route("login") }}';
+
+    // Handle WhatsApp button click
+    function handleWhatsAppClick() {
+        // If user is not logged in, redirect to login
+        if (!isUserLoggedIn) {
+            window.location.href = loginUrl;
+            return;
+        }
+        // Otherwise show the disclaimer modal
+        showDisclaimerModal();
+    }
 
     // Show disclaimer modal
     function showDisclaimerModal() {
