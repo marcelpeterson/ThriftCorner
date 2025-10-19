@@ -2,9 +2,9 @@
 
 @section('content')
 <div class="container mx-auto px-4">
-    <div class="flex justify-between items-center my-8">
-        <h1 class="text-3xl font-bold">Manage News</h1>
-        <a href="{{ route('admin.news.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center my-8 gap-4">
+        <h1 class="text-2xl sm:text-3xl font-bold">Manage News</h1>
+        <a href="{{ route('admin.news.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm w-full sm:w-auto text-center">
             Create New Article
         </a>
     </div>

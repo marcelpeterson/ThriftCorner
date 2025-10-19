@@ -10,11 +10,50 @@ document.addEventListener('alpine:init', () => {
         totalSlides: totalSlides,
         isPaused: false,
         timer: null,
-        
+        touchStartX: 0,
+        touchEndX: 0,
+
         init() {
-            this.startAutoplay();
+            // this.startAutoplay();
+            this.setupTouchListeners();
         },
-        
+
+        setupTouchListeners() {
+            const carousel = this.$el;
+            carousel.addEventListener('touchstart', (e) => {
+                this.handleTouchStart(e);
+            }, false);
+            carousel.addEventListener('touchend', (e) => {
+                this.handleTouchEnd(e);
+            }, false);
+        },
+
+        handleTouchStart(e) {
+            this.touchStartX = e.changedTouches[0].screenX;
+            this.isPaused = true;
+        },
+
+        handleTouchEnd(e) {
+            this.touchEndX = e.changedTouches[0].screenX;
+            this.handleSwipe();
+            this.isPaused = false;
+        },
+
+        handleSwipe() {
+            const swipeThreshold = 50; // Minimum distance to register a swipe
+            const diff = this.touchStartX - this.touchEndX;
+
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    // Swiped left - go to next slide
+                    this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
+                } else {
+                    // Swiped right - go to previous slide
+                    this.currentSlide = this.currentSlide === 0 ? this.totalSlides - 1 : this.currentSlide - 1;
+                }
+            }
+        },
+
         startAutoplay() {
             const self = this;
             this.timer = setInterval(function() {
@@ -32,14 +71,14 @@ document.addEventListener('alpine:init', () => {
 <div class="pb-10 pt-5">
     {{-- Hero Banner Carousel --}}
     <div class="relative mb-12" x-data="carousel({{ $heroItems->count() + 3 }})">
-        <div class="relative rounded-[48px] overflow-hidden shadow-xl h-[400px]"
+        <div class="relative rounded-2xl md:rounded-[48px] overflow-hidden shadow-xl h-[250px] sm:h-[300px] md:h-[400px]"
              @mouseenter="isPaused = true"
              @mouseleave="isPaused = false">
             @foreach($heroItems as $index => $heroItem)
                 {{-- Slide {{ $index }}: Hero Banner from Premium Listing --}}
                 <a href="{{ route('items.view', $heroItem->id) }}" class="absolute inset-0 transition-opacity duration-750 cursor-pointer group"
                    :class="currentSlide === {{ $index }} ? 'opacity-100 z-10' : 'opacity-0 z-0'">
-                    <div class="relative h-[400px] transform transition-transform duration-300 group-hover:scale-[1.02]">
+                    <div class="relative h-[250px] sm:h-[300px] md:h-[400px] transform transition-transform duration-300 group-hover:scale-[1.02]">
                         {{-- Background Image --}}
                         @if($heroItem->images->count() > 0)
                             <div class="absolute inset-0">
@@ -57,18 +96,18 @@ document.addEventListener('alpine:init', () => {
                         @endif
 
                         {{-- Content --}}
-                        <div class="relative h-full flex flex-col justify-center px-24 z-10">
-                            <div class="inline-block bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-sm font-bold px-4 py-2 rounded-full mb-4 w-fit shadow-lg">
+                        <div class="relative h-full flex flex-col justify-center px-4 sm:px-8 md:px-24 z-10">
+                            <div class="inline-block bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-xs sm:text-sm font-bold px-3 sm:px-4 py-1 sm:py-2 rounded-full mb-2 sm:mb-4 w-fit shadow-lg">
                                 🎯 HERO FEATURED
                             </div>
-                            <h1 class="text-5xl font-bold text-white mb-4 drop-shadow-lg">
+                            <h1 class="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-2 sm:mb-4 drop-shadow-lg">
                                 {{ $heroItem->name }}
                             </h1>
-                            <p class="text-4xl font-bold text-cyan-400 mb-6 drop-shadow-lg">
+                            <p class="text-xl sm:text-3xl md:text-4xl font-bold text-cyan-400 mb-4 sm:mb-6 drop-shadow-lg">
                                 {{ $heroItem->price_rupiah }}
                             </p>
                             <div class="flex items-center gap-4">
-                                <div class="bg-white/90 backdrop-blur-sm px-6 py-3 rounded-full font-bold text-gray-900 shadow-xl group-hover:bg-white transition-colors">
+                                <div class="bg-white/90 backdrop-blur-sm px-4 sm:px-6 py-2 sm:py-3 rounded-full font-bold text-xs sm:text-sm md:text-base text-gray-900 shadow-xl group-hover:bg-white transition-colors">
                                     View Listing →
                                 </div>
                             </div>
@@ -82,45 +121,45 @@ document.addEventListener('alpine:init', () => {
             @endphp
 
             {{-- Slide {{ $heroCount }}: ThriftCorner Welcome --}}
-            <div class="absolute inset-0 transition-opacity duration-750" 
+            <div class="absolute inset-0 transition-opacity duration-750"
                  :class="currentSlide === {{ $heroCount }} ? 'opacity-100 z-10' : 'opacity-0 z-0'">
-                <div class="bg-gray-900 relative h-[400px]">
-                    <div class="text-white ml-24 pt-16 max-w-2xl">
-                        <h1 class="text-[4rem] font-bold tracking-tight sm:text-[4rem]">
+                <div class="bg-gray-900 relative h-[250px] sm:h-[300px] md:h-[400px]">
+                    <div class="text-white sm:px-8 md:px-0 md:ml-24 md:pt-20 max-w-2xl pt-11 px-4">
+                        <h1 class="text-2xl sm:text-4xl md:text-[4rem] md:font-bold font-extrabold tracking-tight">
                             {{ config('app.name', 'ThriftCorner') }}
                         </h1>
-                        <p class="mt-2 text-3xl font-bold text-gray-100">
+                        <p class="md:mt-4 mt-2 md:ml-2 sm:mt-2 text-md sm:text-2xl md:text-3xl md:font-bold font-semibold text-gray-100">
                             Binusian favorite place for second-hand gems.
                         </p>
-                        <p class="mt-2 text-gray-300">
+                        <p class="md:mt-2 mt-1 md:ml-2 sm:mt-2 text-xs sm:text-sm md:text-base text-gray-300">
                             A simple marketplace for Binus students to buy and sell textbooks, electronics, and dorm essentials.
                         </p>
-                        <button class="bg-white text-gray-900 font-bold mt-5 px-8 py-3 rounded-full hover:bg-blue-50 transition-colors shadow-lg cursor-pointer">
+                        <button class="bg-white text-gray-900 font-bold mt-4 sm:mt-5 px-6 sm:px-8 py-2 sm:py-3 rounded-full hover:bg-blue-50 transition-colors shadow-lg cursor-pointer text-sm sm:text-base">
                             @if (Route::has('items.create'))
                                 <a href="{{ auth()->check() ? route('items.create') : route('login') }}">Sell Now →</a>
                             @endif
                         </button>
                     </div>
-                    <img src="https://storage.thriftcorner.store/assets/bags.png" alt="" class="absolute bottom-0 right-0 w-full max-w-[450px]">
+                    <img src="https://storage.thriftcorner.store/assets/bags.png" alt="" class="absolute bottom-0 right-0 w-full max-w-[150px] hidden md:block md:max-w-[450px]">
                 </div>
             </div>
 
             {{-- Slide {{ $heroCount + 1 }}: Dummy Ad - Electronics Sale --}}
-            <div class="absolute inset-0 transition-opacity duration-750" 
+            <div class="absolute inset-0 transition-opacity duration-750"
                  :class="currentSlide === {{ $heroCount + 1 }} ? 'opacity-100 z-10' : 'opacity-0 z-0'">
-                <div class="bg-gradient-to-r from-blue-600 to-blue-800 flex items-center justify-between h-[400px] px-24">
+                <div class="bg-gradient-to-r from-blue-600 to-blue-800 flex items-center justify-between h-[250px] sm:h-[300px] md:h-[400px] px-4 sm:px-8 md:px-24">
                     <div class="text-white max-w-2xl">
-                        <div class="inline-block bg-yellow-400 text-blue-900 text-xs font-bold px-3 py-1 rounded-full mb-4">
+                        <div class="inline-block bg-yellow-400 text-blue-900 text-xs font-bold px-3 py-1 rounded-full mb-2 sm:mb-4">
                             SPONSORED AD
                         </div>
-                        <h2 class="text-5xl font-bold mb-4">
+                        <h2 class="text-2xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-4">
                             📱 Electronics Clearance!
                         </h2>
-                        <p class="text-2xl mb-4 ml-2">Up to <span class="text-yellow-400 font-bold">50% OFF</span></p>
-                        <p class="text-lg text-blue-100 mb-6 ml-2">
+                        <p class="text-lg sm:text-2xl mb-2 sm:mb-4 ml-2">Up to <span class="text-yellow-400 font-bold">50% OFF</span></p>
+                        <p class="text-sm sm:text-lg text-blue-100 mb-4 sm:mb-6 ml-2 hidden md:block">
                             Laptops, tablets, phones & accessories. Limited time offer!
                         </p>
-                        <button class="bg-white text-blue-600 font-bold px-8 py-3 rounded-full hover:bg-blue-50 transition-colors shadow-lg">
+                        <button class="bg-white text-blue-600 font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-full hover:bg-blue-50 transition-colors shadow-lg text-sm sm:text-base">
                             Shop Now →
                         </button>
                     </div>
@@ -128,21 +167,21 @@ document.addEventListener('alpine:init', () => {
             </div>
 
             {{-- Slide {{ $heroCount + 2 }}: Dummy Ad - Textbook Exchange --}}
-            <div class="absolute inset-0 transition-opacity duration-750" 
+            <div class="absolute inset-0 transition-opacity duration-750"
                  :class="currentSlide === {{ $heroCount + 2 }} ? 'opacity-100 z-10' : 'opacity-0 z-0'">
-                <div class="bg-gradient-to-r from-emerald-600 to-teal-700 flex items-center justify-between h-[400px] px-24">
+                <div class="bg-gradient-to-r from-emerald-600 to-teal-700 flex items-center justify-between h-[250px] sm:h-[300px] md:h-[400px] px-4 sm:px-8 md:px-24">
                     <div class="text-white max-w-2xl">
-                        <div class="inline-block bg-orange-400 text-emerald-900 text-xs font-bold px-3 py-1 rounded-full mb-4">
+                        <div class="inline-block bg-orange-400 text-emerald-900 text-xs font-bold px-3 py-1 rounded-full mb-2 sm:mb-4">
                             SPONSORED AD
                         </div>
-                        <h2 class="text-5xl font-bold mb-4">
+                        <h2 class="text-2xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-4">
                             📚 Textbook Season!
                         </h2>
-                        <p class="text-2xl mb-4 ml-2">Save on <span class="text-yellow-300 font-bold">Course Books</span></p>
-                        <p class="text-lg text-emerald-100 mb-6 ml-2">
+                        <p class="text-lg sm:text-2xl mb-2 sm:mb-4 ml-2">Save on <span class="text-yellow-300 font-bold">Course Books</span></p>
+                        <p class="text-sm sm:text-lg text-emerald-100 mb-4 sm:mb-6 ml-2 hidden md:block">
                             Find your semester books at student-friendly prices. Buy & sell with ease!
                         </p>
-                        <button class="bg-white text-emerald-600 font-bold px-8 py-3 rounded-full hover:bg-emerald-50 transition-colors shadow-lg">
+                        <button class="bg-white text-emerald-600 font-bold px-6 sm:px-8 py-2 sm:py-3 rounded-full hover:bg-emerald-50 transition-colors shadow-lg text-sm sm:text-base">
                             Browse Books →
                         </button>
                     </div>
@@ -151,13 +190,13 @@ document.addEventListener('alpine:init', () => {
 
             {{-- Navigation Arrows --}}
             <button @click="currentSlide = currentSlide === 0 ? totalSlides - 1 : currentSlide - 1"
-                    class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-3 transition-all z-20 shadow-lg cursor-pointer">
+                    class="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-3 transition-all z-20 shadow-lg cursor-pointer items-center justify-center">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                 </svg>
             </button>
             <button @click="currentSlide = currentSlide === totalSlides - 1 ? 0 : currentSlide + 1"
-                    class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-3 transition-all z-20 shadow-lg cursor-pointer">
+                    class="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-3 transition-all z-20 shadow-lg cursor-pointer items-center justify-center">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
@@ -191,7 +230,7 @@ document.addEventListener('alpine:init', () => {
         </div>
 
         {{-- Ad Space Info Badge --}}
-        <div class="mt-4 flex items-center justify-center gap-2 text-sm text-gray-500">
+        <div class="mt-4 flex items-center justify-center gap-2 text-xs md:text-sm text-gray-500">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
             </svg>
@@ -286,8 +325,8 @@ document.addEventListener('alpine:init', () => {
                 <div class="flex items-center justify-between">
                     {{-- Sort Options --}}
                     <div class="flex items-center gap-2">
-                        <label for="sort" class="text-sm font-medium text-gray-700">Sort by:</label>
-                        <select name="sort" id="sort" class="rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        <label for="sort" class="text-sm font-medium text-gray-700 max-md:text-right">Sort by:</label>
+                        <select name="sort" id="sort" class="rounded-md border border-gray-300 px-3 py-2 max-md:px-2 max-md:ml-1 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500">
                             <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Newest First</option>
                             <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>Oldest First</option>
                             <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Price: Low to High</option>
@@ -297,8 +336,8 @@ document.addEventListener('alpine:init', () => {
 
                     {{-- Filter Actions --}}
                     <div class="flex items-center gap-2">
-                        <a href="{{ route('home') }}" class="text-sm text-gray-600 hover:text-gray-900 underline mr-2">Clear Filters</a>
-                        <button type="submit" class="bg-blue-700 text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-blue-800 transition-colors cursor-pointer">
+                        <a href="{{ route('home') }}" class="text-sm text-gray-600 hover:text-gray-900 underline mr-2 max-md:text-center max-md:ml-2 max-md:mr-0">Clear Filters</a>
+                        <button type="submit" class="bg-blue-700 text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-blue-800 transition-colors cursor-pointer max-md:px-4">
                             Apply Filters
                         </button>
                     </div>

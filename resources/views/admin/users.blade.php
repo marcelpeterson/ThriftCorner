@@ -5,19 +5,20 @@
 @section('content')
 <div class="space-y-6">
     {{-- Header --}}
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900">Manage Users</h1>
-            <p class="text-gray-600 mt-1">View and manage platform users</p>
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Manage Users</h1>
+            <p class="text-xs sm:text-sm text-gray-600 mt-1">View and manage platform users</p>
         </div>
-        <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors">
+        <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors text-sm">
             ← Back to Dashboard
         </a>
     </div>
 
-    {{-- Users Table --}}
+    {{-- Users Table/Cards --}}
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="overflow-x-auto">
+        {{-- Desktop Table View --}}
+        <div class="hidden md:block overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
@@ -82,6 +83,55 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+
+        {{-- Mobile Card View --}}
+        <div class="md:hidden divide-y divide-gray-200">
+            @foreach($users as $user)
+                <div class="p-4 hover:bg-gray-50 transition-colors">
+                    <div class="flex items-start justify-between gap-3 mb-3">
+                        <div class="flex items-center gap-3 flex-1 min-w-0">
+                            @if($user->photo_url)
+                                <img src="{{ $user->photo_url }}" alt="{{ $user->first_name }}" class="w-12 h-12 rounded-full object-cover flex-shrink-0">
+                            @else
+                                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                    <span class="text-blue-600 font-bold">{{ substr($user->first_name, 0, 1) }}{{ substr($user->last_name, 0, 1) }}</span>
+                                </div>
+                            @endif
+                            <div class="min-w-0">
+                                <p class="text-sm font-medium text-gray-900 truncate">{{ $user->full_name }}</p>
+                                <p class="text-xs text-gray-500 truncate">{{ $user->email }}</p>
+                            </div>
+                        </div>
+                        @if($user->is_admin)
+                            <span class="px-2 py-1 text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800 flex-shrink-0">
+                                Admin
+                            </span>
+                        @else
+                            <span class="px-2 py-1 text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 flex-shrink-0">
+                                User
+                            </span>
+                        @endif
+                    </div>
+                    <div class="space-y-2 text-sm mb-3">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Listings:</span>
+                            <span class="font-medium text-blue-600">{{ $user->items_count }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Joined:</span>
+                            <span class="text-gray-700">{{ $user->created_at->format('M d, Y') }}</span>
+                        </div>
+                    </div>
+                    <form action="{{ route('admin.users.toggleAdmin', $user) }}" method="POST" class="w-full">
+                        @csrf
+                        <button type="submit" class="w-full px-3 py-2 text-xs font-medium rounded-lg bg-blue-100 hover:bg-blue-200 text-blue-700 transition-colors cursor-pointer"
+                                {{ $user->id === auth()->id() ? 'disabled' : '' }}>
+                            {{ $user->is_admin ? 'Revoke Admin' : 'Make Admin' }}
+                        </button>
+                    </form>
+                </div>
+            @endforeach
         </div>
 
         {{-- Pagination --}}

@@ -5,7 +5,7 @@
 @section('content')
 <div class="py-10">
     <div class="mx-auto max-w-3xl">
-        <div class="mb-8">
+        <div class="mb-8 max-md:text-center">
             <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                 Edit Profile
             </h1>

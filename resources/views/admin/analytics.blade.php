@@ -5,22 +5,22 @@
 @section('content')
 <div class="space-y-6">
     {{-- Header --}}
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900">Google Analytics</h1>
-            <p class="text-gray-600 mt-1">Website traffic and user behavior insights</p>
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Google Analytics</h1>
+            <p class="text-xs sm:text-sm text-gray-600 mt-1">Website traffic and user behavior insights</p>
         </div>
-        <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors">
+        <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors text-sm">
             ← Back to Dashboard
         </a>
     </div>
 
     {{-- Period Selector --}}
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-        <form method="GET" action="{{ route('admin.analytics') }}" class="flex items-center gap-4">
-            <label for="period" class="text-sm font-medium text-gray-700">Time Period:</label>
-            <select name="period" id="period" onchange="this.form.submit()" 
-                    class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        <form method="GET" action="{{ route('admin.analytics') }}" class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <label for="period" class="text-sm font-medium text-gray-700 whitespace-nowrap">Time Period:</label>
+            <select name="period" id="period" onchange="this.form.submit()"
+                    class="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 <option value="7" {{ $period == 7 ? 'selected' : '' }}>Last 7 days</option>
                 <option value="30" {{ $period == 30 ? 'selected' : '' }}>Last 30 days</option>
                 <option value="90" {{ $period == 90 ? 'selected' : '' }}>Last 90 days</option>
@@ -78,26 +78,26 @@
         </div>
     @else
         {{-- Overview Stats --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <p class="text-sm font-medium text-gray-600">Total Visitors</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">{{ number_format($analyticsData['totalVisitors']->sum('activeUsers')) }}</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+                <p class="text-xs sm:text-sm font-medium text-gray-600">Total Visitors</p>
+                <p class="text-2xl sm:text-3xl font-bold text-gray-900 mt-2">{{ number_format($analyticsData['totalVisitors']->sum('activeUsers')) }}</p>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <p class="text-sm font-medium text-gray-600">Page Views</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">{{ number_format($analyticsData['totalPageViews']->sum('screenPageViews')) }}</p>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+                <p class="text-xs sm:text-sm font-medium text-gray-600">Page Views</p>
+                <p class="text-2xl sm:text-3xl font-bold text-gray-900 mt-2">{{ number_format($analyticsData['totalPageViews']->sum('screenPageViews')) }}</p>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <p class="text-sm font-medium text-gray-600">Sessions</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">{{ number_format($analyticsData['totalSessions']->sum('sessions')) }}</p>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+                <p class="text-xs sm:text-sm font-medium text-gray-600">Sessions</p>
+                <p class="text-2xl sm:text-3xl font-bold text-gray-900 mt-2">{{ number_format($analyticsData['totalSessions']->sum('sessions')) }}</p>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <p class="text-sm font-medium text-gray-600">Avg Session Duration</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">{{ number_format($analyticsData['avgSessionDuration']->avg('averageSessionDuration') ?? 0, 0) }}s</p>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+                <p class="text-xs sm:text-sm font-medium text-gray-600">Avg Session Duration</p>
+                <p class="text-2xl sm:text-3xl font-bold text-gray-900 mt-2">{{ number_format($analyticsData['avgSessionDuration']->avg('averageSessionDuration') ?? 0, 0) }}s</p>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <p class="text-sm font-medium text-gray-600">Engagement Rate</p>
-                <p class="text-3xl font-bold text-gray-900 mt-2">{{ number_format(($analyticsData['bounceRate']->avg('engagementRate') ?? 0) * 100, 1) }}%</p>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+                <p class="text-xs sm:text-sm font-medium text-gray-600">Engagement Rate</p>
+                <p class="text-2xl sm:text-3xl font-bold text-gray-900 mt-2">{{ number_format(($analyticsData['bounceRate']->avg('engagementRate') ?? 0) * 100, 1) }}%</p>
             </div>
         </div>
 
@@ -167,10 +167,10 @@
         </div>
 
         {{-- Daily Visitors Chart --}}
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h3 class="text-lg font-bold text-gray-900 mb-4">Daily Visitors Trend</h3>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
+            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">Daily Visitors Trend</h3>
             @if($analyticsData['dailyVisitors']->isNotEmpty())
-                <div class="h-64 flex items-end justify-between gap-1">
+                <div class="h-48 sm:h-64 flex items-end justify-between gap-1">
                     @foreach($analyticsData['dailyVisitors'] as $day)
                         <div class="flex-1 bg-blue-500 hover:bg-blue-600 transition-colors rounded-t" 
                              style="height: {{ ($day['activeUsers'] / $analyticsData['dailyVisitors']->max('activeUsers')) * 100 }}%"

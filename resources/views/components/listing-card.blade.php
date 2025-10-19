@@ -23,19 +23,19 @@
         </div>
     </div>
     @if($item->images->isNotEmpty())
-        <div class="relative mt-3">
-            <img src="{{ Storage::url($item->images->first()->image_path) }}" alt="{{ $item->name }}" class="w-96 h-96 object-cover rounded-md {{ $item->isPremium() ? 'ring-2 ring-purple-300' : '' }}">
+        <div class="relative mt-3 w-full">
+            <img src="{{ Storage::url($item->images->first()->image_path) }}" alt="{{ $item->name }}" class="w-full aspect-square object-cover rounded-md {{ $item->isPremium() ? 'ring-2 ring-purple-300' : '' }}">
         </div>
     @else
-        <div class="mt-4 w-full h-48 bg-gray-100 flex items-center justify-center rounded-md">
+        <div class="mt-4 w-full aspect-square bg-gray-100 flex items-center justify-center rounded-md">
             <span class="text-gray-400">No Image</span>
         </div>
     @endif
     <div>
-        <h3 class="text-lg font-bold {{ $item->isPremium() ? 'text-purple-900' : 'text-gray-900' }} mt-2">{{ $item->name }}</h3>
+        <h3 class="text-lg font-bold max-md:font-black {{ $item->isPremium() ? 'text-purple-900' : 'text-gray-900' }} mt-2">{{ $item->name }}</h3>
         <p class="mt-1 text-sm {{ $item->isPremium() ? 'text-gray-700' : 'text-gray-600' }}">{{ \Illuminate\Support\Str::limit($item->description, 100) }}</p>
-        <div class="mt-2 flex items-center justify-between">
-            <p class="text-md font-semibold {{ $item->isPremium() ? 'text-purple-700' : 'text-gray-900' }}">{{ $item->price_rupiah }}</p>
+        <div class="mt-2 max-md:mt-3 flex items-center justify-between">
+            <p class="text-md font-semibold max-md:font-bold {{ $item->isPremium() ? 'text-purple-700' : 'text-gray-900' }}">{{ $item->price_rupiah }}</p>
             <div class="inline-flex items-center mt-1">
                 <svg class="w-5 h-5 mr-1.5 {{ $item->isPremium() ? 'text-purple-600' : 'text-blue-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>

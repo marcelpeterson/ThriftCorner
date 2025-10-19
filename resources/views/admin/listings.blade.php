@@ -5,18 +5,18 @@
 @section('content')
 <div class="space-y-6">
     {{-- Header --}}
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900">Manage Listings</h1>
-            <p class="text-gray-600 mt-1">View and manage all platform listings</p>
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Manage Listings</h1>
+            <p class="text-xs sm:text-sm text-gray-600 mt-1">View and manage all platform listings</p>
         </div>
-        <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors">
+        <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors text-sm">
             ← Back to Dashboard
         </a>
     </div>
 
     {{-- Listings Grid --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         @foreach($listings as $listing)
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
                 {{-- Image --}}
