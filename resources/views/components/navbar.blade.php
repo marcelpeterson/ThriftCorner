@@ -1,4 +1,4 @@
-<nav class="bg-white md:bg-white/80 md:backdrop-blur border-b border-gray-200 sticky top-0 z-50" aria-label="Primary">
+<nav class="bg-white md:bg-white/80 md:backdrop-blur border-b border-gray-200 fixed top-0 left-0 right-0 z-50" aria-label="Primary">
     <!-- Mobile & Desktop Top Bar -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
         <!-- Mobile: Logo + Icons -->

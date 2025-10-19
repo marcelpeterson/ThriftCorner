@@ -88,7 +88,7 @@ function saveScrollPosition() {
 @section('content')
 <div class="pb-10 pt-5">
     {{-- Hero Banner Carousel --}}
-    <div class="relative mb-12" x-data="carousel({{ $heroItems->count() + 3 }})">
+    <div class="relative mb-12 max-md:mb-10" x-data="carousel({{ $heroItems->count() + 3 }})">
         <div class="relative rounded-2xl md:rounded-[48px] overflow-hidden shadow-xl h-[250px] sm:h-[300px] md:h-[400px]"
              @mouseenter="isPaused = true"
              @mouseleave="isPaused = false">
@@ -283,7 +283,7 @@ function saveScrollPosition() {
 
     <div>
         {{-- Search and Filter Section --}}
-        <div id="filter-section" class="mt-12 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div id="filter-section" class="mt-12 max-md:mt-10 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div class="flex max-md:flex-col items-center max-md:items-start justify-between mb-4">
                 <h2 class="text-2xl font-bold text-gray-900">
                     @if(request('q'))
