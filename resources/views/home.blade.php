@@ -14,7 +14,7 @@ document.addEventListener('alpine:init', () => {
         touchEndX: 0,
 
         init() {
-            // this.startAutoplay();
+            this.startAutoplay();
             this.setupTouchListeners();
         },
 
@@ -64,6 +64,24 @@ document.addEventListener('alpine:init', () => {
         }
     }));
 });
+
+// Restore scroll position after page reload
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if there's a saved scroll position
+    const savedScrollY = sessionStorage.getItem('filterScrollPosition');
+    
+    if (savedScrollY) {
+        // Restore scroll position
+        window.scrollTo(0, parseInt(savedScrollY));
+        // Clear the saved position
+        sessionStorage.removeItem('filterScrollPosition');
+    }
+});
+
+// Save scroll position before form submission
+function saveScrollPosition() {
+    sessionStorage.setItem('filterScrollPosition', window.scrollY.toString());
+}
 </script>
 @endpush
 
@@ -265,7 +283,7 @@ document.addEventListener('alpine:init', () => {
 
     <div>
         {{-- Search and Filter Section --}}
-        <div class="mt-12 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div id="filter-section" class="mt-12 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
             <div class="flex max-md:flex-col items-center max-md:items-start justify-between mb-4">
                 <h2 class="text-2xl font-bold text-gray-900">
                     @if(request('q'))
@@ -278,7 +296,7 @@ document.addEventListener('alpine:init', () => {
             </div>
 
             {{-- Filters --}}
-            <form method="GET" action="{{ route('home') }}" class="space-y-4">
+            <form method="GET" action="{{ route('home') }}" class="space-y-4" onsubmit="saveScrollPosition()">
                 @if(request('q'))
                     <input type="hidden" name="q" value="{{ request('q') }}">
                 @endif
@@ -336,7 +354,7 @@ document.addEventListener('alpine:init', () => {
 
                     {{-- Filter Actions --}}
                     <div class="flex items-center gap-2">
-                        <a href="{{ route('home') }}" class="text-sm text-gray-600 hover:text-gray-900 underline mr-2 max-md:text-center max-md:ml-2 max-md:mr-0">Clear Filters</a>
+                        <a href="{{ route('home') }}" onclick="saveScrollPosition()" class="text-sm text-gray-600 hover:text-gray-900 underline mr-2 max-md:text-center max-md:ml-2 max-md:mr-0">Clear Filters</a>
                         <button type="submit" class="bg-blue-700 text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-blue-800 transition-colors cursor-pointer max-md:px-4">
                             Apply Filters
                         </button>
@@ -371,7 +389,7 @@ document.addEventListener('alpine:init', () => {
                     @endif
                 </p>
                 @if(request('q') || request()->hasAny(['category', 'condition', 'min_price', 'max_price']))
-                    <a href="{{ route('home') }}" class="mt-4 inline-block text-blue-700 hover:text-blue-800 font-medium">
+                    <a href="{{ route('home') }}" onclick="saveScrollPosition()" class="mt-4 inline-block text-blue-700 hover:text-blue-800 font-medium">
                         Clear all filters
                     </a>
                 @endif
