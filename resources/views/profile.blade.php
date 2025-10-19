@@ -3,7 +3,7 @@
 @section('title', 'Profile')
 
 @section('content')
-<div class="py-6 sm:py-10 px-4 sm:px-6">
+<div class="py-4 sm:py-8 px-4 sm:px-6">
     <div class="mx-auto max-w-3xl text-center">
         <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-gray-900">
             Your Profile
@@ -13,17 +13,24 @@
         </p>
     </div>
 
-    <div class="mt-8 sm:mt-10 max-w-5xl mx-auto bg-white p-4 sm:p-6 rounded-lg shadow-md">
+    <div class="mt-8 sm:mt-10 max-w-3xl mx-auto bg-white p-4 sm:p-6 rounded-lg shadow-md">
         <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-6">Personal Information</h2>
         <div class="grid grid-cols-1 gap-6">
             {{-- User Info Section --}}
-            <div>
+            <div class="flex justify-between items-center">
                 <div class="mb-4 flex items-center gap-4">
                     <img src="{{ $user->photo_url }}" alt="User photo" class="w-16 sm:w-20 h-16 sm:h-20 rounded-full flex-shrink-0">
                     <div>
                         <h3 class="text-lg sm:text-xl font-bold text-gray-900 mt-0 sm:mt-1">{{ $user->first_name }} {{ $user->last_name }}</h3>
                         <p class="text-xs sm:text-sm text-gray-600 truncate">{{ $user->email }}</p>
                     </div>
+                </div>
+
+                {{-- Edit Button --}}
+                <div class="max-md:hidden">
+                    <a href="{{ route('profile.edit') }}" class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 sm:px-8 py-2 text-xs sm:text-sm font-semibold text-gray-700 shadow-sm hover:text-blue-700 hover:border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer transition-all whitespace-nowrap">
+                        Edit
+                    </a>
                 </div>
             </div>
 
@@ -62,22 +69,15 @@
                     @else
                         <p class="text-xs sm:text-sm text-gray-600 mt-2">No reviews yet</p>
                     @endif
-                </div>
-
-                {{-- Edit Button --}}
-                <div>
-                    <a href="{{ route('profile.edit') }}" class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 sm:px-8 py-2 text-xs sm:text-sm font-semibold text-gray-700 shadow-sm hover:text-blue-700 hover:border-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer transition-all whitespace-nowrap">
-                        Edit
-                    </a>
-                </div>
+                </div>        
             </div>
         </div>
     </div>
 
-    <div class="mt-8 sm:mt-10 max-w-5xl mx-auto">
-        <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-6 px-4 sm:px-0">Your Listings</h2>
+    <div class="mt-8 sm:mt-10 max-w-5xl max-md:max-w-6xl mx-auto">
+        <h2 class="text-xl sm:text-2xl font-semibold max-md:font-bold text-gray-800 mb-6">Your Listings</h2>
         @if(count($items) > 0)
-            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 px-4 sm:px-0">
+            <div class="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 md:grid-cols-3">
                 @foreach ($items as $item)
                     <x-listing-card :item="$item" />
                 @endforeach

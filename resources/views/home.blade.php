@@ -255,7 +255,7 @@ document.addEventListener('alpine:init', () => {
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 md:grid-cols-3">
                 @foreach ($featuredItems as $item)
                     <x-listing-card :item="$item" :featured="true" />
                 @endforeach
@@ -347,7 +347,7 @@ document.addEventListener('alpine:init', () => {
 
         {{-- Listings Grid --}}
         @if(count($items) > 0)
-            <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 md:grid-cols-3">
                 @foreach ($items as $item)
                     <x-listing-card :item="$item" />
                 @endforeach

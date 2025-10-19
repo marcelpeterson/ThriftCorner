@@ -33,13 +33,25 @@
     <div>
         <h3 class="text-lg font-bold max-md:font-black {{ $item->isPremium() ? 'text-purple-900' : 'text-gray-900' }} mt-2">{{ $item->name }}</h3>
         <p class="mt-1 text-sm {{ $item->isPremium() ? 'text-gray-700' : 'text-gray-600' }}">{{ \Illuminate\Support\Str::limit($item->description, 100) }}</p>
-        <div class="mt-2 max-md:mt-3 flex items-center justify-between">
+        <div class="mt-2 max-md:mt-3 max-md:flex-col max-md:items-start flex items-center justify-between">
             <p class="text-md font-semibold max-md:font-bold {{ $item->isPremium() ? 'text-purple-700' : 'text-gray-900' }}">{{ $item->price_rupiah }}</p>
-            <div class="inline-flex items-center mt-1">
-                <svg class="w-5 h-5 mr-1.5 {{ $item->isPremium() ? 'text-purple-600' : 'text-blue-600' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-                <span class="{{ $item->isPremium() ? 'text-purple-800' : 'text-blue-800' }} font-semibold mt-[-2px]">{{ $item->condition }}</span>
+            <div class="inline-flex items-center mt-1 flex-row-reverse md:flex-row">
+            <svg
+                class="w-5 h-5 ml-1.5 md:ml-0 md:mr-1.5 {{ $item->isPremium() ? 'text-purple-600' : 'text-blue-600' }}"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+            </svg>
+            <span class="{{ $item->isPremium() ? 'text-purple-800' : 'text-blue-800' }} font-semibold mt-[-2px]">
+                {{ $item->condition }}
+            </span>
             </div>
         </div>
     </div>

@@ -65,17 +65,22 @@
                     @foreach ($transactions as $transaction)
                         <li class="hover:bg-gray-50 transition-colors">
                             <div class="px-3 sm:px-6 py-4 sm:py-5">
-                                <div class="flex flex-col gap-4">
+                                <div class="flex flex-col gap-4 md:flex-row md:justify-between">
                                     <!-- Top Row: Image and Basic Info -->
-                                    <div class="flex gap-3 sm:gap-4">
+                                    <div class="flex max-md:flex-col gap-3 sm:gap-6">
                                         <!-- Item Image -->
-                                        <div class="flex-shrink-0">
+                                        <div class="flex-shrink-0 relative">
                                             @if ($transaction->item->images->isNotEmpty())
+                                                {{-- Blurred Background --}}
+                                                <div class="absolute inset-0 rounded-lg overflow-hidden md:hidden">
+                                                    <img src="{{ Storage::url($transaction->item->images->first()->image_path) }}" alt="" class="w-full h-full object-cover blur-2xl scale-110 opacity-60">
+                                                </div>
+                                                {{-- Actual Image --}}
                                                 <img src="{{ Storage::url($transaction->item->images->first()->image_path) }}"
                                                      alt="{{ $transaction->item->name }}"
-                                                     class="h-16 sm:h-20 w-16 sm:w-20 rounded-lg object-cover">
+                                                     class="relative h-32 sm:h-44 w-full sm:w-48 rounded-lg object-contain md:object-cover">
                                             @else
-                                                <div class="h-16 sm:h-20 w-16 sm:w-20 rounded-lg bg-gray-200 flex items-center justify-center flex-shrink-0">
+                                                <div class="h-16 sm:h-44 w-full sm:w-48 rounded-lg bg-gray-200 flex items-center justify-center flex-shrink-0">
                                                     <svg class="h-8 sm:h-10 w-8 sm:w-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                                     </svg>
@@ -85,7 +90,7 @@
 
                                         <!-- Transaction Details -->
                                         <div class="flex-1 min-w-0">
-                                            <div class="flex flex-col sm:flex-row sm:items-center gap-2 mb-1 sm:mb-2">
+                                            <div class="flex flex-row sm:items-center gap-2 mb-1 sm:mb-2">
                                                 <h3 class="text-base sm:text-lg font-semibold text-gray-900 truncate">
                                                     {{ $transaction->item->name }}
                                                 </h3>
@@ -178,7 +183,7 @@
                                     </div>
 
                                     <!-- Actions Row -->
-                                    <div class="flex flex-wrap gap-2">
+                                    <div class="flex flex-wrap gap-2 md:flex-col md:items-end">
                                         @if ($transaction->status === 'pending' && $transaction->seller_id === auth()->id())
                                             <a href="{{ route('transaction.links', $transaction->id) }}"
                                                class="inline-flex items-center px-2 sm:px-3 py-1 sm:py-1.5 border border-blue-600 text-xs font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
