@@ -96,14 +96,14 @@ document.addEventListener('alpine:init', () => {
                         @endif
 
                         {{-- Content --}}
-                        <div class="relative h-full flex flex-col justify-center px-4 sm:px-8 md:px-24 z-10">
+                        <div class="relative h-full flex flex-col justify-center px-5 sm:px-8 md:px-24 z-10">
                             <div class="inline-block bg-gradient-to-r from-blue-500 to-cyan-500 text-white text-xs sm:text-sm font-bold px-3 sm:px-4 py-1 sm:py-2 rounded-full mb-2 sm:mb-4 w-fit shadow-lg">
                                 🎯 HERO FEATURED
                             </div>
-                            <h1 class="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-2 sm:mb-4 drop-shadow-lg">
+                            <h1 class="text-2xl sm:text-4xl md:text-5xl font-bold max-md:font-black text-white mb-0 sm:mb-4 drop-shadow-lg">
                                 {{ $heroItem->name }}
                             </h1>
-                            <p class="text-xl sm:text-3xl md:text-4xl font-bold text-cyan-400 mb-4 sm:mb-6 drop-shadow-lg">
+                            <p class="text-xl sm:text-3xl md:text-4xl font-bold max-md:font-black text-cyan-400 mb-4 sm:mb-6 drop-shadow-lg">
                                 {{ $heroItem->price_rupiah }}
                             </p>
                             <div class="flex items-center gap-4">
@@ -124,7 +124,7 @@ document.addEventListener('alpine:init', () => {
             <div class="absolute inset-0 transition-opacity duration-750"
                  :class="currentSlide === {{ $heroCount }} ? 'opacity-100 z-10' : 'opacity-0 z-0'">
                 <div class="bg-gray-900 relative h-[250px] sm:h-[300px] md:h-[400px]">
-                    <div class="text-white sm:px-8 md:px-0 md:ml-24 md:pt-20 max-w-2xl pt-11 px-4">
+                    <div class="text-white sm:px-8 md:px-0 md:ml-24 md:pt-20 max-w-2xl pt-11 px-5">
                         <h1 class="text-2xl sm:text-4xl md:text-[4rem] md:font-bold font-extrabold tracking-tight">
                             {{ config('app.name', 'ThriftCorner') }}
                         </h1>

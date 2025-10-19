@@ -5,11 +5,11 @@
 @section('content')
 
 <section aria-labelledby="register-title" class="min-h-[50vh] flex items-center justify-center">
-    <div class="flex gap-8 items-center">
+    <div class="flex gap-8 items-center max-md:flex-col px-4">
         <div>
-            <img src="https://storage.thriftcorner.store/assets/binus-register.png" alt="Binus Register" class="w-[400px]">
+            <img src="https://storage.thriftcorner.store/assets/binus-register.png" alt="Binus Register" class="w-[400px] max-md:hidden">
         </div>
-        <div>
+        <div class="max-w-md w-full p-8 bg-white border border-gray-200 rounded-lg shadow-lg">
             <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl text-center">Create an account</h1>
             <div class="mt-2 flex items-center justify-center gap-1">
                 <p class="text-sm font-medium text-gray-700">Already have an account?</p>
@@ -19,33 +19,33 @@
             <form action="{{ route('register.submit')}}" method="POST">
                 @csrf
                 <div class="flex flex-col gap-3 mt-6">
-                    <div class="flex gap-3">
+                    <div class="grid grid-cols-2 gap-3">
                         <div class="flex flex-col">
-                            <input type="text" name="first_name" placeholder="First name" class="border border-gray-500 rounded-[12px] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            <input type="text" name="first_name" placeholder="First name" class="border border-gray-500 rounded-[12px] px-3 py-2 max-md:px-4 max-md:py-3 max-md:text-xs focus:outline-none focus:ring-2 focus:ring-blue-500" />
                             @error('first_name')
                                 <p class="text-sm text-red-500">{{ $message }}</p>
                             @enderror
                         </div>
                         <div class="flex flex-col">
-                            <input type="text" name="last_name" placeholder="Last name" class="border border-gray-500 rounded-[12px] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                            <input type="text" name="last_name" placeholder="Last name" class="border border-gray-500 rounded-[12px] px-3 py-2 max-md:px-4 max-md:py-3 max-md:text-xs focus:outline-none focus:ring-2 focus:ring-blue-500" />
                             @error('last_name')
                                 <p class="text-sm text-red-500">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
-                    <input type="text" name="email" placeholder="Email" class="border border-gray-500 rounded-[12px] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <input type="text" name="email" placeholder="Email" class="border border-gray-500 rounded-[12px] px-3 py-2 max-md:px-4 max-md:py-3 max-md:text-xs focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     @error('email')
                         <p class="text-sm text-red-500">{{ $message }}</p>
                     @enderror
-                    <input type="password" name="password" placeholder="Password" class="border border-gray-500 rounded-[12px] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <input type="password" name="password" placeholder="Password" class="border border-gray-500 rounded-[12px] px-3 py-2 max-md:px-4 max-md:py-3 max-md:text-xs focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     @error('password')
                         <p class="text-sm text-red-500">{{ $message }}</p>
                     @enderror
-                    <input type="password" name="password_confirmation" placeholder="Confirm Password" class="border border-gray-500 rounded-[12px] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <input type="password" name="password_confirmation" placeholder="Confirm Password" class="border border-gray-500 rounded-[12px] px-3 py-2 max-md:px-4 max-md:py-3 max-md:text-xs focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     @error('password_confirmation')
                         <p class="text-sm text-red-500">{{ $message }}</p>
                     @enderror
-                    <input type="text" name="phone" placeholder="Phone Number" class="border border-gray-500 rounded-[12px] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <input type="text" name="phone" placeholder="Phone Number" class="border border-gray-500 rounded-[12px] px-3 py-2 max-md:px-4 max-md:py-3 max-md:text-xs focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     @error('phone')
                         <p class="text-sm text-red-500">{{ $message }}</p>
                     @enderror

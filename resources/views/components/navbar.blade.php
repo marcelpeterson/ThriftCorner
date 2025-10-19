@@ -22,7 +22,7 @@
             @endif
 
             <!-- Desktop Navigation -->
-            <div class="hidden md:flex items-center gap-4 lg:gap-6 shrink-0">
+            <div class="hidden md:flex items-center gap-2 shrink-0">
                 {{-- News Button --}}
                 <a href="{{ route('news.index') }}" class="inline-flex items-center rounded-md px-3 lg:px-4 py-2 text-xs sm:text-sm font-semibold text-gray-700 hover:bg-gray-100 transition-all transition-colors {{ request()->routeIs('news.*') ? 'bg-gray-100 text-gray-900' : '' }} whitespace-nowrap">
                     <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -54,7 +54,7 @@
                                     aria-controls="navbar-user-menu"
                                     data-navbar-user-toggle>
                                 <img src="{{ Auth::user()->photo_url }}" alt="User photo" class="w-8 h-8 rounded-full object-cover">
-                                <span class="text-sm font-medium text-gray-700">{{ Auth::user()->first_name }}</span>
+                                <span class="text-sm font-medium text-gray-700">Hi, {{ Auth::user()->first_name }}</span>
                                 <svg class="h-4 w-4 text-gray-500 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor" data-arrow>
                                     <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 111.06 1.061l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
                                 </svg>
@@ -192,7 +192,7 @@
                     </li> --}}
 
                     {{-- Selling Section --}}
-                    @if (Route::has('items.create'))
+                    @if (Route::has('items.create') && (!auth()->check() || !auth()->user()->is_admin))
                         <li class="pt-4">
                             <p class="text-xs font-semibold text-gray-400 uppercase px-4 mb-2">Selling</p>
                             <a href="{{ auth()->check() ? route('items.create') : route('login') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 transition-colors text-gray-900">

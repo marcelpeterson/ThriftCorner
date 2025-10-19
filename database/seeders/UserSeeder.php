@@ -22,6 +22,7 @@ class UserSeeder extends Seeder
             'phone' => '081212345678',
             'photo_url' => Avatar::create('John Doe')->toBase64(),
             'password' => Hash::make('password'),
+            'email_verified_at' => now(),
         ]);
         User::create([
             'first_name' => 'Jane',
@@ -30,6 +31,7 @@ class UserSeeder extends Seeder
             'phone' => '081212345679',
             'photo_url' => Avatar::create('Jane Smith')->toBase64(),
             'password' => Hash::make('password'),
+            'email_verified_at' => now(),
         ]);
         User::create([
             'first_name' => 'Alice',
@@ -38,6 +40,7 @@ class UserSeeder extends Seeder
             'phone' => '081212345680',
             'photo_url' => Avatar::create('Alice Johnson')->toBase64(),
             'password' => Hash::make('password'),
+            'email_verified_at' => now(),
         ]);
         User::create([
             'first_name' => 'Bob',
@@ -46,6 +49,7 @@ class UserSeeder extends Seeder
             'phone' => '081212345681',
             'photo_url' => Avatar::create('Bob Brown')->toBase64(),
             'password' => Hash::make('password'),
+            'email_verified_at' => now(),
         ]);
         User::create([
             'first_name' => 'Admin',
@@ -55,6 +59,7 @@ class UserSeeder extends Seeder
             'photo_url' => Avatar::create('Admin User')->toBase64(),
             'password' => Hash::make('password'),
             'is_admin' => true,
+            'email_verified_at' => now(),
         ]);
     }
 }
