@@ -266,7 +266,7 @@ document.addEventListener('alpine:init', () => {
     <div>
         {{-- Search and Filter Section --}}
         <div class="mt-12 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div class="flex items-center justify-between mb-4">
+            <div class="flex max-md:flex-col items-center max-md:items-start justify-between mb-4">
                 <h2 class="text-2xl font-bold text-gray-900">
                     @if(request('q'))
                         Search Results for "{{ request('q') }}"

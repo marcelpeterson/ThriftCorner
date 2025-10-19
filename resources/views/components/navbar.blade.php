@@ -34,7 +34,7 @@
                 {{-- Sell Button --}}
                 @if (Route::has('items.create') && (!auth()->check() || !auth()->user()->is_admin))
                     <a href="{{ auth()->check() ? route('items.create') : route('login') }}"
-                       class="inline-flex items-center rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 transition-colors whitespace-nowrap">
+                       class="inline-flex items-center rounded-md mr-2 bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 transition-colors whitespace-nowrap">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
@@ -91,7 +91,7 @@
                             </div>
                         </div>
                     @else
-                        <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-3">
                             @if (Route::has('login'))
                                 <a href="{{ route('login') }}" class="text-sm font-medium text-gray-700 hover:text-blue-700 transition-all">Log in</a>
                             @endif
@@ -183,9 +183,23 @@
                     {{-- My Transactions --}}
                     <li>
                         <a href="{{ route('transactions.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors text-gray-900">
-                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            stroke-width="2" 
+                            stroke-linecap="round" 
+                            stroke-linejoin="round" 
+                            class="w-5 h-5">
+                        <!-- Outer circle -->
+                        <circle cx="12" cy="12" r="9" />
+                        
+                        <!-- History arrow (clockwise) -->
+                        <path d="M12 7v5l3 3" />
+                        
+                        <!-- Small arc to indicate “time/history” -->
+                        <path d="M21 12a9 9 0 1 0-9 9" />
+                        </svg>
                             <span class="font-medium">My Transactions</span>
                         </a>
                     </li>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="overflow-x-hidden">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,13 +18,13 @@
     {{-- 100% privacy-first analytics --}}
     <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
 </head>
-<body class="min-h-screen flex flex-col bg-gray-50 text-gray-900 antialiased">
+<body class="min-h-screen flex flex-col bg-gray-50 text-gray-900 antialiased overflow-x-hidden">
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 rounded bg-emerald-600 px-3 py-2 text-white">Skip to content</a>
 
     <x-navbar />
 
-    <main id="main-content" class="flex-1">
-        <div class="max-w-7xl mx-auto px-4 py-8">
+    <main id="main-content" class="flex-1 overflow-x-hidden">
+        <div class="max-w-7xl mx-auto px-4 py-8 w-full">
             {{-- Flash Messages --}}
             {{-- @if(session('success'))
                 <div class="mb-6 rounded-lg bg-green-50 border border-green-200 p-4" x-data="{ show: true }" x-show="show" x-transition>
