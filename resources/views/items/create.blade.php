@@ -3,7 +3,7 @@
 @section('title', 'Create Listing - ' . config('app.name'))
 
 @section('content')
-<div class="max-w-4xl mx-auto px-4 py-2">
+<div class="max-w-4xl mx-auto px-4 py-2 max-md:mt-2">
     <div class="mb-6 sm:mb-8">
         <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Create New Listing</h1>
         <p class="mt-2 text-xs sm:text-sm text-gray-600">Fill in the details below to list your item on ThriftCorner</p>

@@ -34,7 +34,7 @@
                 {{-- Sell Button --}}
                 @if (Route::has('items.create') && (!auth()->check() || !auth()->user()->is_admin))
                     <a href="{{ auth()->check() ? route('items.create') : route('login') }}"
-                       class="inline-flex items-center rounded-md mr-2 bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 transition-colors whitespace-nowrap">
+                       class="inline-flex items-center rounded-md ml-1 mr-2 bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 transition-colors whitespace-nowrap">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>

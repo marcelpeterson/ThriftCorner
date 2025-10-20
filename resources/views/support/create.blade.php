@@ -3,7 +3,7 @@
 @section('title', 'Contact Support - ' . config('app.name'))
 
 @section('content')
-<div class="max-w-3xl mx-auto">
+<div class="max-w-3xl mx-auto max-md:mt-6">
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
         {{-- Header --}}
         <div class="mb-8">

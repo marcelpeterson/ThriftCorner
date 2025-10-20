@@ -3,7 +3,7 @@
 @section('title', $item->name . ' - ' . config('app.name'))
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 max-md:mt-2">
     {{-- Back Button --}}
     <div class="mb-4 sm:mb-6">
         <a href="{{ route('home') }}" class="inline-flex items-center text-xs sm:text-sm text-gray-600 hover:text-gray-700 font-medium">

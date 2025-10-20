@@ -37,7 +37,7 @@
             <p class="text-md font-semibold max-md:font-bold {{ $item->isPremium() ? 'text-purple-700' : 'text-gray-900' }}">{{ $item->price_rupiah }}</p>
             <div class="inline-flex items-center mt-1 flex-row-reverse md:flex-row">
             <svg
-                class="w-5 h-5 ml-1.5 md:ml-0 md:mr-1.5 {{ $item->isPremium() ? 'text-purple-600' : 'text-blue-600' }}"
+                class="w-5 h-5 ml-0.75 max-md:mb-0.75 md:ml-0 md:mr-1.5 {{ $item->isPremium() ? 'text-purple-600' : 'text-blue-600' }}"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"

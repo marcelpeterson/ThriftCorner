@@ -86,7 +86,7 @@ function saveScrollPosition() {
 @endpush
 
 @section('content')
-<div class="pb-10 pt-5">
+<div class="pt-5">
     {{-- Hero Banner Carousel --}}
     <div class="relative mb-12 max-md:mb-10" x-data="carousel({{ $heroItems->count() + 3 }})">
         <div class="relative rounded-2xl md:rounded-[48px] overflow-hidden shadow-xl h-[250px] sm:h-[300px] md:h-[400px]"
