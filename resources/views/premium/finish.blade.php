@@ -3,7 +3,7 @@
 @section('title', 'Payment Status - ' . config('app.name'))
 
 @section('content')
-<div class="max-w-3xl mx-auto">
+<div class="max-w-3xl mx-auto max-md:mt-6">
     <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
         <div id="payment-status-container">
             {{-- Loading State --}}
@@ -84,7 +84,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
-                    <h2 class="text-3xl font-bold text-gray-900 mb-2">Payment Confirmation Pending</h2>
+                    <h2 class="text-3xl font-bold text-gray-900 mb-2 max-md:font-black">Payment Confirmation Pending</h2>
                     <p class="text-gray-600 mb-2">We're waiting for payment confirmation from the payment gateway.</p>
                     <p class="text-sm text-gray-500 mb-4">This usually takes a few seconds, but can take up to 5 minutes.</p>
                     <p class="text-sm text-gray-600">Order ID: <span class="font-mono font-semibold">{{ $payment->order_id }}</span></p>

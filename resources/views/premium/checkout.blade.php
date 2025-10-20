@@ -3,11 +3,11 @@
 @section('title', 'Checkout - ' . config('app.name'))
 
 @section('content')
-<div class="max-w-3xl mx-auto">
+<div class="max-w-3xl mx-auto max-md:mt-6">
     <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-8">
         {{-- Header --}}
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">Complete Your Payment</h1>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2 max-md:font-black">Complete Your Payment</h1>
             <p class="text-gray-600">Secure payment powered by Midtrans</p>
         </div>
 
