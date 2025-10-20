@@ -3,17 +3,17 @@
 @section('title', 'Premium Packages - ' . config('app.name'))
 
 @section('content')
-<div class="max-w-6xl mx-auto px-4 sm:px-6">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 max-md:mt-4">
     {{-- Header --}}
-    <div class="text-center mb-8 sm:mb-12">
-        <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">Boost Your Listing with Premium Placement</h1>
+    <div class="text-center mb-6">
+        <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold max-md:font-black text-gray-900 mb-3 sm:mb-4">Boost Your Listing with Premium Placement</h1>
         <p class="text-base sm:text-lg md:text-xl text-gray-600">Choose the package that fits your needs</p>
     </div>
 
     {{-- Item Preview --}}
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-8 sm:mb-12">
-        <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">Your Listing:</h3>
-        <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 max-md:pt-4 max-md:pb-2 sm:p-6 mb-8 sm:mb-12 max-md:flex max-md:flex-col max-md:items-center">
+        <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4 max-md:hidden">Your Listing:</h3>
+        <div class="flex flex-col sm:flex-row sm:items-center gap-4 max-md:gap-2 max-md:items-center">
             @if($item->images->count() > 0)
                 <img src="{{ Storage::url($item->images->first()->image_path) }}" alt="{{ $item->name }}" class="w-20 sm:w-24 h-20 sm:h-24 object-cover rounded-lg flex-shrink-0">
             @else
@@ -24,8 +24,8 @@
                 </div>
             @endif
             <div class="flex-1">
-                <h4 class="font-bold text-gray-900 text-base sm:text-lg">{{ $item->name }}</h4>
-                <p class="text-xl sm:text-2xl font-bold text-emerald-600">{{ $item->price_rupiah }}</p>
+                <h4 class="font-bold max-md:font-black max-md:text-center text-gray-900 text-base sm:text-lg">{{ $item->name }}</h4>
+                <p class="text-xl sm:text-2xl font-semibold max-md:font-bold max-md:text-center text-emerald-600">{{ $item->price_rupiah }}</p>
             </div>
         </div>
     </div>
@@ -87,12 +87,12 @@
                     <h2 class="text-xl sm:text-2xl font-bold text-center {{ $type === 'hero' ? 'text-blue-900' : 'text-purple-900' }} mb-2">{{ $package['name'] }}</h2>
 
                     @if(isset($package['description']))
-                        <p class="text-center text-gray-600 text-xs sm:text-sm mb-4 sm:mb-6">{{ $package['description'] }}</p>
+                        <p class="text-center text-gray-600 text-xs sm:text-sm mb-4">{{ $package['description'] }}</p>
                     @endif
 
                     {{-- Price --}}
                     <div class="text-center mb-4 sm:mb-6">
-                        <span class="text-3xl sm:text-4xl font-bold text-gray-900">{{ rupiah($package['price']) }}</span>
+                        <span class="text-3xl sm:text-4xl font-bold max-md:font-black text-gray-900">{{ rupiah($package['price']) }}</span>
                         <p class="text-gray-600 text-xs sm:text-sm mt-2">{{ $package['duration_days'] }} days</p>
                     </div>
 

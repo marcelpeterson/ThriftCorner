@@ -106,7 +106,19 @@
             },
             onPending: function(result){
                 console.log('Payment pending:', result);
-                window.location.href = '{{ route('payment.finish', $payment->id) }}';
+                // QRIS immediately calls onPending when QR is displayed (before user scans)
+                // Other methods call onPending only after user submits payment details
+                // Check payment type to handle QRIS differently
+                const paymentType = result.payment_type || '';
+                
+                if (paymentType === 'qris') {
+                    // For QRIS, don't auto-redirect on pending
+                    // User needs to scan QR and complete payment first
+                    console.log('QRIS payment initiated - waiting for user to scan QR code');
+                } else {
+                    // For other payment methods, redirect to finish page
+                    window.location.href = '{{ route('payment.finish', $payment->id) }}';
+                }
             },
             onError: function(result){
                 console.log('Payment error:', result);
@@ -114,6 +126,7 @@
             },
             onClose: function(){
                 console.log('Customer closed the popup without finishing the payment');
+                // Don't redirect on close - let user stay on checkout page to retry
             }
         });
     };
