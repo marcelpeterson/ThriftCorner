@@ -65,7 +65,7 @@
                 </div>
 
                 <div class="flex gap-4">
-                    <a href="{{ route('items.view', $payment->item_id) }}" 
+                    <a href="{{ route('items.view', $payment->item->slug) }}" 
                        class="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-center transition-colors">
                         View Your Listing
                     </a>
@@ -111,7 +111,7 @@
                 </div>
 
                 <div class="flex gap-4">
-                    <a href="{{ route('items.view', $payment->item_id) }}" 
+                    <a href="{{ route('items.view', $payment->item->slug) }}" 
                        class="flex-1 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg text-center transition-colors">
                         View Listing
                     </a>
@@ -141,11 +141,11 @@
                 </div>
 
                 <div class="flex gap-4">
-                    <a href="{{ route('premium.packages', $payment->item_id) }}" 
+                    <a href="{{ route('premium.packages', $payment->item->slug) }}" 
                        class="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-center transition-colors">
                         Try Again
                     </a>
-                    <a href="{{ route('items.view', $payment->item_id) }}" 
+                    <a href="{{ route('items.view', $payment->item->slug) }}" 
                        class="flex-1 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg text-center transition-colors">
                         Back to Listing
                     </a>

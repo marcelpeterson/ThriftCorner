@@ -94,7 +94,7 @@ function saveScrollPosition() {
              @mouseleave="isPaused = false">
             @foreach($heroItems as $index => $heroItem)
                 {{-- Slide {{ $index }}: Hero Banner from Premium Listing --}}
-                <a href="{{ route('items.view', $heroItem->id) }}" class="absolute inset-0 transition-opacity duration-750 cursor-pointer group"
+                <a href="{{ route('items.view', $heroItem->slug) }}" class="absolute inset-0 transition-opacity duration-750 cursor-pointer group"
                    :class="currentSlide === {{ $index }} ? 'opacity-100 z-10' : 'opacity-0 z-0'">
                     <div class="relative h-[250px] sm:h-[300px] md:h-[400px] transform transition-transform duration-300 group-hover:scale-[1.02]">
                         {{-- Background Image --}}

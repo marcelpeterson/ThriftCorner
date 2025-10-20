@@ -169,7 +169,7 @@ class TransactionController extends Controller
         $transaction->update(['status' => 'cancelled']);
         $transaction->item->update(['transaction_id' => null]);
 
-        return redirect()->route('items.view', $transaction->item_id)
+        return redirect()->route('items.view', $transaction->item->slug)
             ->with('success', 'Transaction cancelled.');
     }
 }

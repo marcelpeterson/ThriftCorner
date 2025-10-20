@@ -204,7 +204,7 @@
                                             </a>
                                         @endif
 
-                                        <a href="{{ route('items.view', $transaction->item->id) }}"
+                                        <a href="{{ route('items.view', $transaction->item->slug) }}"
                                            class="inline-flex items-center px-2 sm:px-3 py-1 sm:py-1.5 border border-gray-300 text-xs font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                             View Item
                                         </a>

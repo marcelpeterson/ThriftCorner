@@ -86,7 +86,7 @@
 
         {{-- Cancel Link --}}
         <div class="mt-4 text-center">
-            <a href="{{ route('items.view', $payment->item_id) }}" class="text-sm text-gray-600 hover:text-gray-900">
+            <a href="{{ route('items.view', $payment->item->slug) }}" class="text-sm text-gray-600 hover:text-gray-900">
                 Cancel and go back
             </a>
         </div>

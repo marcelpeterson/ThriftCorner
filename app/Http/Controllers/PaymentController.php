@@ -24,9 +24,9 @@ class PaymentController extends Controller
     /**
      * Show premium packages selection page
      */
-    public function showPackages($itemId)
+    public function showPackages(Item $item)
     {
-        $item = Item::with(['user', 'images'])->findOrFail($itemId);
+        $item->load(['user', 'images']);
 
         // Check if user owns the item
         if ($item->user_id !== auth()->id()) {
@@ -47,13 +47,11 @@ class PaymentController extends Controller
     /**
      * Create payment for premium listing
      */
-    public function createPayment(Request $request, $itemId)
+    public function createPayment(Request $request, Item $item)
     {
         $request->validate([
             'package_type' => 'required|in:hero,featured',
         ]);
-
-        $item = Item::findOrFail($itemId);
 
         // Check if user owns the item
         if ($item->user_id !== auth()->id()) {
@@ -138,7 +136,7 @@ class PaymentController extends Controller
 
         // Check if payment is still pending
         if ($payment->status !== 'pending') {
-            return redirect()->route('items.view', $payment->item_id)
+            return redirect()->route('items.view', $payment->item->slug)
                 ->with('info', 'This payment has already been processed.');
         }
 
@@ -267,7 +265,7 @@ class PaymentController extends Controller
         return response()->json([
             'status' => $payment->status,
             'is_success' => $payment->isSuccess(),
-            'redirect_url' => route('items.view', $payment->item_id),
+            'redirect_url' => route('items.view', $payment->item->slug),
         ]);
     }
 }

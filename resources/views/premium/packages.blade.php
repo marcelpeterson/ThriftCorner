@@ -112,7 +112,7 @@
                     </div>
 
                     {{-- Purchase Button --}}
-                    <form action="{{ route('premium.createPayment', $item->id) }}" method="POST">
+                    <form action="{{ route('premium.createPayment', $item->slug) }}" method="POST">
                         @csrf
                         <input type="hidden" name="package_type" value="{{ $type }}">
                         <button type="submit" class="w-full py-2 sm:py-3 px-4 sm:px-6 bg-gradient-to-r {{ $type === 'hero' ? 'from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700' : 'from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700' }} text-white font-bold rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer text-sm sm:text-base">
@@ -161,7 +161,7 @@
 
     {{-- Back Button --}}
     <div class="text-center">
-        <a href="{{ route('items.view', $item->id) }}" class="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg transition-colors text-sm sm:text-base">
+        <a href="{{ route('items.view', $item->slug) }}" class="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg transition-colors text-sm sm:text-base">
             <svg class="w-4 sm:w-5 h-4 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
             </svg>

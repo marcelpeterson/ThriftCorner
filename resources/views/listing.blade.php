@@ -399,13 +399,13 @@
                                         @endforeach
 
                                         {{-- Extend/Upgrade Link --}}
-                                        <a href="{{ route('premium.packages', $item->id) }}" class="block text-center text-xs sm:text-sm text-gray-700 hover:text-gray-900 font-semibold mt-2">
+                                        <a href="{{ route('premium.packages', $item->slug) }}" class="block text-center text-xs sm:text-sm text-gray-700 hover:text-gray-900 font-semibold mt-2">
                                             Extend or Add More Packages →
                                         </a>
                                     </div>
                                 @else
                                     {{-- No Premium - Show Boost Button --}}
-                                    <a href="{{ route('premium.packages', $item->id) }}" class="block w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold py-3 px-4 sm:px-6 rounded-lg transition duration-150 ease-in-out shadow-md hover:shadow-lg text-center text-sm sm:text-base">
+                                    <a href="{{ route('premium.packages', $item->slug) }}" class="block w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold py-3 px-4 sm:px-6 rounded-lg transition duration-150 ease-in-out shadow-md hover:shadow-lg text-center text-sm sm:text-base">
                                         <div class="flex items-center justify-center">
                                             <svg class="w-4 sm:w-5 h-4 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>

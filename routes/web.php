@@ -80,8 +80,8 @@ Route::post('/transaction/confirm/{token}', [TransactionController::class, 'conf
 
 // Premium listing & payment routes
 Route::middleware('auth')->group(function () {
-    Route::get('/items/{id}/premium/packages', [PaymentController::class, 'showPackages'])->name('premium.packages');
-    Route::post('/items/{id}/premium/payment', [PaymentController::class, 'createPayment'])->name('premium.createPayment');
+    Route::get('/items/{item:slug}/premium/packages', [PaymentController::class, 'showPackages'])->name('premium.packages');
+    Route::post('/items/{item:slug}/premium/payment', [PaymentController::class, 'createPayment'])->name('premium.createPayment');
     Route::get('/payment/{id}/checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
     Route::get('/payment/{id}/finish', [PaymentController::class, 'finish'])->name('payment.finish');
     Route::get('/payment/{id}/status', [PaymentController::class, 'checkStatus'])->name('payment.status');

@@ -122,7 +122,7 @@
 
         {{-- Actions --}}
         <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <a href="{{ route('items.view', $transaction->item_id) }}" 
+            <a href="{{ route('items.view', $transaction->item->slug) }}" 
                class="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg text-center transition-colors text-sm sm:text-base">
                 Back to Listing
             </a>
