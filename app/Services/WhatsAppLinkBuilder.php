@@ -17,6 +17,11 @@ class WhatsAppLinkBuilder
             return route('login');
         }
 
+        // Redirect unverified users to profile page
+        if (!$buyer->hasVerifiedEmail()) {
+            return route('profile') . '?verification_required=true';
+        }
+
         $seller = $item->user;
         $sellerPhone = $this->normalizePhone($seller->phone);
 

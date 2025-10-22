@@ -43,6 +43,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
     Route::get('/profile/edit', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('password.update');
 });
 
 Route::middleware('auth')->group(function () {
@@ -50,8 +51,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/items', [ItemController::class, 'getItemPage'])->name('items');
-Route::get('/items/create', [ItemController::class, 'createItemPage'])->name('items.create');
-Route::post('/items/create/submit', [ItemController::class, 'createItemSubmit'])->name('items.create.submit');
+Route::get('/items/create', [ItemController::class, 'createItemPage'])->name('items.create')->middleware('verified.user');
+Route::post('/items/create/submit', [ItemController::class, 'createItemSubmit'])->name('items.create.submit')->middleware('verified.user');
 Route::get('/items/{id}/edit', [ItemController::class, 'editItemPage'])->name('items.edit');
 Route::post('/items/{id}/edit/submit', [ItemController::class, 'editItemSubmit'])->name('items.edit.submit');
 Route::post('/items/{id}/delete', [ItemController::class, 'deleteItem'])->name('items.delete');

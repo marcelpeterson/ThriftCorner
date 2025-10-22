@@ -88,11 +88,23 @@ class ItemController extends Controller
             return redirect()->route('login')->with('info', 'Please log in to create a listing.');
         }
 
+        // Additional verification check (backup to middleware)
+        if (!auth()->user()->hasVerifiedEmail()) {
+            return redirect()->route('profile')
+                ->with('verification_required', 'Please verify your email address to create listings.');
+        }
+
         $categories = Category::all();
         return view('items.create', compact('categories'));
     }
 
     function createItemSubmit(StoreItemRequest $request) {
+        // Additional verification check (backup to middleware)
+        if (!auth()->user()->hasVerifiedEmail()) {
+            return redirect()->route('profile')
+                ->with('verification_required', 'Please verify your email address to create listings.');
+        }
+
         $item = Item::create([
             'user_id' => auth()->id(),
             'category_id' => $request->category_id,

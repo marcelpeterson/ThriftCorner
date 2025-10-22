@@ -480,6 +480,13 @@
             window.location.href = loginUrl;
             return;
         }
+        
+        // Check if WhatsApp link contains verification_required parameter
+        if (whatsappLink.includes('verification_required=true')) {
+            window.location.href = whatsappLink;
+            return;
+        }
+        
         // Otherwise show the disclaimer modal
         showDisclaimerModal();
     }

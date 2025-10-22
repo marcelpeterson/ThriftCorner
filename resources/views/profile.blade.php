@@ -14,6 +14,40 @@
     </div>
 
     <div class="mt-8 sm:mt-10 max-w-3xl mx-auto bg-white p-4 sm:p-6 rounded-lg shadow-md">
+        <!-- Success/Error Messages -->
+        @if(session('success'))
+            <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
+                {{ session('success') }}
+            </div>
+        @endif
+        
+        @if(session('error'))
+            <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
+                {{ session('error') }}
+            </div>
+        @endif
+        
+        {{-- Email Verification Status --}}
+        @if(!$user->hasVerifiedEmail())
+            <div class="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <div class="flex items-start">
+                    <svg class="w-5 h-5 text-amber-600 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                    <div>
+                        <h3 class="text-sm font-semibold text-amber-800 mb-1">Email Verification Required</h3>
+                        <p class="text-xs text-amber-700 mb-3">Please verify your email address to create listings and contact sellers.</p>
+                        <a href="{{ route('verification.send') }}" class="inline-flex items-center text-xs font-medium text-amber-800 hover:text-amber-900">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                            Resend verification email
+                        </a>
+                    </div>
+                </div>
+            </div>
+        @endif
+        
         <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-6">Personal Information</h2>
         <div class="grid grid-cols-1 gap-6">
             {{-- User Info Section --}}

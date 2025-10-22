@@ -80,6 +80,27 @@
                 </div>
             @endif
 
+            @if(session('verification_required'))
+                <div class="mb-6 rounded-lg bg-amber-50 border border-amber-200 p-4" x-data="{ show: true }" x-show="show" x-transition>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 text-amber-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                            <div>
+                                <p class="text-amber-800 font-medium">{{ session('verification_required') }}</p>
+                                <p class="text-amber-700 text-sm mt-1">Please check your email and click the verification link to activate your account.</p>
+                            </div>
+                        </div>
+                        <button @click="show = false" class="text-amber-600 hover:text-amber-800">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            @endif
+
             @yield('content')
         </div>
     </main>

@@ -60,7 +60,11 @@ class AuthController extends Controller
         // Fire the Registered event to trigger email verification
         event(new Registered($user));
 
-        return redirect()->route('verification.notice')->with('status', 'A verification link has been sent to your email address. Please check your email to verify your account.');
+        // Log in the user automatically after registration
+        Auth::login($user);
+
+        return redirect()->route('profile')
+            ->with('verification_required', 'Registration successful! Please check your email to verify your account.');
     }
 
     public function login() 
@@ -87,6 +91,11 @@ class AuthController extends Controller
             // Redirect admin users to dashboard
             if (Auth::user()->is_admin) {
                 return redirect()->route('admin.dashboard')->with('success', 'Welcome back, Admin!');
+            }
+            
+            // Check if user's email is verified
+            if (!Auth::user()->hasVerifiedEmail()) {
+                return redirect()->route('profile')->with('verification_required', 'Please verify your email address to access all features.');
             }
             
             return redirect()->route('home')->with('success', 'Welcome back!');
