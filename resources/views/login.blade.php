@@ -26,6 +26,12 @@
                 <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-[12px] mt-2 w-full cursor-pointer">Login</button>
             </div>
         </form>
+        
+        <div class="mt-4 text-center">
+            <a href="{{ route('password.request') }}" class="text-sm font-medium text-blue-500 hover:text-blue-800">
+                Forgot Your Password?
+            </a>
+        </div>
     </div>
 </section>
 
