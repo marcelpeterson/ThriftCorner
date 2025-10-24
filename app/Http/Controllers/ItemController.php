@@ -6,6 +6,7 @@ use App\Models\Item;
 use App\Models\Category;
 use App\Models\ItemImage;
 use App\Services\WhatsAppLinkBuilder;
+use App\Services\ImageOptimizationService;
 use App\Http\Requests\StoreItemRequest;
 use App\Http\Requests\SearchItemsRequest;
 use Illuminate\Http\Request;
@@ -13,6 +14,12 @@ use Illuminate\Support\Facades\Storage;
 
 class ItemController extends Controller
 {
+    protected ImageOptimizationService $imageOptimizer;
+
+    public function __construct(ImageOptimizationService $imageOptimizer)
+    {
+        $this->imageOptimizer = $imageOptimizer;
+    }
     function getItemPage(SearchItemsRequest $request) {
         $query = Item::with(['user', 'category', 'images'])
             ->available()
@@ -117,7 +124,8 @@ class ItemController extends Controller
         // Handle image uploads
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $index => $image) {
-                $path = $image->store('images/items', config('filesystems.default'));
+                // Use the image optimization service to optimize and store the image
+                $path = $this->imageOptimizer->optimizeAndStore($image, 'images/items', 'r2');
 
                 ItemImage::create([
                     'item_id' => $item->id,
@@ -209,7 +217,8 @@ class ItemController extends Controller
             }
             
             foreach ($newImages as $index => $image) {
-                $path = $image->store('images/items', config('filesystems.default'));
+                // Use the image optimization service to optimize and store the image
+                $path = $this->imageOptimizer->optimizeAndStore($image, 'images/items', 'r2');
 
                 ItemImage::create([
                     'item_id' => $item->id,

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Spatie\ImageOptimizer\OptimizerChain;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -12,7 +13,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(OptimizerChain::class, function ($app) {
+            return new OptimizerChain();
+        });
     }
 
     /**
