@@ -59,9 +59,9 @@ Route::middleware('auth')->group(function () {
 Route::get('/items', [ItemController::class, 'getItemPage'])->name('items');
 Route::get('/items/create', [ItemController::class, 'createItemPage'])->name('items.create')->middleware('verified.user');
 Route::post('/items/create/submit', [ItemController::class, 'createItemSubmit'])->name('items.create.submit')->middleware('verified.user');
-Route::get('/items/{id}/edit', [ItemController::class, 'getEditItemPage'])->name('items.edit')->middleware('auth');
-Route::post('/items/{id}/edit/submit', [ItemController::class, 'editItem'])->name('items.edit.submit')->middleware('auth');
-Route::post('/items/{id}/delete', [ItemController::class, 'deleteItem'])->name('items.delete');
+Route::get('/items/{item:slug}/edit', [ItemController::class, 'getEditItemPage'])->name('items.edit')->middleware('auth');
+Route::post('/items/{item:slug}/edit/submit', [ItemController::class, 'editItem'])->name('items.edit.submit')->middleware('auth');
+Route::post('/items/{item:slug}/delete', [ItemController::class, 'deleteItem'])->name('items.delete');
 Route::get('/items/{id}', function ($id) {
     $item = Item::findOrFail($id);
     return redirect()->route('items.view', $item->slug);

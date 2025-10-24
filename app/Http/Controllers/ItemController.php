@@ -136,9 +136,7 @@ class ItemController extends Controller
         return redirect()->route('items.view', $item->slug)->with('success', 'Item listed successfully!');
     }
 
-    function getEditItemPage($id) {
-        $item = Item::findOrFail($id);
-        
+    function getEditItemPage(Item $item) {
         // Check if user is the owner of the item
         if (auth()->id() !== $item->user_id) {
             return redirect()->route('items.view', $item->slug)
@@ -149,9 +147,7 @@ class ItemController extends Controller
         return view('items.edit', compact('item', 'categories'));
     }
 
-    function editItem(Request $request, $id) {
-        $item = Item::findOrFail($id);
-        
+    function editItem(Request $request, Item $item) {
         // Check if user is the owner of the item
         if (auth()->id() !== $item->user_id) {
             return redirect()->route('items.view', $item->slug)
@@ -232,8 +228,7 @@ class ItemController extends Controller
         return redirect()->route('items.view', $item->slug)->with('success', 'Item updated successfully!');
     }
 
-    function deleteItem($id) {
-        $item = Item::findOrFail($id);
+    function deleteItem(Item $item) {
         $item->delete();
         return redirect()->route('items.index')->with('success', 'Item deleted successfully.');
     }

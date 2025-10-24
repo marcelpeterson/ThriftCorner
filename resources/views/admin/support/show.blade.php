@@ -7,7 +7,7 @@
     {{-- Header --}}
     <div class="flex items-center max-md:items-start justify-between">
         <div>
-            <h1 class="text-3xl max-md:text-xl font-bold max-md:font-black text-gray-900">Support Submission #{{ $submission->id }}</h1>
+            <h1 class="text-3xl max-md:text-2xl font-bold max-md:font-black text-gray-900">Support Submission #{{ $submission->id }}</h1>
             <p class="text-gray-600 mt-1">{{ $submission->type_label }}</p>
         </div>
         <a href="{{ route('admin.support.index') }}" class="inline-flex items-center whitespace-nowrap px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors max-md:hidden">

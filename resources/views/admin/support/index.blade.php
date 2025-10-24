@@ -7,8 +7,8 @@
     {{-- Header --}}
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Support Submissions</h1>
-            <p class="text-xs sm:text-sm text-gray-600 mt-1">Manage user reports and feedback</p>
+            <h1 class="text-3xl font-bold text-gray-900">Support Submissions</h1>
+            <p class="text-sm text-gray-600 mt-1">Manage user reports and feedback</p>
         </div>
         <a href="{{ route('admin.dashboard') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors text-sm flex flex-row items-center max-md:hidden">
             <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

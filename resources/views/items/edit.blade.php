@@ -27,7 +27,7 @@
         </div>
     @endif
 
-    <form action="{{ route('items.edit.submit', $item->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6 sm:space-y-8">
+    <form action="{{ route('items.edit.submit', $item->slug) }}" method="POST" enctype="multipart/form-data" class="space-y-6 sm:space-y-8">
         @csrf
 
         {{-- Step 1: Images --}}
