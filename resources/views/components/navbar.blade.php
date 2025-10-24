@@ -168,92 +168,109 @@
                     </div>
                 </div>
 
-                {{-- Menu Items --}}
-                <ul class="space-y-1">
-                    {{-- Profile --}}
-                    <li>
-                        <a href="{{ route('profile') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors text-gray-900">
-                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                            </svg>
-                            <span class="font-medium">Profile</span>
-                        </a>
-                    </li>
-
-                    {{-- My Transactions --}}
-                    <li>
-                        <a href="{{ route('transactions.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors text-gray-900">
-                            <svg xmlns="http://www.w3.org/2000/svg" 
-                            viewBox="0 0 24 24" 
-                            fill="none" 
-                            stroke="currentColor" 
-                            stroke-width="2" 
-                            stroke-linecap="round" 
-                            stroke-linejoin="round" 
-                            class="w-5 h-5">
-                        <!-- Outer circle -->
-                        <circle cx="12" cy="12" r="9" />
-                        
-                        <!-- History arrow (clockwise) -->
-                        <path d="M12 7v5l3 3" />
-                        
-                        <!-- Small arc to indicate “time/history” -->
-                        <path d="M21 12a9 9 0 1 0-9 9" />
-                        </svg>
-                            <span class="font-medium">My Transactions</span>
-                        </a>
-                    </li>
-
-                    {{-- Buying Section --}}
-                    {{-- <li class="pt-4">
-                        <p class="text-xs font-semibold text-gray-400 uppercase px-4 mb-2">Buying</p>
-                        <a href="{{ route('profile') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors text-gray-900">
-                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                            </svg>
-                            <span class="font-medium">Likes</span>
-                        </a>
-                    </li> --}}
-
-                    {{-- Selling Section --}}
-                    @if (Route::has('items.create') && (!auth()->check() || !auth()->user()->is_admin))
-                        <li class="pt-4">
-                            <p class="text-xs font-semibold text-gray-400 uppercase px-4 mb-2">Selling</p>
-                            <a href="{{ auth()->check() ? route('items.create') : route('login') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 transition-colors text-gray-900">
-                                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                {{-- Menu Items for Admin --}}
+                @if(auth()->user()->is_admin)
+                    <ul class="space-y-1">
+                        <li>
+                            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-purple-50 transition-colors text-purple-600 font-semibold">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                                 </svg>
-                                <span class="font-medium text-red-600">Create Listing</span>
+                                <span>Admin Dashboard</span>
                             </a>
                         </li>
-                    @endif
 
-                    {{-- Account Section --}}
-                    <li class="pt-4">
-                        <p class="text-xs font-semibold text-gray-400 uppercase px-4 mb-2">Account</p>
-                        <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors text-gray-900">
-                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            </svg>
-                            <span class="font-medium">Settings</span>
-                        </a>
-                    </li>
-
-                    {{-- Log Out --}}
-                    <li class="pt-6 border-t border-gray-200 mt-6">
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 transition-colors text-red-600 font-medium cursor-pointer">
-                                <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M3 4.75A1.75 1.75 0 014.75 3h4.5a.75.75 0 010 1.5h-4.5a.25.25 0 00-.25.25v11.5c0 .138.112.25.25.25h4.5a.75.75 0 010 1.5h-4.5A1.75 1.75 0 013 16.25V4.75z" clip-rule="evenodd" />
-                                    <path fill-rule="evenodd" d="M8.47 5.47a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 11-1.06-1.06L11.69 11H7a.75.75 0 010-1.5h4.69L8.47 6.53a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                        {{-- Log Out --}}
+                        <li class="pt-6 border-t border-gray-200 mt-6">
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 transition-colors text-red-600 font-medium cursor-pointer">
+                                    <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M3 4.75A1.75 1.75 0 014.75 3h4.5a.75.75 0 010 1.5h-4.5a.25.25 0 00-.25.25v11.5c0 .138.112.25.25.25h4.5a.75.75 0 010 1.5h-4.5A1.75 1.75 0 013 16.25V4.75z" clip-rule="evenodd" />
+                                        <path fill-rule="evenodd" d="M8.47 5.47a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 11-1.06-1.06L11.69 11H7a.75.75 0 010-1.5h4.69L8.47 6.53a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Log out</span>
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                @else
+                    {{-- Menu Items for Regular Users --}}
+                    <ul class="space-y-1">
+                        {{-- Profile --}}
+                        <li>
+                            <a href="{{ route('profile') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors text-gray-900">
+                                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                 </svg>
-                                <span>Log out</span>
-                            </button>
-                        </form>
-                    </li>
-                </ul>
+                                <span class="font-medium">Profile</span>
+                            </a>
+                        </li>
+
+                        {{-- My Transactions --}}
+                        <li>
+                            <a href="{{ route('transactions.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors text-gray-900">
+                                <svg xmlns="http://www.w3.org/2000/svg" 
+                                viewBox="0 0 24 24" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                stroke-width="2" 
+                                stroke-linecap="round" 
+                                stroke-linejoin="round" 
+                                class="w-5 h-5">
+                            <!-- Outer circle -->
+                            <circle cx="12" cy="12" r="9" />
+                            
+                            <!-- History arrow (clockwise) -->
+                            <path d="M12 7v5l3 3" />
+                            
+                            <!-- Small arc to indicate "time/history" -->
+                            <path d="M21 12a9 9 0 1 0-9 9" />
+                            </svg>
+                                <span class="font-medium">My Transactions</span>
+                            </a>
+                        </li>
+
+                        {{-- Selling Section --}}
+                        @if (Route::has('items.create'))
+                            <li class="pt-4">
+                                <p class="text-xs font-semibold text-gray-400 uppercase px-4 mb-2">Selling</p>
+                                <a href="{{ route('items.create') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 transition-colors text-gray-900">
+                                    <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                    </svg>
+                                    <span class="font-medium text-red-600">Create Listing</span>
+                                </a>
+                            </li>
+                        @endif
+
+                        {{-- Account Section --}}
+                        <li class="pt-4">
+                            <p class="text-xs font-semibold text-gray-400 uppercase px-4 mb-2">Account</p>
+                            <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors text-gray-900">
+                                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                                <span class="font-medium">Settings</span>
+                            </a>
+                        </li>
+
+                        {{-- Log Out --}}
+                        <li class="pt-6 border-t border-gray-200 mt-6">
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 transition-colors text-red-600 font-medium cursor-pointer">
+                                    <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M3 4.75A1.75 1.75 0 014.75 3h4.5a.75.75 0 010 1.5h-4.5a.25.25 0 00-.25.25v11.5c0 .138.112.25.25.25h4.5a.75.75 0 010 1.5h-4.5A1.75 1.75 0 013 16.25V4.75z" clip-rule="evenodd" />
+                                        <path fill-rule="evenodd" d="M8.47 5.47a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 11-1.06-1.06L11.69 11H7a.75.75 0 010-1.5h4.69L8.47 6.53a.75.75 0 010-1.06z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span>Log out</span>
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                @endif
             @else
                 {{-- Not Logged In --}}
                 <div class="space-y-3">
