@@ -53,7 +53,12 @@
             {{-- User Info Section --}}
             <div class="flex justify-between items-center">
                 <div class="mb-4 flex items-center gap-4">
-                    <img src="{{ $user->photo_url }}" alt="User photo" class="w-16 sm:w-20 h-16 sm:h-20 rounded-full flex-shrink-0">
+                    @if($user->photo)
+                        <img src="{{ $user->photo }}" alt="User photo" class="w-16 sm:w-20 h-16 sm:h-20 rounded-full flex-shrink-0">
+                    @else
+                        <img src="{{ Avatar::create($user->first_name . ' ' . $user->last_name)->toBase64() }}"
+                             alt="User photo" class="w-16 sm:w-20 h-16 sm:h-20 rounded-full flex-shrink-0">
+                    @endif
                     <div>
                         <h3 class="text-lg sm:text-xl font-bold text-gray-900 mt-0 sm:mt-1">{{ $user->first_name }} {{ $user->last_name }}</h3>
                         <p class="text-xs sm:text-sm text-gray-600 truncate">{{ $user->email }}</p>

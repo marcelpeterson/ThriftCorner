@@ -18,6 +18,7 @@ class UpdateProfileRequest extends FormRequest
             'first_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:50',
             'phone' => 'required|string|min:10|max:12',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Optional photo in general profile update
         ];
 
         // Only allow email updates for unverified users
@@ -47,6 +48,9 @@ class UpdateProfileRequest extends FormRequest
             'phone.required' => 'The phone number field is required.',
             'phone.min' => 'The phone number must be at least 10 characters.',
             'phone.max' => 'The phone number may not be greater than 12 characters.',
+            'photo.image' => 'The file must be an image.',
+            'photo.mimes' => 'The photo must be a file of type: jpeg, png, jpg, gif.',
+            'photo.max' => 'The photo may not be greater than 2MB.',
         ];
     }
 }

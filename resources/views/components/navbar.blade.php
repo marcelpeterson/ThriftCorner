@@ -53,7 +53,12 @@
                                     aria-haspopup="true"
                                     aria-controls="navbar-user-menu"
                                     data-navbar-user-toggle>
-                                <img src="{{ Auth::user()->photo_url }}" alt="User photo" class="w-8 h-8 rounded-full object-cover">
+                                @if(Auth::user()->photo)
+                                    <img src="{{ Auth::user()->photo }}" alt="User photo" class="w-8 h-8 rounded-full object-cover">
+                                @else
+                                    <img src="{{ Avatar::create(Auth::user()->first_name . ' ' . Auth::user()->last_name)->toBase64() }}"
+                                         alt="User photo" class="w-8 h-8 rounded-full object-cover">
+                                @endif
                                 <span class="text-sm font-medium text-gray-700">Hi, {{ Auth::user()->first_name }}</span>
                                 <svg class="h-4 w-4 text-gray-500 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor" data-arrow>
                                     <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 111.06 1.061l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.06z" clip-rule="evenodd" />
@@ -124,7 +129,12 @@
                 {{-- Account/Profile Icon --}}
                 <button type="button" id="mobile-account-button" class="flex items-center justify-center w-11 h-11 rounded-full hover:bg-gray-100 transition-colors" title="Account" aria-expanded="false" aria-controls="mobile-account-menu">
                     @auth
-                        <img src="{{ Auth::user()->photo_url }}" alt="User photo" class="w-7 h-7 rounded-full object-cover">
+                        @if(Auth::user()->photo)
+                            <img src="{{ Auth::user()->photo }}" alt="User photo" class="w-7 h-7 rounded-full object-cover">
+                        @else
+                            <img src="{{ Avatar::create(Auth::user()->first_name . ' ' . Auth::user()->last_name)->toBase64() }}"
+                                 alt="User photo" class="w-7 h-7 rounded-full object-cover">
+                        @endif
                     @else
                         <svg class="w-7 h-7 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
@@ -160,7 +170,12 @@
                 {{-- User Header --}}
                 <div class="mb-6 pb-6 border-b border-gray-200">
                     <div class="flex items-center gap-3 mb-2">
-                        <img src="{{ Auth::user()->photo_url }}" alt="User photo" class="w-12 h-12 rounded-full object-cover">
+                        @if(Auth::user()->photo)
+                            <img src="{{ Auth::user()->photo }}" alt="User photo" class="w-12 h-12 rounded-full object-cover">
+                        @else
+                            <img src="{{ Avatar::create(Auth::user()->first_name . ' ' . Auth::user()->last_name)->toBase64() }}"
+                                 alt="User photo" class="w-12 h-12 rounded-full object-cover">
+                        @endif
                         <div>
                             <p class="font-semibold text-gray-900">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</p>
                             <p class="text-xs text-gray-500">{{ Auth::user()->email }}</p>

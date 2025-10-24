@@ -394,9 +394,12 @@
                     <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-4">Seller Information</h3>
 
                     <div class="flex items-center mb-4">
-                        @if($item->user->photo_url)
-                            <img src="{{ $item->user->photo_url }}" alt="{{ $item->user->first_name }}" class="w-12 sm:w-16 h-12 sm:h-16 rounded-full object-cover">
+                        @if($item->user->photo)
+                            <img src="{{ $item->user->photo }}" alt="{{ $item->user->first_name }}" class="w-12 sm:w-16 h-12 sm:h-16 rounded-full object-cover">
                         @else
+                            <img src="{{ Avatar::create($item->user->first_name . ' ' . $item->user->last_name)->toBase64() }}"
+                                 alt="{{ $item->user->first_name }}" class="w-12 sm:w-16 h-12 sm:h-16 rounded-full object-cover">
+                        @endif
                             <div class="w-12 sm:w-16 h-12 sm:h-16 rounded-full bg-emerald-100 flex items-center justify-center">
                                 <span class="text-emerald-600 font-bold text-lg sm:text-xl">{{ substr($item->user->first_name, 0, 1) }}{{ substr($item->user->last_name, 0, 1) }}</span>
                             </div>

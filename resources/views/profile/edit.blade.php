@@ -14,7 +14,68 @@
             </p>
         </div>
 
-        <div class="bg-white rounded-lg shadow-md p-8">            
+        <div class="bg-white rounded-lg shadow-md p-8">
+            <!-- Profile Photo Section -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-6">Profile Photo</h2>
+                
+                <!-- Success/Error Messages for Photo Update -->
+                @if(session('success'))
+                    <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                
+                <div class="flex items-center space-x-6">
+                    <!-- Current Photo -->
+                    <div class="shrink-0">
+                        @if($user->photo)
+                            <img class="h-24 w-24 object-cover rounded-full"
+                                 src="{{ $user->photo }}"
+                                 alt="Profile photo">
+                        @else
+                            <img class="h-24 w-24 object-cover rounded-full"
+                                 src="{{ Avatar::create($user->first_name . ' ' . $user->last_name)->toBase64() }}"
+                                 alt="Profile photo">
+                        @endif
+                    </div>
+                    
+                    <!-- Photo Upload Form -->
+                    <div class="flex-1">
+                        <form action="{{ route('profile.photo.update') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                            @csrf
+                            <div>
+                                <label for="photo" class="block text-sm font-medium text-gray-900 mb-2">
+                                    Upload New Photo
+                                </label>
+                                <input
+                                    type="file"
+                                    id="photo"
+                                    name="photo"
+                                    accept="image/*"
+                                    class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer @error('photo') border-red-500 @enderror"
+                                />
+                                @error('photo')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                                <p class="mt-1 text-xs text-gray-500">Allowed formats: JPEG, PNG, JPG, GIF. Maximum size: 2MB</p>
+                            </div>
+                            <button
+                                type="submit"
+                                class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors cursor-pointer"
+                            >
+                                Update Photo
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <hr class="my-8">
+            
+            <!-- Personal Information Section -->
+            <h2 class="text-xl font-semibold text-gray-900 mb-6">Personal Information</h2>
+            
             <form action="{{ route('profile.update') }}" method="POST" class="space-y-6">
                 @csrf
                 @method('PUT')

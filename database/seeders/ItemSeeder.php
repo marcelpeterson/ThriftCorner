@@ -24,7 +24,7 @@ class ItemSeeder extends Seeder
 
         ItemImage::create([
             'item_id' => 1,
-            'image_path' => 'images/vintage_lamp.png',
+            'image_path' => 'images/vintage_lamp.jpg',
         ]);
 
         Item::create([

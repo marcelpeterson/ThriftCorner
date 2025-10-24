@@ -63,6 +63,39 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the user's photo URL with proper handling for different storage scenarios.
+     */
+    public function getPhotoAttribute(): ?string
+    {
+        if (!$this->photo_url) {
+            return null;
+        }
+
+        // If it's already a full URL, return as is
+        if (filter_var($this->photo_url, FILTER_VALIDATE_URL)) {
+            return $this->photo_url;
+        }
+
+        // If it's a base64 avatar (from Laravolt), return as is
+        if (str_starts_with($this->photo_url, 'data:image/')) {
+            return $this->photo_url;
+        }
+
+        // If it starts with 'storage/', use asset() helper
+        if (str_starts_with($this->photo_url, 'storage/')) {
+            return asset($this->photo_url);
+        }
+
+        // For R2 storage, use Storage::url()
+        try {
+            return \Storage::url($this->photo_url);
+        } catch (\Exception $e) {
+            // Fallback to asset with storage prefix
+            return asset('storage/' . $this->photo_url);
+        }
+    }
+
+    /**
      * Get items listed by this user.
      */
     public function items()

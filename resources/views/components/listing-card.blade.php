@@ -15,7 +15,12 @@
     @endif
 
     <div class="flex items-center gap-0.5 max-md:gap-0.25">
-        <img src="{{ $item->user->photo_url }}" alt="User photo from API" class="w-10 h-10 max-md:w-9 max-md:h-9 rounded-full object-cover inline-block">
+        @if($item->user->photo)
+            <img src="{{ $item->user->photo }}" alt="{{ $item->user->first_name }}" class="w-10 h-10 max-md:w-9 max-md:h-9 rounded-full object-cover inline-block">
+        @else
+            <img src="{{ Avatar::create($item->user->first_name . ' ' . $item->user->last_name)->toBase64() }}"
+                 alt="{{ $item->user->first_name }}" class="w-10 h-10 max-md:w-9 max-md:h-9 rounded-full object-cover inline-block">
+        @endif
         <div class="flex flex-col sm:gap-0.5">
             <p class="text-sm font-medium text-gray-900 inline-block ml-2">{{ $item->user->first_name }}</p>
             <p class="text-xs text-gray-500 ml-2">{{ $item->created_at->diffForHumans() }}</p>
