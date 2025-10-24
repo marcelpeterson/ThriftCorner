@@ -23,10 +23,11 @@ class SupportContactController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'type' => 'required|in:report_suspicious,feedback',
+            'type' => 'required|in:report_suspicious,feedback,delete_listing',
             'subject' => 'required|string|max:255',
             'message' => 'required|string|max:5000',
             'attachment' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:5120', // Max 5MB
+            'item_id' => 'nullable|exists:items,id',
         ]);
 
         $data = [
@@ -36,6 +37,7 @@ class SupportContactController extends Controller
             'type' => $validated['type'],
             'subject' => $validated['subject'],
             'message' => $validated['message'],
+            'item_id' => $validated['item_id'] ?? null,
             'status' => 'pending',
         ];
 

@@ -14,10 +14,10 @@
         </div>
     @endif
 
-    <div class="flex items-center gap-0.5">
-        <img src="{{ $item->user->photo_url }}" alt="User photo from API" class="w-10 h-10 rounded-full object-cover inline-block">
-        <div>
-            <p class="text-sm font-medium text-gray-900 inline-block ml-2">{{ $item->user->first_name }} {{ $item->user->last_name }}</p>
+    <div class="flex items-center gap-0.5 max-md:gap-0.25">
+        <img src="{{ $item->user->photo_url }}" alt="User photo from API" class="w-10 h-10 max-md:w-9 max-md:h-9 rounded-full object-cover inline-block">
+        <div class="flex flex-col sm:gap-0.5">
+            <p class="text-sm font-medium text-gray-900 inline-block ml-2">{{ $item->user->first_name }}</p>
             <p class="text-xs text-gray-500 ml-2">{{ $item->created_at->diffForHumans() }}</p>
         </div>
     </div>

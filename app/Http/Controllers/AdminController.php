@@ -226,8 +226,27 @@ class AdminController extends Controller
      */
     public function deleteListing(Item $item)
     {
-        $item->delete();
-        return redirect()->back()->with('success', 'Listing deleted successfully.');
+        try {
+            \Log::info('Attempting to delete item with ID: ' . $item->id);
+            
+            // Delete related images from storage
+            foreach ($item->images as $image) {
+                if ($image->image_path && \Illuminate\Support\Facades\Storage::exists($image->image_path)) {
+                    \Illuminate\Support\Facades\Storage::delete($image->image_path);
+                    \Log::info('Deleted image: ' . $image->image_path);
+                }
+            }
+            
+            // Delete the item
+            $itemId = $item->id;
+            $item->delete();
+            \Log::info('Successfully deleted item with ID: ' . $itemId);
+            
+            return redirect()->back()->with('success', 'Listing deleted successfully.');
+        } catch (\Exception $e) {
+            \Log::error('Failed to delete item: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete listing: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -314,13 +333,38 @@ class AdminController extends Controller
      */
     public function supportDestroy(SupportContact $supportContact)
     {
-        // Delete attachment if exists
-        if ($supportContact->attachment_path) {
-            \Storage::disk(config('filesystems.default'))->delete($supportContact->attachment_path);
+        try {
+            // If this is a delete listing request, delete the item and mark submission as resolved
+            if ($supportContact->type === 'delete_listing' && $supportContact->item_id) {
+                $item = Item::find($supportContact->item_id);
+                if ($item) {
+                    // Delete related images from storage
+                    foreach ($item->images as $image) {
+                        if ($image->image_path && \Illuminate\Support\Facades\Storage::exists($image->image_path)) {
+                            \Illuminate\Support\Facades\Storage::delete($image->image_path);
+                        }
+                    }
+                    // Delete the item
+                    $item->delete();
+                    \Log::info('Deleted item with ID: ' . $item->id . ' from support submission deletion');
+                }
+                
+                // Mark the submission as resolved instead of deleting it
+                $supportContact->update(['status' => 'resolved']);
+                return redirect()->route('admin.support.index')->with('success', 'Listing deleted successfully. Submission marked as resolved.');
+            }
+            
+            // For non-delete requests, actually delete the submission
+            // Delete attachment if exists
+            if ($supportContact->attachment_path) {
+                \Storage::disk(config('filesystems.default'))->delete($supportContact->attachment_path);
+            }
+
+            $supportContact->delete();
+            return redirect()->route('admin.support.index')->with('success', 'Submission deleted successfully.');
+        } catch (\Exception $e) {
+            \Log::error('Failed to delete support submission: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete submission: ' . $e->getMessage());
         }
-
-        $supportContact->delete();
-
-        return redirect()->route('admin.support.index')->with('success', 'Submission deleted successfully.');
     }
 }

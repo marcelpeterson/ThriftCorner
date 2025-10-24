@@ -5,17 +5,18 @@
 @section('content')
 <div class="space-y-6">
     {{-- Header --}}
-    <div class="flex items-center justify-between">
+    <div class="flex items-center max-md:items-start justify-between">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900">Support Submission #{{ $submission->id }}</h1>
+            <h1 class="text-3xl max-md:text-xl font-bold max-md:font-black text-gray-900">Support Submission #{{ $submission->id }}</h1>
             <p class="text-gray-600 mt-1">{{ $submission->type_label }}</p>
         </div>
-        <a href="{{ route('admin.support.index') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors">
-            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <a href="{{ route('admin.support.index') }}" class="inline-flex items-center whitespace-nowrap px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors">
+            <svg class="w-5 h-5 max-md:w-4 max-md:h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
             </svg>
-            Back to List
+            <span class="max-md:text-sm">Back to List</span>
         </a>
+
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -31,6 +32,13 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                                 </svg>
                                 Suspicious Activity Report
+                            </span>
+                        @elseif($submission->type === 'delete_listing')
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                                Delete Listing Request
                             </span>
                         @else
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
@@ -74,6 +82,64 @@
                             </a>
                         </div>
                     </div>
+                @endif
+
+                {{-- Item Information for Deletion Requests --}}
+                @if($submission->type === 'delete_listing' && isset($submission->item_id))
+                    @php
+                        $item = \App\Models\Item::find($submission->item_id);
+                    @endphp
+                    @if($item)
+                        <div class="mt-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-3">Item Information</h3>
+                            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                                <div class="flex gap-4">
+                                    @if($item->images->count() > 0)
+                                        <img src="{{ Storage::url($item->images->first()->image_path) }}" alt="{{ $item->name }}" class="w-24 h-24 object-cover rounded-lg">
+                                    @elseif($item->photo)
+                                        <img src="{{ $item->photo }}" alt="{{ $item->name }}" class="w-24 h-24 object-cover rounded-lg">
+                                    @else
+                                        <div class="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center">
+                                            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                            </svg>
+                                        </div>
+                                    @endif
+                                    <div class="flex-1">
+                                        <p class="font-semibold text-gray-900">{{ $item->name }}</p>
+                                        <p class="text-sm text-gray-600">{{ $item->price_rupiah }}</p>
+                                        <p class="text-xs text-gray-500">Listed {{ $item->created_at->diffForHumans() }}</p>
+                                        <div class="mt-2">
+                                            <a href="{{ route('items.view', $item->slug) }}" target="_blank" class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800 font-medium">
+                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                                </svg>
+                                                View Listing
+                                            </a>
+                                            <form action="{{ route('admin.listings.delete', $item) }}" method="POST" class="inline-block ml-2" onsubmit="return confirm('Are you sure you want to delete this listing? This action cannot be undone.');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="inline-flex items-center text-sm text-red-600 hover:text-red-800 font-medium cursor-pointer">
+                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                                    </svg>
+                                                    Delete Item
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @else
+                        <div class="mt-6">
+                            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                                <p class="text-sm text-yellow-800">
+                                    <strong>Note:</strong> The requested item (ID: {{ $submission->item_id }}) may have already been deleted or is no longer available.
+                                </p>
+                            </div>
+                        </div>
+                    @endif
                 @endif
             </div>
 
@@ -166,14 +232,18 @@
                         </svg>
                         Reply via Email
                     </a>
-                    <form action="{{ route('admin.support.destroy', $submission) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this submission? This action cannot be undone.');">
+                    <form action="{{ route('admin.support.destroy', $submission) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete@if($submission->type === 'delete_listing' && isset($submission->item_id)) the listing@else this submission@endif? This action cannot be undone.');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors cursor-pointer">
                             <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                             </svg>
-                            Delete Submission
+                            @if($submission->type === 'delete_listing' && isset($submission->item_id))
+                                Delete Item
+                            @else
+                                Delete Submission
+                            @endif
                         </button>
                     </form>
                 </div>

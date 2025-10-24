@@ -220,6 +220,103 @@
         </div>
     </div>
 
+    {{-- Deletion Request Modal --}}
+    <div id="deletionRequestModal" class="hidden fixed inset-0 bg-gray-900/30 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
+        <div class="bg-white rounded-xl sm:rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            {{-- Modal Header --}}
+            <div class="bg-gradient-to-r from-red-50 to-red-100 border-b border-red-200 px-4 sm:px-6 py-3 sm:py-4 rounded-t-xl sm:rounded-t-2xl">
+                <div class="flex items-start justify-between">
+                    <div class="flex items-center gap-3">
+                        <svg class="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-900">Request Listing Deletion</h3>
+                            <p class="text-xs text-gray-600 mt-1">Submit a support ticket to delete your listing</p>
+                        </div>
+                    </div>
+                    <button onclick="closeDeletionRequestModal()"
+                            type="button"
+                            class="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0 cursor-pointer mt-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            {{-- Modal Body --}}
+            <form action="{{ route('support.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="type" value="delete_listing">
+                <input type="hidden" name="item_id" value="{{ $item->id }}">
+                <input type="hidden" name="subject" value="Deletion Request: {{ $item->name }} (ID: {{ $item->id }})">
+                
+                <div class="px-4 sm:px-6 py-6 space-y-5">
+                    {{-- Item Information --}}
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                        <h4 class="font-semibold text-gray-900 mb-2">Item to be deleted:</h4>
+                        <div class="flex items-center gap-3">
+                            @if($item->images->count() > 0)
+                                <img src="{{ Storage::url($item->images->first()->image_path) }}" alt="{{ $item->name }}" class="w-16 h-16 object-cover rounded-lg">
+                            @elseif($item->photo)
+                                <img src="{{ $item->photo }}" alt="{{ $item->name }}" class="w-16 h-16 object-cover rounded-lg">
+                            @else
+                                <div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                </div>
+                            @endif
+                            <div>
+                                <p class="font-semibold text-gray-900">{{ $item->name }}</p>
+                                <p class="text-sm text-gray-600">{{ $item->price_rupiah }}</p>
+                                <p class="text-xs text-gray-500">Listed {{ $item->created_at->diffForHumans() }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Reason for Deletion --}}
+                    <div>
+                        <label for="deletion_reason" class="block text-sm font-semibold text-gray-900 mb-2">
+                            Reason for Deletion <span class="text-red-500">*</span>
+                        </label>
+                        <textarea name="message" id="deletion_reason" rows="4" required maxlength="5000"
+                                  class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                                  placeholder="Please explain why you want to delete this listing..."></textarea>
+                        <p class="mt-1 text-sm text-gray-500">Maximum 5000 characters</p>
+                    </div>
+
+                    {{-- Disclaimer --}}
+                    <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                        <h4 class="font-semibold text-amber-900 mb-2 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Important Notice
+                        </h4>
+                        <p class="text-sm text-amber-800">
+                            {{-- Once you submit this request, our admin team will review it. The deletion will be processed after verification, and you'll receive a notification when completed. This action cannot be undone. --}}
+                            Once you submit this request, our admin team will review it. The deletion will be processed after verification. This action cannot be undone.
+                        </p>
+                    </div>
+                </div>
+
+                {{-- Modal Footer --}}
+                <div class="bg-gray-50 px-4 sm:px-6 py-3 sm:py-4 rounded-b-xl sm:rounded-b-2xl flex gap-3 justify-end max-md:justify-between border-t border-gray-200">
+                    <button type="button" onclick="closeDeletionRequestModal()"
+                            class="px-4 py-2 text-gray-700 max-md:text-sm bg-white border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors font-medium cursor-pointer">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                            class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white max-md:text-sm font-semibold rounded-lg transition-colors cursor-pointer">
+                        Submit Deletion Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
         {{-- Left Column: Item Details --}}
         <div class="lg:col-span-2">
@@ -373,8 +470,29 @@
 
                     {{-- Seller Actions --}}
                     @auth
-                        @if(auth()->id() === $item->user_id && !$item->is_sold)
+                        @if(auth()->id() === $item->user_id)
                             <div class="mt-4 pt-4 border-t border-gray-200 space-y-3">
+                                {{-- Edit and Delete Buttons --}}
+                                @if(!$item->is_sold)
+                                <div class="flex gap-2">
+                                    <a href="{{ route('items.edit', $item->id) }}" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-2 sm:px-1 rounded-lg transition duration-150 ease-in-out shadow text-center text-sm cursor-pointer">
+                                        <div class="flex items-center justify-center">
+                                            <svg class="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                            </svg>
+                                            Edit Listing
+                                        </div>
+                                    </a>
+                                    <button onclick="showDeletionRequestModal()" type="button" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-3 sm:px-4 rounded-lg transition duration-150 ease-in-out shadow text-center text-sm cursor-pointer">
+                                        <div class="flex items-center justify-center">
+                                            <svg class="w-3 sm:w-4 h-3 sm:h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
+                                            Request Deletion
+                                        </div>
+                                    </button>
+                                </div>
+                                @endif
                                 {{-- Premium Packages Status --}}
                                 @if($activePremiumPackages->count() > 0)
                                     <div class="space-y-3">
@@ -535,25 +653,60 @@
         }
     }
 
+    // Show deletion request modal
+    function showDeletionRequestModal() {
+        const modal = document.getElementById('deletionRequestModal');
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+
+    // Close deletion request modal
+    function closeDeletionRequestModal() {
+        const modal = document.getElementById('deletionRequestModal');
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto'; // Re-enable scrolling
+        
+        // Reset form
+        const form = modal.querySelector('form');
+        if (form) {
+            form.reset();
+        }
+    }
+
     // Add event listener to checkbox
     document.addEventListener('DOMContentLoaded', function() {
         const checkbox = document.getElementById('disclaimerCheckbox');
         checkbox.addEventListener('change', updateProceedButton);
 
-        // Close modal when clicking outside
-        const modal = document.getElementById('disclaimerModal');
-        modal.addEventListener('click', function(e) {
+        // Close disclaimer modal when clicking outside
+        const disclaimerModal = document.getElementById('disclaimerModal');
+        disclaimerModal.addEventListener('click', function(e) {
             if (e.target === this) {
                 closeDisclaimerModal();
             }
         });
 
-        // Close modal with Escape key
+        // Close deletion request modal when clicking outside
+        const deletionModal = document.getElementById('deletionRequestModal');
+        deletionModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDeletionRequestModal();
+            }
+        });
+
+        // Close modals with Escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
-                const modal = document.getElementById('disclaimerModal');
-                if (modal && !modal.classList.contains('hidden')) {
+                // Close disclaimer modal if open
+                const disclaimerModal = document.getElementById('disclaimerModal');
+                if (disclaimerModal && !disclaimerModal.classList.contains('hidden')) {
                     closeDisclaimerModal();
+                }
+                
+                // Close deletion request modal if open
+                const deletionModal = document.getElementById('deletionRequestModal');
+                if (deletionModal && !deletionModal.classList.contains('hidden')) {
+                    closeDeletionRequestModal();
                 }
             }
         });

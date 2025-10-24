@@ -138,11 +138,26 @@ class ItemController extends Controller
 
     function getEditItemPage($id) {
         $item = Item::findOrFail($id);
+        
+        // Check if user is the owner of the item
+        if (auth()->id() !== $item->user_id) {
+            return redirect()->route('items.view', $item->slug)
+                ->with('error', 'You can only edit your own listings.');
+        }
+        
         $categories = Category::all();
         return view('items.edit', compact('item', 'categories'));
     }
 
     function editItem(Request $request, $id) {
+        $item = Item::findOrFail($id);
+        
+        // Check if user is the owner of the item
+        if (auth()->id() !== $item->user_id) {
+            return redirect()->route('items.view', $item->slug)
+                ->with('error', 'You can only edit your own listings.');
+        }
+        
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -159,9 +174,62 @@ class ItemController extends Controller
             'condition.in' => 'The selected condition is invalid.',
         ]);
 
-        $item = Item::findOrFail($id);
-        $item->update($request->all());
-        return redirect()->route('items.index')->with('success', 'Item updated successfully.');
+        // Update item details
+        $item->update([
+            'category_id' => $request->category_id,
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'condition' => $request->condition,
+        ]);
+
+        // Handle image removals
+        if ($request->has('remove_images')) {
+            foreach ($request->remove_images as $imageId) {
+                $image = ItemImage::find($imageId);
+                if ($image && $image->item_id === $item->id) {
+                    // Delete the file from storage
+                    if (Storage::disk('public')->exists($image->image_path)) {
+                        Storage::disk('public')->delete($image->image_path);
+                    }
+                    // Delete the database record
+                    $image->delete();
+                }
+            }
+        }
+
+        // Handle new image uploads
+        if ($request->hasFile('images')) {
+            // Get current images count after removals
+            $currentImageCount = $item->images()->count();
+            $newImages = $request->file('images');
+            $totalImages = $currentImageCount + count($newImages);
+            
+            // Check if total images would exceed 5
+            if ($totalImages > 5) {
+                return redirect()->back()
+                    ->with('error', 'You can only have a maximum of 5 images per listing.')
+                    ->withInput();
+            }
+            
+            foreach ($newImages as $index => $image) {
+                $path = $image->store('images/items', config('filesystems.default'));
+
+                ItemImage::create([
+                    'item_id' => $item->id,
+                    'image_path' => $path,
+                    'order' => $currentImageCount + $index,
+                ]);
+            }
+            
+            // Update the photo_url if needed
+            $firstImage = $item->images()->first();
+            if ($firstImage) {
+                $item->update(['photo_url' => $firstImage->image_path]);
+            }
+        }
+
+        return redirect()->route('items.view', $item->slug)->with('success', 'Item updated successfully!');
     }
 
     function deleteItem($id) {

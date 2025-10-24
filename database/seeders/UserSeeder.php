@@ -16,48 +16,57 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'first_name' => 'John',
-            'last_name' => 'Doe',
-            'email' => 'john@example.com',
+            'first_name' => 'Marcel',
+            'last_name' => 'Peterson',
+            'email' => 'marcel.peterson@binus.ac.id',
             'phone' => '081212345678',
-            'photo_url' => Avatar::create('John Doe')->toBase64(),
+            'photo_url' => Avatar::create('Marcel Peterson')->toBase64(),
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
         ]);
         User::create([
-            'first_name' => 'Jane',
-            'last_name' => 'Smith',
-            'email' => 'jane@example.com',
+            'first_name' => 'Bryan',
+            'last_name' => 'Law',
+            'email' => 'bryan.law@binus.ac.id',
             'phone' => '081212345679',
-            'photo_url' => Avatar::create('Jane Smith')->toBase64(),
+            'photo_url' => Avatar::create('Wilbert Nevin')->toBase64(),
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
         ]);
         User::create([
-            'first_name' => 'Alice',
-            'last_name' => 'Johnson',
-            'email' => 'alice@example.com',
+            'first_name' => 'Wilbert',
+            'last_name' => 'Nevin',
+            'email' => 'wilbert.lorenzo@binus.ac.id',
             'phone' => '081212345680',
-            'photo_url' => Avatar::create('Alice Johnson')->toBase64(),
+            'photo_url' => Avatar::create('Wilbert Nevin')->toBase64(),
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
         ]);
         User::create([
-            'first_name' => 'Bob',
-            'last_name' => 'Brown',
-            'email' => 'bob@example.com',
+            'first_name' => 'George',
+            'last_name' => 'Binsar',
+            'email' => 'sitorus.tua@binus.ac.id',
             'phone' => '081212345681',
-            'photo_url' => Avatar::create('Bob Brown')->toBase64(),
+            'photo_url' => Avatar::create('George Binsar')->toBase64(),
+            'password' => Hash::make('password'),
+            'email_verified_at' => now(),
+        ]);
+        User::create([
+            'first_name' => 'Raden',
+            'last_name' => 'Althav',
+            'email' => 'raden.himawan@binus.ac.id',
+            'phone' => '081212345682',
+            'photo_url' => Avatar::create('Raden Althav')->toBase64(),
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
         ]);
         User::create([
             'first_name' => 'Admin',
             'last_name' => 'User',
-            'email' => 'admin@example.com',
-            'phone' => '081298765432',
+            'email' => 'admin@thriftcorner.com',
+            'phone' => '',
             'photo_url' => Avatar::create('Admin User')->toBase64(),
-            'password' => Hash::make('password'),
+            'password' => Hash::make('@thr!ftC0rn3r'),
             'is_admin' => true,
             'email_verified_at' => now(),
         ]);

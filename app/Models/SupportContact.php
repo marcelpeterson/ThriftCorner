@@ -9,6 +9,7 @@ class SupportContact extends Model
 {
     protected $fillable = [
         'user_id',
+        'item_id',
         'name',
         'email',
         'type',
@@ -40,6 +41,7 @@ class SupportContact extends Model
         return match($this->type) {
             'report_suspicious' => 'Report Suspicious Activity',
             'feedback' => 'Feedback',
+            'delete_listing' => 'Delete Listing Request',
             default => ucfirst($this->type),
         };
     }

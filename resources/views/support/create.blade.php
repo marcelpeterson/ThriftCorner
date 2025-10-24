@@ -41,8 +41,27 @@
                     <option value="">Select an option</option>
                     <option value="report_suspicious" {{ old('type') === 'report_suspicious' ? 'selected' : '' }}>Report Suspicious Activity</option>
                     <option value="feedback" {{ old('type') === 'feedback' ? 'selected' : '' }}>General Feedback</option>
+                    <option value="delete_listing" {{ old('type') === 'delete_listing' ? 'selected' : '' }}>Request Listing Deletion</option>
                 </select>
                 @error('type')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            {{-- Item Selection (for delete_listing requests) --}}
+            <div class="mb-6" id="item-selection" style="display: none;">
+                <label for="item_id" class="block text-sm font-semibold text-gray-900 mb-2">Select the Listing to Delete</label>
+                <select name="item_id" id="item_id" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('item_id') border-red-500 @enderror">
+                    <option value="">Select a listing</option>
+                    @forelse(Auth::user()?->items ?? [] as $item)
+                        <option value="{{ $item->id }}" {{ old('item_id') == $item->id ? 'selected' : '' }}>
+                            {{ $item->name }} - Rp{{ number_format($item->price, 0, ',', '.') }}
+                        </option>
+                    @empty
+                        <option value="" disabled>You don't have any active listings</option>
+                    @endforelse
+                </select>
+                @error('item_id')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
@@ -151,6 +170,26 @@
 
 @push('scripts')
 <script>
+    const typeSelect = document.getElementById('type');
+    const itemSelection = document.getElementById('item-selection');
+    const itemInput = document.getElementById('item_id');
+
+    // Show/hide item selection based on type
+    function toggleItemSelection() {
+        if (typeSelect.value === 'delete_listing') {
+            itemSelection.style.display = 'block';
+            itemInput.required = true;
+        } else {
+            itemSelection.style.display = 'none';
+            itemInput.required = false;
+        }
+    }
+
+    typeSelect.addEventListener('change', toggleItemSelection);
+
+    // Initial state
+    toggleItemSelection();
+
     // Show selected file name
     document.getElementById('attachment').addEventListener('change', function(e) {
         const fileName = e.target.files[0]?.name;
