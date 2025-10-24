@@ -165,7 +165,7 @@ class ItemController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
+            'price' => 'required|numeric|min:0|max:99999999',
             'category_id' => 'required|exists:categories,id',
             'condition' => 'required|in:Brand new,Like new,Lightly used,Well used,Heavily used',
         ], [
@@ -174,6 +174,7 @@ class ItemController extends Controller
             'price.required' => 'The price field is required.',
             'price.numeric' => 'The price must be a number.',
             'price.min' => 'The price must be at least 0.',
+            'price.max' => 'The price must not exceed 99,999,999.',
             'name.max' => 'The name may not be greater than 255 characters.',
             'condition.in' => 'The selected condition is invalid.',
         ]);
