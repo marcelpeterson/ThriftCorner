@@ -229,6 +229,14 @@ class AdminController extends Controller
         try {
             \Log::info('Attempting to delete item with ID: ' . $item->id);
             
+            $itemId = $item->id;
+            
+            // Mark related delete_listing support submissions as resolved BEFORE deleting the item
+            // (because foreign key will set item_id to NULL after deletion)
+            SupportContact::where('item_id', $itemId)
+                ->where('type', 'delete_listing')
+                ->update(['status' => 'resolved']);
+            
             // Delete related images from storage
             foreach ($item->images as $image) {
                 if ($image->image_path && \Illuminate\Support\Facades\Storage::exists($image->image_path)) {
@@ -238,11 +246,10 @@ class AdminController extends Controller
             }
             
             // Delete the item
-            $itemId = $item->id;
             $item->delete();
             \Log::info('Successfully deleted item with ID: ' . $itemId);
             
-            return redirect()->back()->with('success', 'Listing deleted successfully.');
+            return redirect()->back()->with('success', 'Listing deleted successfully. Any related support submissions have been marked as resolved.');
         } catch (\Exception $e) {
             \Log::error('Failed to delete item: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to delete listing: ' . $e->getMessage());

@@ -10,7 +10,7 @@
             <h1 class="text-3xl max-md:text-xl font-bold max-md:font-black text-gray-900">Support Submission #{{ $submission->id }}</h1>
             <p class="text-gray-600 mt-1">{{ $submission->type_label }}</p>
         </div>
-        <a href="{{ route('admin.support.index') }}" class="inline-flex items-center whitespace-nowrap px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors">
+        <a href="{{ route('admin.support.index') }}" class="inline-flex items-center whitespace-nowrap px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors max-md:hidden">
             <svg class="w-5 h-5 max-md:w-4 max-md:h-4 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
             </svg>
@@ -95,7 +95,7 @@
                             <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
                                 <div class="flex gap-4">
                                     @if($item->images->count() > 0)
-                                        <img src="{{ Storage::url($item->images->first()->image_path) }}" alt="{{ $item->name }}" class="w-24 h-24 object-cover rounded-lg">
+                                        <img src="{{ Storage::url($item->images->first()->image_path) }}" alt="{{ $item->name }}" class="w-24 h-24 object-cover rounded-lg max-md:self-center">
                                     @elseif($item->photo)
                                         <img src="{{ $item->photo }}" alt="{{ $item->name }}" class="w-24 h-24 object-cover rounded-lg">
                                     @else
@@ -107,8 +107,8 @@
                                     @endif
                                     <div class="flex-1">
                                         <p class="font-semibold text-gray-900">{{ $item->name }}</p>
-                                        <p class="text-sm text-gray-600">{{ $item->price_rupiah }}</p>
-                                        <p class="text-xs text-gray-500">Listed {{ $item->created_at->diffForHumans() }}</p>
+                                        <p class="text-sm text-gray-600 sm:mt-0.5">{{ $item->price_rupiah }}</p>
+                                        <p class="text-xs text-gray-500 sm:mt-0.5">Listed {{ $item->created_at->diffForHumans() }}</p>
                                         <div class="mt-2">
                                             <a href="{{ route('items.view', $item->slug) }}" target="_blank" class="inline-flex items-center text-sm text-blue-600 hover:text-blue-800 font-medium">
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -116,7 +116,7 @@
                                                 </svg>
                                                 View Listing
                                             </a>
-                                            <form action="{{ route('admin.listings.delete', $item) }}" method="POST" class="inline-block ml-2" onsubmit="return confirm('Are you sure you want to delete this listing? This action cannot be undone.');">
+                                            <form action="{{ route('admin.listings.delete', $item) }}" method="POST" class="inline-block ml-2 max-md:ml-0" onsubmit="return confirm('Are you sure you want to delete this listing? This action cannot be undone.');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="inline-flex items-center text-sm text-red-600 hover:text-red-800 font-medium cursor-pointer">
@@ -220,33 +220,9 @@
                         </button>
                     </div>
                 </form>
-            </div>
-
-            {{-- Actions --}}
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Actions</h3>
-                <div class="space-y-3">
-                    <a href="mailto:{{ $submission->email }}" class="block w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-center font-medium rounded-lg transition-colors">
-                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                        </svg>
-                        Reply via Email
-                    </a>
-                    <form action="{{ route('admin.support.destroy', $submission) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete@if($submission->type === 'delete_listing' && isset($submission->item_id)) the listing@else this submission@endif? This action cannot be undone.');">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="w-full px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-colors cursor-pointer">
-                            <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                            </svg>
-                            @if($submission->type === 'delete_listing' && isset($submission->item_id))
-                                Delete Item
-                            @else
-                                Delete Submission
-                            @endif
-                        </button>
-                    </form>
-                </div>
+                <a href="mailto:{{ $submission->email }}" class="flex items-center justify-center w-full mt-3 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-center font-medium rounded-lg transition-colors">
+                    Reply via Email
+                </a>
             </div>
         </div>
     </div>
