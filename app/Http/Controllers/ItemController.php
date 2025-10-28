@@ -200,6 +200,18 @@ class ItemController extends Controller
             'condition' => $request->condition,
         ]);
 
+        // Handle reordering of existing images FIRST
+        if ($request->has('existing_image_order')) {
+            foreach ($request->existing_image_order as $orderData) {
+                if (!$orderData) continue;
+                list($imageId, $newOrder) = explode(':', $orderData);
+                $image = ItemImage::find($imageId);
+                if ($image && $image->item_id === $item->id) {
+                    $image->update(['order' => (int)$newOrder]);
+                }
+            }
+        }
+
         // Handle image removals - compare requested images with existing images
         $requestedImageIds = $request->has('existing_images') ? $request->existing_images : [];
         $existingImages = $item->images()->pluck('id')->toArray();
@@ -223,20 +235,9 @@ class ItemController extends Controller
             }
         }
 
-        // Handle reordering of existing images
-        if ($request->has('existing_image_order')) {
-            foreach ($request->existing_image_order as $orderData) {
-                list($imageId, $newOrder) = explode(':', $orderData);
-                $image = ItemImage::find($imageId);
-                if ($image && $image->item_id === $item->id) {
-                    $image->update(['order' => $newOrder]);
-                }
-            }
-        }
-
         // Handle new image uploads
         if ($request->hasFile('images')) {
-            // Get current images count after removals
+            // Get current images count after removals and reordering
             $currentImageCount = $item->images()->count();
             $newImages = $request->file('images');
             $totalImages = $currentImageCount + count($newImages);

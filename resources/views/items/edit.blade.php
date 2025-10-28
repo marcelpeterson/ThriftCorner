@@ -29,6 +29,9 @@
 
     <form action="{{ route('items.edit.submit', $item->slug) }}" method="POST" enctype="multipart/form-data" class="space-y-6 sm:space-y-8">
         @csrf
+        
+        {{-- Hidden container for image order inputs --}}
+        <div id="hidden-order-inputs-container"></div>
 
         {{-- Step 1: Images --}}
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6">
@@ -406,15 +409,11 @@
         e.preventDefault();
         e.dataTransfer.dropEffect = 'move';
         
-        if (this !== draggedElement && (this.classList.contains('draggable-existing-image') || this.classList.contains('draggable-new-image'))) {
-            const existingContainer = document.getElementById('existing-images-container');
-            const previewContainer = document.getElementById('image-preview');
-            const allDraggableImages = existingContainer ? 
-                [...existingContainer.querySelectorAll('.draggable-existing-image'), ...previewContainer.querySelectorAll('.draggable-new-image')] :
-                [...previewContainer.querySelectorAll('.draggable-new-image')];
-            
-            const draggedIndex = allDraggableImages.indexOf(draggedElement);
-            const targetIndex = allDraggableImages.indexOf(this);
+        if (this !== draggedElement && this.parentNode === draggedElement.parentNode) {
+            const container = draggedElement.parentNode;
+            const allImages = [...container.querySelectorAll('.draggable-existing-image, .draggable-new-image')];
+            const draggedIndex = allImages.indexOf(draggedElement);
+            const targetIndex = allImages.indexOf(this);
             
             if (draggedIndex < targetIndex) {
                 this.parentNode.insertBefore(draggedElement, this.nextSibling);
@@ -436,65 +435,86 @@
     function updateAllImageOrder() {
         const existingContainer = document.getElementById('existing-images-container');
         const previewContainer = document.getElementById('image-preview');
-        const form = document.querySelector('form');
+        const hiddenOrderContainer = document.getElementById('hidden-order-inputs-container');
 
-        // Clear old order inputs from form
+        // Clear old order inputs
         document.querySelectorAll('input[name="existing_image_order[]"]').forEach(input => input.remove());
 
         // Update existing images order
         if (existingContainer) {
             const existingImages = existingContainer.querySelectorAll('.draggable-existing-image:not([style*="opacity: 0.5"])');
+            
             existingImages.forEach((img, index) => {
                 const badge = img.querySelector('.existing-order-badge');
                 badge.textContent = index === 0 ? 'Cover' : '#' + (index + 1);
                 
-                // Create and add hidden input to form
+                // Create and add hidden input to hidden container
                 const hiddenOrder = document.createElement('input');
                 hiddenOrder.type = 'hidden';
                 hiddenOrder.name = 'existing_image_order[]';
                 hiddenOrder.value = img.dataset.imageId + ':' + index;
-                form.appendChild(hiddenOrder);
+                hiddenOrderContainer.appendChild(hiddenOrder);
             });
         }
 
         // Update new images order
-        const newImages = previewContainer.querySelectorAll('.draggable-new-image');
-        newImages.forEach((img, index) => {
-            const badge = img.querySelector('.order-badge');
-            const existingCount = existingContainer ? 
-                existingContainer.querySelectorAll('.draggable-existing-image:not([style*="opacity: 0.5"])').length : 0;
-            badge.textContent = (index + existingCount) === 0 ? 'Cover' : '#' + (index + existingCount + 1);
-        });
+        if (previewContainer && !previewContainer.classList.contains('hidden')) {
+            const newImages = previewContainer.querySelectorAll('.draggable-new-image');
+            newImages.forEach((img, index) => {
+                const badge = img.querySelector('.order-badge');
+                const existingCount = existingContainer ? 
+                    existingContainer.querySelectorAll('.draggable-existing-image:not([style*="opacity: 0.5"])').length : 0;
+                badge.textContent = (index + existingCount) === 0 ? 'Cover' : '#' + (index + existingCount + 1);
+            });
+        }
     }
 
     // Handle form submission with reordered files and images
-    document.querySelector('form')?.addEventListener('submit', function(e) {
-        const imageInput = document.getElementById('images');
-        const previewContainer = document.getElementById('image-preview');
+    function attachFormHandler() {
+        const submitBtn = document.getElementById('submitBtn');
+        // Find the form that CONTAINS the submit button (not the first form on page)
+        const formElement = submitBtn ? submitBtn.closest('form') : null;
         
-        // Only prevent default if we have new images to reorder
-        if (previewContainer && !previewContainer.classList.contains('hidden')) {
-            e.preventDefault();
-            const form = this;
-            const images = previewContainer.querySelectorAll('.draggable-new-image');
-            const fileTransfer = new DataTransfer();
+        if (submitBtn && formElement) {
+            submitBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Ensure existing image order is updated before submission
+                updateAllImageOrder();
+                
+                const imageInput = document.getElementById('images');
+                const previewContainer = document.getElementById('image-preview');
+            
+                // Handle reordering of new images if they exist
+                if (previewContainer && !previewContainer.classList.contains('hidden')) {
+                    const images = previewContainer.querySelectorAll('.draggable-new-image');
+                    const fileTransfer = new DataTransfer();
 
-            // Add new files in DOM order
-            images.forEach(img => {
-                const fileId = img.dataset.fileId;
-                if (newFileMap.has(fileId)) {
-                    fileTransfer.items.add(newFileMap.get(fileId));
+                    // Add new files in DOM order
+                    images.forEach(img => {
+                        const fileId = img.dataset.fileId;
+                        if (newFileMap.has(fileId)) {
+                            fileTransfer.items.add(newFileMap.get(fileId));
+                        }
+                    });
+
+                    // Update the input with reordered files
+                    imageInput.files = fileTransfer.files;
                 }
+                
+                // Submit the form
+                formElement.submit();
             });
-
-            // Update the input with reordered files
-            imageInput.files = fileTransfer.files;
-
-            // Submit the form
-            form.submit();
         }
-        // If no new images, form submits normally with existing_images[] data
-    });
+    }
+    
+    // Try to attach immediately
+    attachFormHandler();
+    
+    // Also try on DOMContentLoaded in case scripts run before form is loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', attachFormHandler);
+    }
 
     // Modal functions
     function showPhotoGuidelinesModal() {
