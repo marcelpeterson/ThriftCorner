@@ -42,11 +42,11 @@
             @if($item->images->count() > 0)
                 <div class="mb-4">
                     <p class="text-xs sm:text-sm font-medium text-gray-700 mb-2">Current Images:</p>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-4">
+                    <div id="existing-images-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-4">
                         @foreach($item->images as $index => $image)
-                            <div class="relative group">
-                                <img src="{{ Storage::url($image->image_path) }}" alt="{{ $item->name }} - Image {{ $index + 1 }}" class="w-full aspect-square object-cover rounded-lg border-2 border-gray-200">
-                                <div class="absolute top-1 sm:top-2 left-1 sm:left-2 bg-emerald-600 text-white text-xs font-bold px-2 py-1 rounded">
+                            <div class="relative group draggable-existing-image" draggable="true" data-image-id="{{ $image->id }}">
+                                <img src="{{ Storage::url($image->image_path) }}" alt="{{ $item->name }} - Image {{ $index + 1 }}" class="w-full aspect-square object-cover rounded-lg border-2 border-gray-200 cursor-move hover:border-emerald-500 transition-colors">
+                                <div class="absolute top-1 sm:top-2 left-1 sm:left-2 bg-emerald-600 text-white text-xs font-bold px-2 py-1 rounded existing-order-badge">
                                     {{ $index === 0 ? 'Cover' : '#' . ($index + 1) }}
                                 </div>
                                 <button type="button" onclick="removeExistingImage({{ $image->id }})" class="absolute top-1 sm:top-2 right-1 sm:right-2 bg-red-500 hover:bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity max-md:opacity-100">
@@ -58,6 +58,7 @@
                             </div>
                         @endforeach
                     </div>
+                    <p class="text-xs sm:text-sm text-gray-500 mt-2">You can drag images to reorder them.</p>
                 </div>
             @endif
 
@@ -80,6 +81,7 @@
                 <div id="image-preview" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-4 hidden">
                     <!-- Previews will be inserted here by JavaScript -->
                 </div>
+                <p class="text-xs sm:text-sm text-gray-500 mt-2">You can drag images to reorder them among all images.</p>
             </div>
         </div>
 
@@ -189,7 +191,7 @@
         {{-- Submit Button --}}
         <div class="flex flex-row items-center justify-between gap-3 sm:gap-4">
             <a href="{{ route('items.view', $item->slug) }}" class="text-md max-md:text-sm text-gray-600 hover:text-gray-900 font-medium order-1">Cancel</a>
-            <button type="submit"
+            <button type="submit" id="submitBtn"
                     class="w-auto inline-flex items-center justify-center px-6 sm:px-6 py-3 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm rounded-lg shadow-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer order-1 sm:order-2">
                 <svg class="w-4 sm:w-5 h-4 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -351,6 +353,8 @@
 <script>
     // Store images to be removed
     const imagesToRemove = [];
+    const newFileMap = new Map();
+    let draggedElement = null;
     
     // Character counter for description
     const descriptionTextarea = document.getElementById('description');
@@ -372,11 +376,17 @@
             imagesToRemove.push(imageId);
             
             // Hide the image element
-            const imageElement = document.querySelector(`input[value="${imageId}"]`).closest('.relative');
+            const imageElement = document.querySelector(`[data-image-id="${imageId}"]`);
             imageElement.style.opacity = '0.5';
             imageElement.style.pointerEvents = 'none';
             
-            // Add a hidden input to track removal
+            // Remove the existing_images[] input for this image from the form
+            const existingImagesInput = imageElement.querySelector(`input[name="existing_images[]"][value="${imageId}"]`);
+            if (existingImagesInput) {
+                existingImagesInput.remove();
+            }
+            
+            // Add a hidden input to track removal (to be deleted)
             const removalInput = document.createElement('input');
             removalInput.type = 'hidden';
             removalInput.name = 'remove_images[]';
@@ -384,6 +394,107 @@
             document.querySelector('form').appendChild(removalInput);
         }
     }
+
+    // Drag and drop handlers
+    function handleDragStart(e) {
+        draggedElement = this;
+        this.style.opacity = '0.5';
+        e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        
+        if (this !== draggedElement && (this.classList.contains('draggable-existing-image') || this.classList.contains('draggable-new-image'))) {
+            const existingContainer = document.getElementById('existing-images-container');
+            const previewContainer = document.getElementById('image-preview');
+            const allDraggableImages = existingContainer ? 
+                [...existingContainer.querySelectorAll('.draggable-existing-image'), ...previewContainer.querySelectorAll('.draggable-new-image')] :
+                [...previewContainer.querySelectorAll('.draggable-new-image')];
+            
+            const draggedIndex = allDraggableImages.indexOf(draggedElement);
+            const targetIndex = allDraggableImages.indexOf(this);
+            
+            if (draggedIndex < targetIndex) {
+                this.parentNode.insertBefore(draggedElement, this.nextSibling);
+            } else {
+                this.parentNode.insertBefore(draggedElement, this);
+            }
+        }
+    }
+
+    function handleDrop(e) {
+        e.preventDefault();
+    }
+
+    function handleDragEnd(e) {
+        this.style.opacity = '1';
+        updateAllImageOrder();
+    }
+
+    function updateAllImageOrder() {
+        const existingContainer = document.getElementById('existing-images-container');
+        const previewContainer = document.getElementById('image-preview');
+        const form = document.querySelector('form');
+
+        // Clear old order inputs from form
+        document.querySelectorAll('input[name="existing_image_order[]"]').forEach(input => input.remove());
+
+        // Update existing images order
+        if (existingContainer) {
+            const existingImages = existingContainer.querySelectorAll('.draggable-existing-image:not([style*="opacity: 0.5"])');
+            existingImages.forEach((img, index) => {
+                const badge = img.querySelector('.existing-order-badge');
+                badge.textContent = index === 0 ? 'Cover' : '#' + (index + 1);
+                
+                // Create and add hidden input to form
+                const hiddenOrder = document.createElement('input');
+                hiddenOrder.type = 'hidden';
+                hiddenOrder.name = 'existing_image_order[]';
+                hiddenOrder.value = img.dataset.imageId + ':' + index;
+                form.appendChild(hiddenOrder);
+            });
+        }
+
+        // Update new images order
+        const newImages = previewContainer.querySelectorAll('.draggable-new-image');
+        newImages.forEach((img, index) => {
+            const badge = img.querySelector('.order-badge');
+            const existingCount = existingContainer ? 
+                existingContainer.querySelectorAll('.draggable-existing-image:not([style*="opacity: 0.5"])').length : 0;
+            badge.textContent = (index + existingCount) === 0 ? 'Cover' : '#' + (index + existingCount + 1);
+        });
+    }
+
+    // Handle form submission with reordered files and images
+    document.querySelector('form')?.addEventListener('submit', function(e) {
+        const imageInput = document.getElementById('images');
+        const previewContainer = document.getElementById('image-preview');
+        
+        // Only prevent default if we have new images to reorder
+        if (previewContainer && !previewContainer.classList.contains('hidden')) {
+            e.preventDefault();
+            const form = this;
+            const images = previewContainer.querySelectorAll('.draggable-new-image');
+            const fileTransfer = new DataTransfer();
+
+            // Add new files in DOM order
+            images.forEach(img => {
+                const fileId = img.dataset.fileId;
+                if (newFileMap.has(fileId)) {
+                    fileTransfer.items.add(newFileMap.get(fileId));
+                }
+            });
+
+            // Update the input with reordered files
+            imageInput.files = fileTransfer.files;
+
+            // Submit the form
+            form.submit();
+        }
+        // If no new images, form submits normally with existing_images[] data
+    });
 
     // Modal functions
     function showPhotoGuidelinesModal() {
@@ -421,17 +532,26 @@
         }
     });
 
+    // Initialize drag and drop for existing images on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const existingImages = document.querySelectorAll('.draggable-existing-image');
+        existingImages.forEach(img => {
+            img.addEventListener('dragstart', handleDragStart);
+            img.addEventListener('dragover', handleDragOver);
+            img.addEventListener('drop', handleDrop);
+            img.addEventListener('dragend', handleDragEnd);
+        });
+    });
+
     // Image preview function
     function previewImages(input) {
         const previewContainer = document.getElementById('image-preview');
         const files = Array.from(input.files);
         
         // Count existing images that aren't marked for removal
-        const existingImageInputs = document.querySelectorAll('input[name="existing_images[]"]');
-        const existingImageCount = Array.from(existingImageInputs).filter(input => {
-            const imageElement = input.closest('.relative');
-            return imageElement.style.opacity !== '0.5';
-        }).length;
+        const existingImageContainer = document.getElementById('existing-images-container');
+        const existingImageCount = existingImageContainer ? 
+            existingImageContainer.querySelectorAll('.draggable-existing-image:not([style*="opacity: 0.5"])').length : 0;
 
         if (files.length === 0) {
             previewContainer.classList.add('hidden');
@@ -447,22 +567,34 @@
 
         previewContainer.innerHTML = '';
         previewContainer.classList.remove('hidden');
+        newFileMap.clear();
 
         files.forEach((file, index) => {
             const reader = new FileReader();
+            const fileId = 'new-file-' + index;
 
             reader.onload = function(e) {
                 const div = document.createElement('div');
-                div.className = 'relative group';
+                div.className = 'relative group draggable-new-image';
+                div.draggable = true;
+                div.dataset.fileId = fileId;
                 div.innerHTML = `
-                    <img src="${e.target.result}" class="w-full aspect-square object-cover rounded-lg border-2 border-gray-200">
-                    <div class="absolute top-1 sm:top-2 left-1 sm:left-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">
+                    <img src="${e.target.result}" class="w-full aspect-square object-cover rounded-lg border-2 border-gray-200 cursor-move hover:border-emerald-500 transition-colors">
+                    <div class="absolute top-1 sm:top-2 left-1 sm:left-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded order-badge">
                         New #${existingImageCount + index + 1}
                     </div>
                 `;
+                
+                // Add drag event listeners
+                div.addEventListener('dragstart', handleDragStart);
+                div.addEventListener('dragover', handleDragOver);
+                div.addEventListener('drop', handleDrop);
+                div.addEventListener('dragend', handleDragEnd);
+                
                 previewContainer.appendChild(div);
             };
 
+            newFileMap.set(fileId, file);
             reader.readAsDataURL(file);
         });
     }

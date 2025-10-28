@@ -56,6 +56,7 @@
                 <div id="image-preview" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-4 hidden">
                     <!-- Previews will be inserted here by JavaScript -->
                 </div>
+                <p class="text-xs sm:text-sm text-gray-500 mt-2">You can drag images to reorder them. The first image will be the cover photo.</p>
             </div>
         </div>
 
@@ -165,7 +166,7 @@
         {{-- Submit Button --}}
         <div class="flex flex-row items-center justify-between gap-3 sm:gap-4">
             <a href="{{ route('home') }}" class="text-md max-md:text-sm text-gray-600 hover:text-gray-900 font-medium order-1">Cancel</a>
-            <button type="submit"
+            <button type="submit" id="submitBtn"
                     class="w-auto inline-flex items-center justify-center px-6 sm:px-6 py-3 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm rounded-lg shadow-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer order-1 sm:order-2">
                 <svg class="w-4 sm:w-5 h-4 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
@@ -374,6 +375,9 @@
         }
     });
 
+    // Store file objects for form submission
+    const fileMap = new Map();
+
     // Image preview function
     function previewImages(input) {
         const previewContainer = document.getElementById('image-preview');
@@ -393,25 +397,109 @@
 
         previewContainer.innerHTML = '';
         previewContainer.classList.remove('hidden');
+        fileMap.clear();
 
         files.forEach((file, index) => {
             const reader = new FileReader();
+            const fileId = 'file-' + index;
 
             reader.onload = function(e) {
                 const div = document.createElement('div');
-                div.className = 'relative group';
+                div.className = 'relative group draggable-image';
+                div.draggable = true;
+                div.dataset.fileId = fileId;
                 div.innerHTML = `
-                    <img src="${e.target.result}" class="w-full aspect-square object-cover rounded-lg border-2 border-gray-200">
-                    <div class="absolute top-1 sm:top-2 left-1 sm:left-2 bg-emerald-600 text-white text-xs font-bold px-2 py-1 rounded">
+                    <img src="${e.target.result}" class="w-full aspect-square object-cover rounded-lg border-2 border-gray-200 cursor-move hover:border-emerald-500 transition-colors">
+                    <div class="absolute top-1 sm:top-2 left-1 sm:left-2 bg-emerald-600 text-white text-xs font-bold px-2 py-1 rounded order-badge">
                         ${index === 0 ? 'Cover' : '#' + (index + 1)}
                     </div>
                 `;
+                
+                // Add drag event listeners
+                div.addEventListener('dragstart', handleDragStart);
+                div.addEventListener('dragover', handleDragOver);
+                div.addEventListener('drop', handleDrop);
+                div.addEventListener('dragend', handleDragEnd);
+                
                 previewContainer.appendChild(div);
             };
 
+            fileMap.set(fileId, file);
             reader.readAsDataURL(file);
         });
     }
+
+    let draggedElement = null;
+
+    function handleDragStart(e) {
+        draggedElement = this;
+        this.style.opacity = '0.5';
+        e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        const previewContainer = document.getElementById('image-preview');
+        if (this !== draggedElement && this.classList.contains('draggable-image')) {
+            const allImages = [...previewContainer.querySelectorAll('.draggable-image')];
+            const draggedIndex = allImages.indexOf(draggedElement);
+            const targetIndex = allImages.indexOf(this);
+            
+            if (draggedIndex < targetIndex) {
+                this.parentNode.insertBefore(draggedElement, this.nextSibling);
+            } else {
+                this.parentNode.insertBefore(draggedElement, this);
+            }
+        }
+    }
+
+    function handleDrop(e) {
+        e.preventDefault();
+    }
+
+    function handleDragEnd(e) {
+        this.style.opacity = '1';
+        updateImageOrder();
+    }
+
+    function updateImageOrder() {
+        const previewContainer = document.getElementById('image-preview');
+        const images = previewContainer.querySelectorAll('.draggable-image');
+        
+        images.forEach((img, index) => {
+            const badge = img.querySelector('.order-badge');
+            badge.textContent = index === 0 ? 'Cover' : '#' + (index + 1);
+        });
+    }
+
+    // Handle form submission with ordered files
+    document.querySelector('form')?.addEventListener('submit', function(e) {
+        const previewContainer = document.getElementById('image-preview');
+        if (!previewContainer || previewContainer.classList.contains('hidden')) {
+            return;
+        }
+
+        e.preventDefault();
+        const form = this;
+        const imageInput = document.getElementById('images');
+        const images = previewContainer.querySelectorAll('.draggable-image');
+        const fileInput = new DataTransfer();
+
+        // Add files in DOM order
+        images.forEach(img => {
+            const fileId = img.dataset.fileId;
+            if (fileMap.has(fileId)) {
+                fileInput.items.add(fileMap.get(fileId));
+            }
+        });
+
+        // Update the input with reordered files
+        imageInput.files = fileInput.files;
+
+        // Submit the form
+        form.submit();
+    });
 </script>
 @endpush
 @endsection

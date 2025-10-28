@@ -21,7 +21,9 @@ class ItemController extends Controller
         $this->imageOptimizer = $imageOptimizer;
     }
     function getItemPage(SearchItemsRequest $request) {
-        $query = Item::with(['user', 'category', 'images'])
+        $query = Item::with(['user', 'category', 'images' => function($q) {
+            $q->orderBy('order');
+        }])
             ->available()
             ->search($request->input('q'))
             ->category($request->input('category'))
@@ -53,7 +55,9 @@ class ItemController extends Controller
         $categories = Category::all();
         
         // Get featured items for homepage section
-        $featuredItems = Item::with(['user', 'category', 'images'])
+        $featuredItems = Item::with(['user', 'category', 'images' => function($q) {
+            $q->orderBy('order');
+        }])
             ->where('is_premium', true)
             ->where('premium_until', '>', now())
             ->available()
@@ -62,7 +66,9 @@ class ItemController extends Controller
             ->get();
 
         // Get ALL hero banner items (all active hero premium listings)
-        $heroItems = Item::with(['user', 'category', 'images'])
+        $heroItems = Item::with(['user', 'category', 'images' => function($q) {
+            $q->orderBy('order');
+        }])
             ->whereHas('premiumListing', function($q) {
                 $q->where('package_type', 'hero')
                   ->where('is_active', true)
@@ -76,7 +82,9 @@ class ItemController extends Controller
     }
 
     function viewItem(Item $item) {
-        $item->load(['user', 'category', 'images', 'premiumListing']);
+        $item->load(['user', 'category', 'images' => function($q) {
+            $q->orderBy('order');
+        }, 'premiumListing']);
         
         // Get all active premium packages for this item
         $activePremiumPackages = $item->premiumListing()
@@ -151,6 +159,10 @@ class ItemController extends Controller
                 ->with('error', 'You can only edit your own listings.');
         }
         
+        $item->load(['images' => function($q) {
+            $q->orderBy('order');
+        }]);
+        
         $categories = Category::all();
         return view('items.edit', compact('item', 'categories'));
     }
@@ -188,17 +200,36 @@ class ItemController extends Controller
             'condition' => $request->condition,
         ]);
 
-        // Handle image removals
-        if ($request->has('remove_images')) {
-            foreach ($request->remove_images as $imageId) {
+        // Handle image removals - compare requested images with existing images
+        $requestedImageIds = $request->has('existing_images') ? $request->existing_images : [];
+        $existingImages = $item->images()->pluck('id')->toArray();
+        $imagesToDelete = array_diff($existingImages, $requestedImageIds);
+        
+        if (!empty($imagesToDelete)) {
+            foreach ($imagesToDelete as $imageId) {
                 $image = ItemImage::find($imageId);
                 if ($image && $image->item_id === $item->id) {
-                    // Delete the file from storage
-                    if (Storage::disk('public')->exists($image->image_path)) {
-                        Storage::disk('public')->delete($image->image_path);
+                    // Delete the file from R2 storage
+                    try {
+                        if (Storage::disk('r2')->exists($image->image_path)) {
+                            Storage::disk('r2')->delete($image->image_path);
+                        }
+                    } catch (\Exception $e) {
+                        \Log::warning('Failed to delete image from R2: ' . $e->getMessage());
                     }
                     // Delete the database record
                     $image->delete();
+                }
+            }
+        }
+
+        // Handle reordering of existing images
+        if ($request->has('existing_image_order')) {
+            foreach ($request->existing_image_order as $orderData) {
+                list($imageId, $newOrder) = explode(':', $orderData);
+                $image = ItemImage::find($imageId);
+                if ($image && $image->item_id === $item->id) {
+                    $image->update(['order' => $newOrder]);
                 }
             }
         }
@@ -229,7 +260,13 @@ class ItemController extends Controller
             }
             
             // Update the photo_url if needed
-            $firstImage = $item->images()->first();
+            $firstImage = $item->images()->orderBy('order')->first();
+            if ($firstImage) {
+                $item->update(['photo_url' => $firstImage->image_path]);
+            }
+        } else {
+            // Update photo_url if no new images but existing images were reordered
+            $firstImage = $item->images()->orderBy('order')->first();
             if ($firstImage) {
                 $item->update(['photo_url' => $firstImage->image_path]);
             }
