@@ -48,6 +48,14 @@
                     <div id="existing-images-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-4">
                         @foreach($item->images as $index => $image)
                             <div class="relative group draggable-existing-image" draggable="true" data-image-id="{{ $image->id }}">
+                                <div class="absolute left-1 top-1/2 -translate-y-1/2 z-20 touch-manipulation opacity-0 group-hover:opacity-100 max-md:opacity-100 transition-opacity">
+                                    <div class="record-handle flex flex-col gap-0.5 p-1 bg-white/90 rounded cursor-move touch-manipulation">
+                                        <div class="w-1 h-1 bg-gray-600 rounded-full"></div>
+                                        <div class="w-1 h-1 bg-gray-600 rounded-full"></div>
+                                        <div class="w-1 h-1 bg-gray-600 rounded-full"></div>
+                                        <div class="w-1 h-1 bg-gray-600 rounded-full"></div>
+                                    </div>
+                                </div>
                                 <img src="{{ Storage::url($image->image_path) }}" alt="{{ $item->name }} - Image {{ $index + 1 }}" class="w-full aspect-square object-cover rounded-lg border-2 border-gray-200 cursor-move hover:border-emerald-500 transition-colors">
                                 <div class="absolute top-1 sm:top-2 left-1 sm:left-2 bg-emerald-600 text-white text-xs font-bold px-2 py-1 rounded existing-order-badge">
                                     {{ $index === 0 ? 'Cover' : '#' . ($index + 1) }}
@@ -352,6 +360,59 @@
     </div>
 </div>
 
+@push('styles')
+<style>
+    /* Mobile drag-and-drop enhancements */
+    .draggable-existing-image.dragging,
+    .draggable-new-image.dragging {
+        z-index: 1000;
+        transform: scale(1.05);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        opacity: 0.8;
+        transition: none;
+        border-color: #10b981 !important;
+    }
+    
+    .draggable-existing-image.drag-over,
+    .draggable-new-image.drag-over {
+        transform: scale(0.95);
+        border-color: #3b82f6 !important;
+        box-shadow: inset 0 0 0 3px rgba(59, 130, 246, 0.3);
+    }
+    
+    .record-handle {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+    
+    /* Ensure touch targets are large enough */
+    .record-handle {
+        min-width: 20px;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Prevent text selection during drag on mobile */
+    body.dragging-active {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        touch-action: none;
+    }
+    
+    /* Smooth transitions for better UX */
+    .draggable-existing-image,
+    .draggable-new-image {
+        transition: transform 0.2s ease, opacity 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+</style>
+@endpush
+
 @push('scripts')
 <script>
     // Store images to be removed
@@ -401,15 +462,29 @@
     // Drag and drop handlers
     function handleDragStart(e) {
         draggedElement = this;
-        this.style.opacity = '0.5';
+        this.classList.add('dragging');
         e.dataTransfer.effectAllowed = 'move';
+        
+        // For mobile: prevent scrolling while dragging
+        if (e.type === 'touchstart') {
+            document.body.style.overflow = 'hidden';
+            document.body.style.position = 'fixed';
+            document.body.classList.add('dragging-active');
+        } else {
+            document.body.classList.add('dragging-active');
+        }
     }
 
     function handleDragOver(e) {
         e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
+        
+        if (e.type === 'dragover') {
+            e.dataTransfer.dropEffect = 'move';
+        }
         
         if (this !== draggedElement && this.parentNode === draggedElement.parentNode) {
+            this.classList.add('drag-over');
+            
             const container = draggedElement.parentNode;
             const allImages = [...container.querySelectorAll('.draggable-existing-image, .draggable-new-image')];
             const draggedIndex = allImages.indexOf(draggedElement);
@@ -425,11 +500,60 @@
 
     function handleDrop(e) {
         e.preventDefault();
+        this.classList.remove('drag-over');
     }
 
     function handleDragEnd(e) {
-        this.style.opacity = '1';
+        this.classList.remove('dragging');
+        
+        // Remove all drag-over classes
+        document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+        
+        // For mobile: restore body scroll
+        if (e.type === 'touchend') {
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+        }
+        
+        // Always remove dragging-active class
+        document.body.classList.remove('dragging-active');
+        
         updateAllImageOrder();
+    }
+    
+    // Touch event handlers for mobile
+    function handleTouchStart(e) {
+        const touch = e.touches[0];
+        const target = e.target.closest('.draggable-existing-image, .draggable-new-image');
+        
+        if (!target) return;
+        
+        draggedElement = target;
+        handleDragStart.call(target, { type: 'touchstart' });
+        
+        // Store initial touch position
+        target.dataset.touchStartX = touch.clientX;
+        target.dataset.touchStartY = touch.clientY;
+    }
+    
+    function handleTouchMove(e) {
+        if (!draggedElement) return;
+        
+        e.preventDefault();
+        const touch = e.touches[0];
+        const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
+        const droppableTarget = targetElement?.closest('.draggable-existing-image, .draggable-new-image');
+        
+        if (droppableTarget && droppableTarget !== draggedElement) {
+            handleDragOver.call(droppableTarget, { type: 'touchmove', preventDefault: () => {} });
+        }
+    }
+    
+    function handleTouchEnd(e) {
+        if (!draggedElement) return;
+        
+        handleDragEnd.call(draggedElement, { type: 'touchend' });
+        draggedElement = null;
     }
 
     function updateAllImageOrder() {
@@ -556,10 +680,17 @@
     document.addEventListener('DOMContentLoaded', function() {
         const existingImages = document.querySelectorAll('.draggable-existing-image');
         existingImages.forEach(img => {
+            // Mouse events
             img.addEventListener('dragstart', handleDragStart);
             img.addEventListener('dragover', handleDragOver);
             img.addEventListener('drop', handleDrop);
             img.addEventListener('dragend', handleDragEnd);
+            
+            // Touch events for mobile
+            img.addEventListener('touchstart', handleTouchStart, { passive: false });
+            img.addEventListener('touchmove', handleTouchMove, { passive: false });
+            img.addEventListener('touchend', handleTouchEnd);
+            img.addEventListener('touchcancel', handleTouchEnd);
         });
     });
 
@@ -599,17 +730,31 @@
                 div.draggable = true;
                 div.dataset.fileId = fileId;
                 div.innerHTML = `
+                    <div class="absolute left-1 top-1/2 -translate-y-1/2 z-20 touch-manipulation opacity-0 group-hover:opacity-100 max-md:opacity-100 transition-opacity">
+                        <div class="record-handle flex flex-col gap-0.5 p-1 bg-white/90 rounded cursor-move touch-manipulation">
+                            <div class="w-1 h-1 bg-gray-600 rounded-full"></div>
+                            <div class="w-1 h-1 bg-gray-600 rounded-full"></div>
+                            <div class="w-1 h-1 bg-gray-600 rounded-full"></div>
+                            <div class="w-1 h-1 bg-gray-600 rounded-full"></div>
+                        </div>
+                    </div>
                     <img src="${e.target.result}" class="w-full aspect-square object-cover rounded-lg border-2 border-gray-200 cursor-move hover:border-emerald-500 transition-colors">
                     <div class="absolute top-1 sm:top-2 left-1 sm:left-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded order-badge">
                         New #${existingImageCount + index + 1}
                     </div>
                 `;
                 
-                // Add drag event listeners
+                // Add mouse and touch event listeners
                 div.addEventListener('dragstart', handleDragStart);
                 div.addEventListener('dragover', handleDragOver);
                 div.addEventListener('drop', handleDrop);
                 div.addEventListener('dragend', handleDragEnd);
+                
+                // Touch events for mobile
+                div.addEventListener('touchstart', handleTouchStart, { passive: false });
+                div.addEventListener('touchmove', handleTouchMove, { passive: false });
+                div.addEventListener('touchend', handleTouchEnd);
+                div.addEventListener('touchcancel', handleTouchEnd);
                 
                 previewContainer.appendChild(div);
             };
