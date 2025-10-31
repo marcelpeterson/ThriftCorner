@@ -31,11 +31,14 @@ jobs:
       
       - name: Setup environment
         run: |
-          cp .env.example .env.testing
-          php artisan key:generate --env=testing
+          cp .env.example .env
+          php artisan key:generate
+      
+      - name: Run migrations for tests
+        run: php artisan migrate
       
       - name: Run tests
-        run: php artisan test --env=testing
+        run: php artisan test
       
       - name: Deploy to server
         env:
