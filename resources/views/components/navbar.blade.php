@@ -72,6 +72,9 @@
                                         @if (Route::has('transactions.index'))
                                             <li><a href="{{ route('transactions.index') }}" class="block px-4 py-2 hover:bg-gray-100" role="menuitem">My Transactions</a></li>
                                         @endif
+                                        @if (Route::has('premium.history'))
+                                            <li><a href="{{ route('premium.history') }}" class="block px-4 py-2 hover:bg-gray-100" role="menuitem">My Premium Upgrades</a></li>
+                                        @endif
                                     @endif
                                     @if(auth()->user()->is_admin)
                                         <li><a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 hover:bg-purple-50 text-purple-600 font-semibold" role="menuitem">Admin Dashboard</a></li>
@@ -243,6 +246,16 @@
                             <path d="M21 12a9 9 0 1 0-9 9" />
                             </svg>
                                 <span class="font-medium">My Transactions</span>
+                            </a>
+                        </li>
+
+                        {{-- My Premium Upgrades --}}
+                        <li>
+                            <a href="{{ route('premium.history') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-100 transition-colors text-gray-900">
+                                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                                </svg>
+                                <span class="font-medium">My Premium Upgrades</span>
                             </a>
                         </li>
 

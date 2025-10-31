@@ -19,11 +19,19 @@ class Payment extends Model
         'paid_at',
         'midtrans_response',
         'snap_token',
+        'proof_of_payment',
+        'bank_name',
+        'account_name',
+        'account_number',
+        'confirmed_at',
+        'confirmed_by',
+        'admin_notes',
     ];
 
     protected $casts = [
         'amount' => 'decimal:2',
         'paid_at' => 'datetime',
+        'confirmed_at' => 'datetime',
         'midtrans_response' => 'array',
     ];
 
@@ -40,6 +48,11 @@ class Payment extends Model
     public function premiumListing()
     {
         return $this->belongsTo(PremiumListing::class);
+    }
+
+    public function confirmedBy()
+    {
+        return $this->belongsTo(User::class, 'confirmed_by');
     }
 
     public function isPending()

@@ -8,7 +8,7 @@
         {{-- Header --}}
         <div class="text-center mb-8">
             <h1 class="text-3xl font-bold text-gray-900 mb-2 max-md:font-black">Complete Your Payment</h1>
-            <p class="text-gray-600">Secure payment powered by Midtrans</p>
+            <p class="text-gray-600">Bank Transfer Instructions</p>
         </div>
 
         {{-- Order Summary --}}
@@ -64,15 +64,80 @@
             </div>
         </div>
 
-        {{-- Payment Button --}}
-        <button id="pay-button" class="w-full py-4 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition-colors shadow-md hover:shadow-lg cursor-pointer">
+        {{-- Bank Transfer Instructions --}}
+        <div class="bg-blue-50 rounded-lg p-6 mb-6">
+            <h3 class="font-bold text-gray-900 mb-4 flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                Bank Transfer Details
+            </h3>
+            
+            <div class="space-y-3 bg-white rounded-lg p-4">
+                <div>
+                    <span class="text-sm text-gray-600">Bank:</span>
+                    <p class="text-lg font-bold text-gray-900">{{ $payment->bank_name }}</p>
+                </div>
+                <div>
+                    <span class="text-sm text-gray-600">Account Number:</span>
+                    <p class="text-2xl font-bold text-gray-900 select-all">{{ $payment->account_number }}</p>
+                </div>
+                <div>
+                    <span class="text-sm text-gray-600">Account Name:</span>
+                    <p class="text-lg font-bold text-gray-900">{{ $payment->account_name }}</p>
+                </div>
+                <div class="pt-3 border-t">
+                    <span class="text-sm text-gray-600">Transfer Amount:</span>
+                    <p class="text-2xl font-bold text-emerald-600 select-all">{{ rupiah($payment->amount) }}</p>
+                </div>
+            </div>
+
+            <div class="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <p class="text-sm text-amber-800">
+                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                    Please transfer the exact amount to ensure quick processing
+                </p>
+            </div>
+        </div>
+
+        {{-- Payment Steps --}}
+        <div class="mb-6">
+            <h3 class="font-bold text-gray-900 mb-4">How to complete your payment:</h3>
+            <ol class="space-y-3">
+                <li class="flex">
+                    <span class="flex-shrink-0 w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center text-sm font-bold">1</span>
+                    <span class="ml-3 text-gray-700">Transfer the exact amount to the BCA account above</span>
+                </li>
+                <li class="flex">
+                    <span class="flex-shrink-0 w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center text-sm font-bold">2</span>
+                    <span class="ml-3 text-gray-700">Take a screenshot or photo of your payment receipt</span>
+                </li>
+                <li class="flex">
+                    <span class="flex-shrink-0 w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center text-sm font-bold">3</span>
+                    <span class="ml-3 text-gray-700">Click "I've Made the Transfer" button below</span>
+                </li>
+                <li class="flex">
+                    <span class="flex-shrink-0 w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center text-sm font-bold">4</span>
+                    <span class="ml-3 text-gray-700">Upload your proof of payment</span>
+                </li>
+                <li class="flex">
+                    <span class="flex-shrink-0 w-8 h-8 bg-emerald-600 text-white rounded-full flex items-center justify-center text-sm font-bold">5</span>
+                    <span class="ml-3 text-gray-700">Wait for admin confirmation (usually within 24 hours)</span>
+                </li>
+            </ol>
+        </div>
+
+        {{-- Action Button --}}
+        <a href="{{ route('payment.status', $payment->id) }}" class="block w-full py-4 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-lg transition-colors shadow-md hover:shadow-lg text-center">
             <div class="flex items-center justify-center">
                 <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
-                Pay Now
+                I've Made the Transfer
             </div>
-        </button>
+        </a>
 
         {{-- Security Notice --}}
         <div class="mt-6 text-center">
@@ -80,7 +145,7 @@
                 <svg class="w-4 h-4 inline mr-1 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
                 </svg>
-                Secure payment. Your data is encrypted and protected.
+                Your payment will be verified by our admin team
             </p>
         </div>
 
@@ -93,42 +158,9 @@
     </div>
 </div>
 
-{{-- Midtrans Snap Script --}}
-<script src="https://app.{{ config('midtrans.is_production') ? '' : 'sandbox.' }}midtrans.com/snap/snap.js" 
-        data-client-key="{{ config('midtrans.client_key') }}"></script>
+{{-- MidTrans Script commented out - using manual bank transfer --}}
+{{-- <script src="https://app.{{ config('midtrans.is_production') ? '' : 'sandbox.' }}midtrans.com/snap/snap.js" 
+        data-client-key="{{ config('midtrans.client_key') }}"></script> --}}
 
-<script type="text/javascript">
-    document.getElementById('pay-button').onclick = function(){
-        snap.pay('{{ $payment->snap_token }}', {
-            onSuccess: function(result){
-                console.log('Payment success:', result);
-                window.location.href = '{{ route('payment.finish', $payment->id) }}';
-            },
-            onPending: function(result){
-                console.log('Payment pending:', result);
-                // QRIS immediately calls onPending when QR is displayed (before user scans)
-                // Other methods call onPending only after user submits payment details
-                // Check payment type to handle QRIS differently
-                const paymentType = result.payment_type || '';
-                
-                if (paymentType === 'qris') {
-                    // For QRIS, don't auto-redirect on pending
-                    // User needs to scan QR and complete payment first
-                    console.log('QRIS payment initiated - waiting for user to scan QR code');
-                } else {
-                    // For other payment methods, redirect to finish page
-                    window.location.href = '{{ route('payment.finish', $payment->id) }}';
-                }
-            },
-            onError: function(result){
-                console.log('Payment error:', result);
-                alert('Payment failed. Please try again.');
-            },
-            onClose: function(){
-                console.log('Customer closed the popup without finishing the payment');
-                // Don't redirect on close - let user stay on checkout page to retry
-            }
-        });
-    };
-</script>
+{{-- Removed MidTrans payment JavaScript --}}
 @endsection

@@ -92,11 +92,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/items/{item:slug}/premium/payment', [PaymentController::class, 'createPayment'])->name('premium.createPayment');
     Route::get('/payment/{id}/checkout', [PaymentController::class, 'checkout'])->name('payment.checkout');
     Route::get('/payment/{id}/finish', [PaymentController::class, 'finish'])->name('payment.finish');
-    Route::get('/payment/{id}/status', [PaymentController::class, 'checkStatus'])->name('payment.status');
+    Route::get('/payment/{id}/status', [PaymentController::class, 'status'])->name('payment.status');
+    Route::post('/payment/{id}/upload-proof', [PaymentController::class, 'uploadProof'])->name('payment.uploadProof');
+    Route::get('/payment/{id}/check-status', [PaymentController::class, 'checkStatus'])->name('payment.checkStatus');
+    Route::get('/premium/history', [PaymentController::class, 'history'])->name('premium.history');
 });
 
-// Midtrans notification callback (no auth required)
-Route::post('/payment/notification', [PaymentController::class, 'notification'])->name('payment.notification');
+// Midtrans notification callback - commented out for manual bank transfer
+// Route::post('/payment/notification', [PaymentController::class, 'notification'])->name('payment.notification');
 
 // Admin routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -108,6 +111,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('/listings/{item}', [AdminController::class, 'deleteListing'])->name('listings.delete');
     Route::get('/transactions', [AdminController::class, 'transactions'])->name('transactions');
     Route::resource('/news', AdminNewsController::class);
+
+    // Payment management routes
+    Route::get('/payments', [AdminController::class, 'payments'])->name('payments');
+    Route::post('/payments/{payment}/confirm', [AdminController::class, 'confirmPayment'])->name('payments.confirm');
+    Route::post('/payments/{payment}/reject', [AdminController::class, 'rejectPayment'])->name('payments.reject');
 
     // Support contact management routes
     Route::get('/support', [AdminController::class, 'supportIndex'])->name('support.index');

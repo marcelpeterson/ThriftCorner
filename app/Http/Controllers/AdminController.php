@@ -374,4 +374,70 @@ class AdminController extends Controller
             return redirect()->back()->with('error', 'Failed to delete submission: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Display payments management page
+     */
+    public function payments()
+    {
+        $payments = \App\Models\Payment::with(['user', 'item', 'premiumListing', 'confirmedBy'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(20);
+
+        return view('admin.payments', compact('payments'));
+    }
+
+    /**
+     * Confirm a payment
+     */
+    public function confirmPayment(Request $request, \App\Models\Payment $payment)
+    {
+        $request->validate([
+            'admin_notes' => 'nullable|string|max:500'
+        ]);
+
+        try {
+            // Update payment status
+            $payment->update([
+                'status' => 'success',
+                'confirmed_at' => now(),
+                'confirmed_by' => auth()->id(),
+                'paid_at' => now(),
+                'admin_notes' => $request->admin_notes
+            ]);
+
+            // Activate the premium listing
+            if ($payment->premiumListing) {
+                $payment->premiumListing->activate();
+            }
+
+            return redirect()->route('admin.payments')->with('success', 'Payment confirmed successfully. Premium listing activated.');
+        } catch (\Exception $e) {
+            \Log::error('Failed to confirm payment: ' . $e->getMessage());
+            return redirect()->route('admin.payments')->with('error', 'Failed to confirm payment: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Reject a payment
+     */
+    public function rejectPayment(Request $request, \App\Models\Payment $payment)
+    {
+        $request->validate([
+            'admin_notes' => 'required|string|max:500'
+        ]);
+
+        try {
+            $payment->update([
+                'status' => 'failed',
+                'confirmed_by' => auth()->id(),
+                'admin_notes' => $request->admin_notes
+            ]);
+
+            return redirect()->route('admin.payments')->with('success', 'Payment rejected.');
+        } catch (\Exception $e) {
+            \Log::error('Failed to reject payment: ' . $e->getMessage());
+            return redirect()->route('admin.payments')->with('error', 'Failed to reject payment: ' . $e->getMessage());
+        }
+    }
 }
