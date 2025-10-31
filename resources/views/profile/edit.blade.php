@@ -168,7 +168,7 @@
                     {{ session('error') }}
                 </div>
             @endif
-            <form action="{{ route('password.update') }}" method="POST" class="space-y-6">
+            <form action="{{ route('profile.password.update') }}" method="POST" class="space-y-6">
                 @csrf
                 @method('PUT')
 
