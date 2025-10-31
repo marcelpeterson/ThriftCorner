@@ -27,7 +27,7 @@
             </div>
         @endif
 
-        <form action="{{ route('password.reset') }}" class="mt-6" method="POST">
+        <form action="{{ route('password.update') }}" class="mt-6" method="POST">
             @csrf
             <input type="hidden" name="token" value="{{ $token }}">
             
