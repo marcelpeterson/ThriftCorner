@@ -404,6 +404,15 @@
                         <div class="ml-3 sm:ml-4">
                             <p class="font-bold text-xs sm:text-sm text-gray-900">{{ $item->user->first_name }} {{ $item->user->last_name }}</p>
                             <p class="text-xs text-gray-500 truncate">{{ $item->user->email }}</p>
+                            @if($item->user->location)
+                                <div class="flex items-center mt-1">
+                                    <svg class="w-3 h-3 text-gray-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    </svg>
+                                    <p class="text-xs text-gray-600">{{ $item->user->location }}</p>
+                                </div>
+                            @endif
                         </div>
                     </div>
 

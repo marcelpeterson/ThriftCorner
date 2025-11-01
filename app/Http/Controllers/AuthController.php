@@ -31,6 +31,7 @@ class AuthController extends Controller
             ],
             'password'   => 'required|min:6|confirmed',
             'phone'      => 'required|string|min:10|max:12',
+            'location'   => 'required|in:Jakarta - Kemanggisan,Jakarta - Syahdan,Jakarta - Senayan,Tangerang - Alam Sutera,Bekasi,Bandung,Semarang,Malang,Medan',
         ], [
             'first_name.required' => 'The first name field is required.',
             'first_name.max' => 'The first name may not be greater than 50 characters.',
@@ -46,6 +47,8 @@ class AuthController extends Controller
             'phone.required' => 'The phone number field is required.',
             'phone.min' => 'The phone number must be at least 10 characters.',
             'phone.max' => 'The phone number may not be greater than 12 characters.',
+            'location.required' => 'The location field is required.',
+            'location.in' => 'The selected location is invalid.',
         ]);
 
         $user = new User();
@@ -53,6 +56,7 @@ class AuthController extends Controller
         $user->last_name  = $request->last_name;
         $user->email      = $request->email;
         $user->phone      = $request->phone;
+        $user->location   = $request->location;
         $user->photo_url  = Avatar::create($request->first_name . ' ' . $request->last_name)->toBase64();
         $user->password   = Hash::make($request->password);
         $user->save();

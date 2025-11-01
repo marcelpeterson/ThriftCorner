@@ -134,6 +134,33 @@
                     @enderror
                 </div>
 
+                <!-- Location -->
+                <div>
+                    <label for="location" class="block text-sm font-medium text-gray-900">
+                        Location
+                    </label>
+                    <select
+                        id="location"
+                        name="location"
+                        required
+                        class="mt-2 block w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-blue-500 @error('location') border-red-500 @enderror"
+                    >
+                        <option value="">Select your region</option>
+                        <option value="Jakarta - Kemanggisan" {{ old('location', $user->location) == 'Jakarta - Kemanggisan' ? 'selected' : '' }}>Jakarta - Kemanggisan</option>
+                        <option value="Jakarta - Syahdan" {{ old('location', $user->location) == 'Jakarta - Syahdan' ? 'selected' : '' }}>Jakarta - Syahdan</option>
+                        <option value="Jakarta - Senayan" {{ old('location', $user->location) == 'Jakarta - Senayan' ? 'selected' : '' }}>Jakarta - Senayan</option>
+                        <option value="Tangerang - Alam Sutera" {{ old('location', $user->location) == 'Tangerang - Alam Sutera' ? 'selected' : '' }}>Tangerang - Alam Sutera</option>
+                        <option value="Bekasi" {{ old('location', $user->location) == 'Bekasi' ? 'selected' : '' }}>Bekasi</option>
+                        <option value="Bandung" {{ old('location', $user->location) == 'Bandung' ? 'selected' : '' }}>Bandung</option>
+                        <option value="Semarang" {{ old('location', $user->location) == 'Semarang' ? 'selected' : '' }}>Semarang</option>
+                        <option value="Malang" {{ old('location', $user->location) == 'Malang' ? 'selected' : '' }}>Malang</option>
+                        <option value="Medan" {{ old('location', $user->location) == 'Medan' ? 'selected' : '' }}>Medan</option>
+                    </select>
+                    @error('location')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Form Actions -->
                 <div class="flex items-center gap-4 pt-6 border-t border-gray-200">
                     <button
