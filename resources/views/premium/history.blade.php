@@ -3,11 +3,11 @@
 @section('title', 'My Premium Upgrades - ' . config('app.name'))
 
 @section('content')
-<div class="min-h-screen bg-gray-50 py-6 sm:py-8">
+<div class="py-6 sm:py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900 max-md:text-2xl">My Premium Upgrades</h1>
-            <p class="text-gray-600 text-xs sm:text-sm mt-2">Track all your premium listing purchases and promotions</p>
+            <p class="text-gray-600 text-sm mt-2">Track all your premium listing purchases and promotions</p>
         </div>
 
         @if($payments->isEmpty())
