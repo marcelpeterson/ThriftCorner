@@ -3,7 +3,7 @@
 @section('title', 'Payment Management - Admin')
 
 @section('content')
-<div class="container mx-auto px-4 py-8">
+<div class="space-y-6">
     <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900">Payment Management</h1>
         <p class="text-gray-600 mt-2">Manage and confirm manual bank transfer payments</p>

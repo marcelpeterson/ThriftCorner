@@ -58,7 +58,11 @@
                                 @error('photo')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
-                                <p class="mt-1 text-xs text-gray-500">Allowed formats: JPEG, PNG, JPG, GIF. Maximum size: 2MB</p>
+                                <p class="max-md:hidden mt-1 text-xs text-gray-500">Allowed formats: JPEG, PNG, JPG, GIF. Maximum size: 2MB</p>
+                                <div class="sm:hidden mt-2">
+                                    <p class="mt-1 text-xs text-gray-500">Formats: JPEG, PNG, JPG, GIF</p>
+                                    <p class="mt-1 text-xs text-gray-500">Maximum size: 2MB</p>
+                                </div>
                             </div>
                             <button
                                 type="submit"
