@@ -255,8 +255,8 @@
             <div class="space-y-3">
                 @foreach($recentUsers as $user)
                     <div class="flex items-center gap-3">
-                        @if($user->photo_url)
-                            <img src="{{ $user->photo_url }}" alt="{{ $user->first_name }}" class="w-10 h-10 rounded-full object-cover">
+                        @if($user->photo)
+                            <img src="{{ $user->photo }}" alt="{{ $user->first_name }}" class="w-10 h-10 rounded-full object-cover">
                         @else
                             <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
                                 <span class="text-blue-600 font-bold text-sm">{{ substr($user->first_name, 0, 1) }}{{ substr($user->last_name, 0, 1) }}</span>

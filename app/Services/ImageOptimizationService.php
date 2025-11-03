@@ -70,14 +70,16 @@ class ImageOptimizationService
             $this->optimizer->optimize($tempPath);
             
             // Store the optimized image to the specified disk
-            $path = Storage::disk($disk)->putFileAs($directory, $tempPath, $filename);
+            $fileContents = file_get_contents($tempPath);
+            $path = $directory . '/' . $filename;
+            $result = Storage::disk($disk)->put($path, $fileContents);
             
             // Clean up temporary file
             if (file_exists($tempPath)) {
                 unlink($tempPath);
             }
             
-            return $path;
+            return $result ? $path : '';
         } catch (\Exception $e) {
             // Clean up temporary file if it exists
             if (file_exists($tempPath)) {

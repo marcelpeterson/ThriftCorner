@@ -177,8 +177,8 @@
                         <div>
                             <p class="text-sm font-medium text-gray-500">Registered User</p>
                             <div class="flex items-center gap-2 mt-1">
-                                @if($submission->user->photo_url)
-                                    <img src="{{ $submission->user->photo_url }}" alt="{{ $submission->user->first_name }}" class="w-8 h-8 rounded-full object-cover">
+                                @if($submission->user->photo)
+                                    <img src="{{ $submission->user->photo }}" alt="{{ $submission->user->first_name }}" class="w-8 h-8 rounded-full object-cover">
                                 @endif
                                 <div>
                                     <p class="text-gray-900 font-medium">{{ $submission->user->full_name }}</p>

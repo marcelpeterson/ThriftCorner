@@ -72,6 +72,9 @@ return [
             'throw' => false,
             'report' => false,
             'visibility' => 'public',
+            'http' => [
+                'verify' => env('APP_ENV') !== 'production', // Disable SSL verification only for local development
+            ],
         ],
 
     ],

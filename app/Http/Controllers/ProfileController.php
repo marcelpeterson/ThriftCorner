@@ -34,8 +34,8 @@ class ProfileController extends Controller
         
         // Handle photo upload if present
         if ($request->hasFile('photo')) {
-            // Delete old photo if exists
-            if ($user->photo_url) {
+            // Delete old photo if exists and it's not a base64 data URL
+            if ($user->photo_url && !str_starts_with($user->photo_url, 'data:')) {
                 // Check if the old photo is in the R2 storage
                 if (Storage::disk('r2')->exists($user->photo_url)) {
                     Storage::disk('r2')->delete($user->photo_url);
@@ -86,8 +86,8 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         
-        // Delete old photo if exists
-        if ($user->photo_url) {
+        // Delete old photo if exists and it's not a base64 data URL
+        if ($user->photo_url && !str_starts_with($user->photo_url, 'data:')) {
             // Check if the old photo is in the R2 storage
             if (Storage::disk('r2')->exists($user->photo_url)) {
                 Storage::disk('r2')->delete($user->photo_url);

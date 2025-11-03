@@ -35,8 +35,8 @@
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    @if($user->photo_url)
-                                        <img src="{{ $user->photo_url }}" alt="{{ $user->first_name }}" class="w-10 h-10 rounded-full object-cover">
+                                    @if($user->photo)
+                                        <img src="{{ $user->photo }}" alt="{{ $user->first_name }}" class="w-10 h-10 rounded-full object-cover">
                                     @else
                                         <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
                                             <span class="text-blue-600 font-bold text-sm">{{ substr($user->first_name, 0, 1) }}{{ substr($user->last_name, 0, 1) }}</span>
@@ -91,8 +91,8 @@
                 <div class="p-4 hover:bg-gray-50 transition-colors">
                     <div class="flex items-start justify-between gap-3 mb-3">
                         <div class="flex items-center gap-3 flex-1 min-w-0">
-                            @if($user->photo_url)
-                                <img src="{{ $user->photo_url }}" alt="{{ $user->first_name }}" class="w-12 h-12 rounded-full object-cover flex-shrink-0">
+                            @if($user->photo)
+                                <img src="{{ $user->photo }}" alt="{{ $user->first_name }}" class="w-12 h-12 rounded-full object-cover flex-shrink-0">
                             @else
                                 <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
                                     <span class="text-blue-600 font-bold">{{ substr($user->first_name, 0, 1) }}{{ substr($user->last_name, 0, 1) }}</span>

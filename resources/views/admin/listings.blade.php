@@ -54,8 +54,8 @@
                     </div>
 
                     <div class="flex items-center gap-2 text-sm text-gray-600 mb-3">
-                        @if($listing->user->photo_url)
-                            <img src="{{ $listing->user->photo_url }}" alt="{{ $listing->user->first_name }}" class="w-6 h-6 rounded-full object-cover">
+                        @if($listing->user->photo)
+                            <img src="{{ $listing->user->photo }}" alt="{{ $listing->user->first_name }}" class="w-6 h-6 rounded-full object-cover">
                         @else
                             <div class="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center">
                                 <span class="text-gray-600 text-xs font-bold">{{ substr($listing->user->first_name, 0, 1) }}</span>
