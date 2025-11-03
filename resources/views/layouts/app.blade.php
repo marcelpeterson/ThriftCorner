@@ -23,7 +23,7 @@
 
     <x-navbar />
 
-    <main id="main-content" class="flex-1 overflow-x-hidden @if(!auth()->check() || !auth()->user()->is_admin) pt-26 md:pt-16 @else pt-16 @endif">
+    <main id="main-content" class="flex-1 overflow-x-hidden @if(!auth()->check() || !auth()->user()->is_admin) pt-28 md:pt-16 @else pt-16 @endif">
         <div class="max-w-7xl mx-auto sm:mx-30 px-4 py-8 w-full">
             {{-- Flash Messages --}}
             {{-- @if(session('success'))
