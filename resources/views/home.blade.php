@@ -146,7 +146,7 @@ function saveScrollPosition() {
                         <h1 class="text-2xl sm:text-4xl md:text-[4rem] md:font-bold font-extrabold tracking-tight">
                             {{ config('app.name', 'ThriftCorner') }}
                         </h1>
-                        <p class="md:mt-4 mt-2 md:ml-2 sm:mt-2 text-md sm:text-2xl md:text-3xl md:font-bold font-semibold text-gray-100">
+                        <p class="md:mt-4 mt-2 md:ml-2 sm:mt-2 text-sm sm:text-2xl md:text-3xl md:font-bold font-semibold text-gray-100">
                             Binusian favorite place for second-hand gems.
                         </p>
                         <p class="md:mt-2 mt-1 md:ml-2 sm:mt-2 text-xs sm:text-sm md:text-base text-gray-300">
