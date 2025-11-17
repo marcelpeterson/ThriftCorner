@@ -21,8 +21,8 @@ class AuthController extends Controller
     {
 
         $request->validate([
-            'first_name' => 'required|string|max:50|regex:/^[A-Z][a-zA-Z\-]*$/',
-            'last_name'  => 'required|string|max:50|regex:/^[A-Z][a-zA-Z\-]*$/',
+            'first_name' => 'required|string|max:50|regex:/^[a-zA-Z\-]+$/',
+            'last_name'  => 'required|string|max:50|regex:/^[a-zA-Z\-]+$/',
             'email'      => [
                 'required',
                 'email',
@@ -35,10 +35,10 @@ class AuthController extends Controller
         ], [
             'first_name.required' => 'The first name field is required.',
             'first_name.max' => 'The first name may not be greater than 50 characters.',
-            'first_name.regex' => 'The first name must start with an uppercase letter and contain only letters and hyphens.',
+            'first_name.regex' => 'The first name must contain only letters and hyphens.',
             'last_name.required' => 'The last name field is required.',
             'last_name.max' => 'The last name may not be greater than 50 characters.',
-            'last_name.regex' => 'The last name must start with an uppercase letter and contain only letters and hyphens.',
+            'last_name.regex' => 'The last name must contain only letters and hyphens.',
             'email.required' => 'The email field is required.',
             'email.email' => 'The email must be a valid email address.',
             'email.unique' => 'The email has already been taken.',
@@ -54,8 +54,8 @@ class AuthController extends Controller
         ]);
 
         $user = new User();
-        $user->first_name = $request->first_name;
-        $user->last_name  = $request->last_name;
+        $user->first_name = ucfirst(strtolower($request->first_name));
+        $user->last_name  = ucfirst(strtolower($request->last_name));
         $user->email      = $request->email;
         $user->phone      = $request->phone;
         $user->location   = $request->location;
