@@ -36,7 +36,8 @@
         </div>
     @endif
     <div>
-        <h3 class="text-lg font-bold {{ $item->isPremium() ? 'text-purple-900' : 'text-gray-900' }} mt-2">{{ \Illuminate\Support\Str::limit($item->name, 10) }}</h3>
+        <h3 class="text-lg font-bold {{ $item->isPremium() ? 'text-purple-900' : 'text-gray-900' }} mt-2 sm:hidden">{{ \Illuminate\Support\Str::limit($item->name, 10) }}</h3>
+        <h3 class="text-lg font-bold {{ $item->isPremium() ? 'text-purple-900' : 'text-gray-900' }} mt-2 max-sm:hidden">{{ $item->name }}</h3>
         <p class="mt-1 text-sm {{ $item->isPremium() ? 'text-gray-700' : 'text-gray-600' }}">{{ \Illuminate\Support\Str::limit($item->description, 50) }}</p>
         <div class="mt-2 max-md:mt-3 max-md:flex-col max-md:items-start flex items-center justify-between">
             <p class="text-md font-semibold max-md:font-bold {{ $item->isPremium() ? 'text-purple-700' : 'text-gray-900' }}">{{ $item->price_rupiah }}</p>
