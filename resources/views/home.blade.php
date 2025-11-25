@@ -14,7 +14,7 @@ document.addEventListener('alpine:init', () => {
         touchEndX: 0,
 
         init() {
-            this.startAutoplay();
+            // this.startAutoplay();
             this.setupTouchListeners();
         },
 
